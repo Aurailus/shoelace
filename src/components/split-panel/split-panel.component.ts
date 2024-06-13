@@ -4,6 +4,7 @@ import { html } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { LocalizeController } from '../../utilities/localize.js';
 import { property, query } from 'lit/decorators.js';
+import { SNAP_NONE, type SnapFunction, toSnapFunction } from './utility.js';
 import { watch } from '../../internal/watch.js';
 import componentStyles from '../../styles/component.styles.js';
 import ShoelaceElement from '../../internal/shoelace-element.js';
@@ -34,7 +35,7 @@ import type { CSSResultGroup } from 'lit';
  * @cssproperty [--max=100%] - The maximum allowed size of the primary panel.
  */
 export default class SlSplitPanel extends ShoelaceElement {
-  static styles: CSSResultGroup = [componentStyles, styles];
+	static styles: CSSResultGroup = [componentStyles, styles]
 
   private cachedPositionInPixels: number;
   private isCollapsed = false;
@@ -43,123 +44,128 @@ export default class SlSplitPanel extends ShoelaceElement {
   private resizeObserver: ResizeObserver;
   private size: number;
 
-  @query('.divider') divider: HTMLElement;
+	@query(".divider") divider: HTMLElement
 
-  /**
-   * The current position of the divider from the primary panel's edge as a percentage 0-100. Defaults to 50% of the
-   * container's initial size.
-   */
-  @property({ type: Number, reflect: true }) position = 50;
+	/**
+	 * The current position of the divider from the primary panel's edge as a percentage 0-100. Defaults to 50% of the
+	 * container's initial size.
+	 */
+	@property({ type: Number, reflect: true }) position = 50
 
-  /** The current position of the divider from the primary panel's edge in pixels. */
-  @property({ attribute: 'position-in-pixels', type: Number }) positionInPixels: number;
+	/** The current position of the divider from the primary panel's edge in pixels. */
+	@property({ attribute: "position-in-pixels", type: Number }) positionInPixels: number
 
-  /** Draws the split panel in a vertical orientation with the start and end panels stacked. */
-  @property({ type: Boolean, reflect: true }) vertical = false;
+	/** Draws the split panel in a vertical orientation with the start and end panels stacked. */
+	@property({ type: Boolean, reflect: true }) vertical = false
 
-  /** Disables resizing. Note that the position may still change as a result of resizing the host element. */
-  @property({ type: Boolean, reflect: true }) disabled = false;
+	/** Disables resizing. Note that the position may still change as a result of resizing the host element. */
+	@property({ type: Boolean, reflect: true }) disabled = false
 
-  /**
-   * If no primary panel is designated, both panels will resize proportionally when the host element is resized. If a
-   * primary panel is designated, it will maintain its size and the other panel will grow or shrink as needed when the
-   * host element is resized.
-   */
-  @property() primary?: 'start' | 'end';
+	/**
+	 * If no primary panel is designated, both panels will resize proportionally when the host element is resized. If a
+	 * primary panel is designated, it will maintain its size and the other panel will grow or shrink as needed when the
+	 * host element is resized.
+	 */
+	@property() primary?: "start" | "end"
 
-  /**
-   * One or more space-separated values at which the divider should snap. Values can be in pixels or percentages, e.g.
-   * `"100px 50%"`.
-   */
-  @property() snap?: string;
+	// Returned when the property is queried, so that string 'snap's are preserved.
+	private snapValue: string | SnapFunction = ""
+	// Actually used for computing snap points. All string snaps are converted via `toSnapFunction`.
+	private snapFunction: SnapFunction = SNAP_NONE
 
-  /** How close the divider must be to a snap point until snapping occurs. */
-  @property({ type: Number, attribute: 'snap-threshold' }) snapThreshold = 12;
+	/**
+	 * One of the following:
+	 * - One or more space-separated values at which the divider should snap, in pixels or percentages, e.g. `"100px 50% 500px"`.
+	 * - A repeat expression containing a single pixel or percentage snap interval, e.g. `"repeat(16px)"`
+	 * - A function which takes in a position, and then returns a snapped position, e.g. ({ pixels }) => Math.round(pixels / 8) * 8;
+	 */
+	@property({ reflect: true })
+	set snap(snap: string | SnapFunction | null | undefined) {
+		this.snapValue = snap ?? ""
+		if (snap) {
+			this.snapFunction = typeof snap === "string" ? toSnapFunction(snap) : snap
+		} else {
+			this.snapFunction = SNAP_NONE
+		}
+	}
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.resizeObserver = new ResizeObserver(entries => this.handleResize(entries));
-    this.updateComplete.then(() => this.resizeObserver.observe(this));
+	get snap(): string | SnapFunction {
+		return this.snapValue
+	}
 
-    this.detectSize();
-    this.cachedPositionInPixels = this.percentageToPixels(this.position);
-  }
+	/** How close the divider must be to a snap point until snapping occurs. */
+	@property({ type: Number, attribute: "snap-threshold" }) snapThreshold = 12
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.resizeObserver?.unobserve(this);
-  }
+	connectedCallback() {
+		super.connectedCallback()
+		this.resizeObserver = new ResizeObserver(entries => this.handleResize(entries))
+		this.updateComplete.then(() => this.resizeObserver.observe(this))
 
-  private detectSize() {
-    const { width, height } = this.getBoundingClientRect();
-    this.size = this.vertical ? height : width;
-  }
+		this.detectSize()
+		this.cachedPositionInPixels = this.percentageToPixels(this.position)
+	}
 
-  private percentageToPixels(value: number) {
-    return this.size * (value / 100);
-  }
+	disconnectedCallback() {
+		super.disconnectedCallback()
+		this.resizeObserver.unobserve(this)
+	}
 
-  private pixelsToPercentage(value: number) {
-    return (value / this.size) * 100;
-  }
+	private detectSize() {
+		const { width, height } = this.getBoundingClientRect()
+		this.size = this.vertical ? height : width
+	}
+
+	private percentageToPixels(value: number) {
+		return this.size * (value / 100)
+	}
+
+	private pixelsToPercentage(value: number) {
+		return (value / this.size) * 100
+	}
 
   private handleDrag(event: PointerEvent) {
     const isRtl = this.localize.dir() === 'rtl';
 
-    if (this.disabled) {
-      return;
-    }
+		if (this.disabled) {
+			return
+		}
 
-    // Prevent text selection when dragging
-    if (event.cancelable) {
-      event.preventDefault();
-    }
+		// Prevent text selection when dragging
+		if (event.cancelable) {
+			event.preventDefault()
+		}
 
-    drag(this, {
-      onMove: (x, y) => {
-        let newPositionInPixels = this.vertical ? y : x;
+		drag(this, {
+			onMove: (x, y) => {
+				let newPositionInPixels = this.vertical ? y : x
 
-        // Flip for end panels
-        if (this.primary === 'end') {
-          newPositionInPixels = this.size - newPositionInPixels;
-        }
+				// Flip for end panels
+				if (this.primary === "end") {
+					newPositionInPixels = this.size - newPositionInPixels
+				}
 
-        // Check snap points
-        if (this.snap) {
-          const snaps = this.snap.split(' ');
+				// Check snap points
+				newPositionInPixels =
+					this.snapFunction({
+						pos: newPositionInPixels,
+						size: this.size,
+						snapThreshold: this.snapThreshold,
+						isRtl: isRtl,
+						vertical: this.vertical,
+						pixelsToPercent: this.pixelsToPercentage,
+						percentToPixels: this.percentageToPixels,
+					}) ?? newPositionInPixels
 
-          snaps.forEach(value => {
-            let snapPoint: number;
+				this.position = clamp(this.pixelsToPercentage(newPositionInPixels), 0, 100)
+			},
+			initialEvent: event,
+		})
+	}
 
-            if (value.endsWith('%')) {
-              snapPoint = this.size * (parseFloat(value) / 100);
-            } else {
-              snapPoint = parseFloat(value);
-            }
-
-            if (isRtl && !this.vertical) {
-              snapPoint = this.size - snapPoint;
-            }
-
-            if (
-              newPositionInPixels >= snapPoint - this.snapThreshold &&
-              newPositionInPixels <= snapPoint + this.snapThreshold
-            ) {
-              newPositionInPixels = snapPoint;
-            }
-          });
-        }
-
-        this.position = clamp(this.pixelsToPercentage(newPositionInPixels), 0, 100);
-      },
-      initialEvent: event
-    });
-  }
-
-  private handleKeyDown(event: KeyboardEvent) {
-    if (this.disabled) {
-      return;
-    }
+	private handleKeyDown(event: KeyboardEvent) {
+		if (this.disabled) {
+			return
+		}
 
     if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter'].includes(event.key)) {
       let newPosition = this.position;
@@ -301,7 +307,7 @@ export default class SlSplitPanel extends ShoelaceElement {
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'sl-split-panel': SlSplitPanel;
-  }
+	interface HTMLElementTagNameMap {
+		"sl-split-panel": SlSplitPanel;
+	}
 }
