@@ -1,14 +1,16 @@
-import { clamp } from '../../internal/math.js';
-import { drag } from '../../internal/drag.js';
-import { html } from 'lit';
-import { ifDefined } from 'lit/directives/if-defined.js';
-import { LocalizeController } from '../../utilities/localize.js';
-import { property, query } from 'lit/decorators.js';
-import { watch } from '../../internal/watch.js';
-import componentStyles from '../../styles/component.styles.js';
-import ShoelaceElement from '../../internal/shoelace-element.js';
-import styles from './split-panel.styles.js';
-import type { CSSResultGroup } from 'lit';
+import { html } from "lit"
+import type { CSSResultGroup } from "lit"
+import { property, query } from "lit/decorators.js"
+import { ifDefined } from "lit/directives/if-defined.js"
+import { drag } from "../../internal/drag.js"
+import { clamp } from "../../internal/math.js"
+import ShoelaceElement from "../../internal/shoelace-element.js"
+import { watch } from "../../internal/watch.js"
+import componentStyles from "../../styles/component.styles.js"
+import { LocalizeController } from "../../utilities/localize.js"
+import styles from "./split-panel.styles.js"
+import { SNAP_NONE, toSnapFunction } from "./utility.js"
+import type { SnapFunction } from "./utility.js"
 
 /**
  * @summary Split panels display two adjacent panels, allowing the user to reposition them.
@@ -34,197 +36,202 @@ import type { CSSResultGroup } from 'lit';
  * @cssproperty [--max=100%] - The maximum allowed size of the primary panel.
  */
 export default class SlSplitPanel extends ShoelaceElement {
-  static styles: CSSResultGroup = [componentStyles, styles];
+	static styles: CSSResultGroup = [componentStyles, styles]
 
-  private cachedPositionInPixels: number;
-  private readonly localize = new LocalizeController(this);
-  private resizeObserver: ResizeObserver;
-  private size: number;
+	private cachedPositionInPixels: number
+	private readonly localize = new LocalizeController(this)
+	private resizeObserver: ResizeObserver
+	private size: number
 
-  @query('.divider') divider: HTMLElement;
+	@query(".divider") divider: HTMLElement
 
-  /**
-   * The current position of the divider from the primary panel's edge as a percentage 0-100. Defaults to 50% of the
-   * container's initial size.
-   */
-  @property({ type: Number, reflect: true }) position = 50;
+	/**
+	 * The current position of the divider from the primary panel's edge as a percentage 0-100. Defaults to 50% of the
+	 * container's initial size.
+	 */
+	@property({ type: Number, reflect: true }) position = 50
 
-  /** The current position of the divider from the primary panel's edge in pixels. */
-  @property({ attribute: 'position-in-pixels', type: Number }) positionInPixels: number;
+	/** The current position of the divider from the primary panel's edge in pixels. */
+	@property({ attribute: "position-in-pixels", type: Number }) positionInPixels: number
 
-  /** Draws the split panel in a vertical orientation with the start and end panels stacked. */
-  @property({ type: Boolean, reflect: true }) vertical = false;
+	/** Draws the split panel in a vertical orientation with the start and end panels stacked. */
+	@property({ type: Boolean, reflect: true }) vertical = false
 
-  /** Disables resizing. Note that the position may still change as a result of resizing the host element. */
-  @property({ type: Boolean, reflect: true }) disabled = false;
+	/** Disables resizing. Note that the position may still change as a result of resizing the host element. */
+	@property({ type: Boolean, reflect: true }) disabled = false
 
-  /**
-   * If no primary panel is designated, both panels will resize proportionally when the host element is resized. If a
-   * primary panel is designated, it will maintain its size and the other panel will grow or shrink as needed when the
-   * host element is resized.
-   */
-  @property() primary?: 'start' | 'end';
+	/**
+	 * If no primary panel is designated, both panels will resize proportionally when the host element is resized. If a
+	 * primary panel is designated, it will maintain its size and the other panel will grow or shrink as needed when the
+	 * host element is resized.
+	 */
+	@property() primary?: "start" | "end"
 
-  /**
-   * One or more space-separated values at which the divider should snap. Values can be in pixels or percentages, e.g.
-   * `"100px 50%"`.
-   */
-  @property() snap?: string;
+	// Returned when the property is queried, so that string 'snap's are preserved.
+	private snapValue: string | SnapFunction = ""
+	// Actually used for computing snap points. All string snaps are converted via `toSnapFunction`.
+	private snapFunction: SnapFunction = SNAP_NONE
 
-  /** How close the divider must be to a snap point until snapping occurs. */
-  @property({ type: Number, attribute: 'snap-threshold' }) snapThreshold = 12;
+	/**
+	 * One of the following:
+	 * - One or more space-separated values at which the divider should snap, in pixels or percentages, e.g. `"100px 50% 500px"`.
+	 * - A repeat expression containing a single pixel or percentage snap interval, e.g. `"repeat(16px)"`
+	 * - A function which takes in a position, and then returns a snapped position, e.g. ({ pixels }) => Math.round(pixels / 8) * 8;
+	 */
+	@property({ reflect: true })
+	set snap(snap: string | SnapFunction | null | undefined) {
+		this.snapValue = snap ?? ""
+		if (snap) {
+			this.snapFunction = typeof snap === "string" ? toSnapFunction(snap) : snap
+		} else {
+			this.snapFunction = SNAP_NONE
+		}
+	}
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.resizeObserver = new ResizeObserver(entries => this.handleResize(entries));
-    this.updateComplete.then(() => this.resizeObserver.observe(this));
+	get snap(): string | SnapFunction {
+		return this.snapValue
+	}
 
-    this.detectSize();
-    this.cachedPositionInPixels = this.percentageToPixels(this.position);
-  }
+	/** How close the divider must be to a snap point until snapping occurs. */
+	@property({ type: Number, attribute: "snap-threshold" }) snapThreshold = 12
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.resizeObserver.unobserve(this);
-  }
+	connectedCallback() {
+		super.connectedCallback()
+		this.resizeObserver = new ResizeObserver(entries => this.handleResize(entries))
+		this.updateComplete.then(() => this.resizeObserver.observe(this))
 
-  private detectSize() {
-    const { width, height } = this.getBoundingClientRect();
-    this.size = this.vertical ? height : width;
-  }
+		this.detectSize()
+		this.cachedPositionInPixels = this.percentageToPixels(this.position)
+	}
 
-  private percentageToPixels(value: number) {
-    return this.size * (value / 100);
-  }
+	disconnectedCallback() {
+		super.disconnectedCallback()
+		this.resizeObserver.unobserve(this)
+	}
 
-  private pixelsToPercentage(value: number) {
-    return (value / this.size) * 100;
-  }
+	private detectSize() {
+		const { width, height } = this.getBoundingClientRect()
+		this.size = this.vertical ? height : width
+	}
 
-  private handleDrag(event: PointerEvent) {
-    const isRtl = this.matches(':dir(rtl)');
+	private percentageToPixels(value: number) {
+		return this.size * (value / 100)
+	}
 
-    if (this.disabled) {
-      return;
-    }
+	private pixelsToPercentage(value: number) {
+		return (value / this.size) * 100
+	}
 
-    // Prevent text selection when dragging
-    if (event.cancelable) {
-      event.preventDefault();
-    }
+	private handleDrag(event: PointerEvent) {
+		const isRtl = this.matches(":dir(rtl)")
 
-    drag(this, {
-      onMove: (x, y) => {
-        let newPositionInPixels = this.vertical ? y : x;
+		if (this.disabled) {
+			return
+		}
 
-        // Flip for end panels
-        if (this.primary === 'end') {
-          newPositionInPixels = this.size - newPositionInPixels;
-        }
+		// Prevent text selection when dragging
+		if (event.cancelable) {
+			event.preventDefault()
+		}
 
-        // Check snap points
-        if (this.snap) {
-          const snaps = this.snap.split(' ');
+		drag(this, {
+			onMove: (x, y) => {
+				let newPositionInPixels = this.vertical ? y : x
 
-          snaps.forEach(value => {
-            let snapPoint: number;
+				// Flip for end panels
+				if (this.primary === "end") {
+					newPositionInPixels = this.size - newPositionInPixels
+				}
 
-            if (value.endsWith('%')) {
-              snapPoint = this.size * (parseFloat(value) / 100);
-            } else {
-              snapPoint = parseFloat(value);
-            }
+				// Check snap points
+				newPositionInPixels =
+					this.snapFunction({
+						pos: newPositionInPixels,
+						size: this.size,
+						snapThreshold: this.snapThreshold,
+						isRtl: isRtl,
+						vertical: this.vertical,
+						pixelsToPercent: this.pixelsToPercentage,
+						percentToPixels: this.percentageToPixels,
+					}) ?? newPositionInPixels
 
-            if (isRtl && !this.vertical) {
-              snapPoint = this.size - snapPoint;
-            }
+				this.position = clamp(this.pixelsToPercentage(newPositionInPixels), 0, 100)
+			},
+			initialEvent: event,
+		})
+	}
 
-            if (
-              newPositionInPixels >= snapPoint - this.snapThreshold &&
-              newPositionInPixels <= snapPoint + this.snapThreshold
-            ) {
-              newPositionInPixels = snapPoint;
-            }
-          });
-        }
+	private handleKeyDown(event: KeyboardEvent) {
+		if (this.disabled) {
+			return
+		}
 
-        this.position = clamp(this.pixelsToPercentage(newPositionInPixels), 0, 100);
-      },
-      initialEvent: event
-    });
-  }
+		if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) {
+			let newPosition = this.position
+			const incr = (event.shiftKey ? 10 : 1) * (this.primary === "end" ? -1 : 1)
 
-  private handleKeyDown(event: KeyboardEvent) {
-    if (this.disabled) {
-      return;
-    }
+			event.preventDefault()
 
-    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) {
-      let newPosition = this.position;
-      const incr = (event.shiftKey ? 10 : 1) * (this.primary === 'end' ? -1 : 1);
+			if ((event.key === "ArrowLeft" && !this.vertical) || (event.key === "ArrowUp" && this.vertical)) {
+				newPosition -= incr
+			}
 
-      event.preventDefault();
+			if ((event.key === "ArrowRight" && !this.vertical) || (event.key === "ArrowDown" && this.vertical)) {
+				newPosition += incr
+			}
 
-      if ((event.key === 'ArrowLeft' && !this.vertical) || (event.key === 'ArrowUp' && this.vertical)) {
-        newPosition -= incr;
-      }
+			if (event.key === "Home") {
+				newPosition = this.primary === "end" ? 100 : 0
+			}
 
-      if ((event.key === 'ArrowRight' && !this.vertical) || (event.key === 'ArrowDown' && this.vertical)) {
-        newPosition += incr;
-      }
+			if (event.key === "End") {
+				newPosition = this.primary === "end" ? 0 : 100
+			}
 
-      if (event.key === 'Home') {
-        newPosition = this.primary === 'end' ? 100 : 0;
-      }
+			this.position = clamp(newPosition, 0, 100)
+		}
+	}
 
-      if (event.key === 'End') {
-        newPosition = this.primary === 'end' ? 0 : 100;
-      }
+	private handleResize(entries: ResizeObserverEntry[]) {
+		const { width, height } = entries[0].contentRect
+		this.size = this.vertical ? height : width
 
-      this.position = clamp(newPosition, 0, 100);
-    }
-  }
+		// There's some weird logic that gets `this.cachedPositionInPixels = NaN` or `this.position === Infinity` when
+		// a split-panel goes from `display: none;` to showing.
+		if (isNaN(this.cachedPositionInPixels) || this.position === Number.POSITIVE_INFINITY) {
+			this.cachedPositionInPixels = Number(this.getAttribute("position-in-pixels"))
+			this.positionInPixels = Number(this.getAttribute("position-in-pixels"))
+			this.position = this.pixelsToPercentage(this.positionInPixels)
+		}
 
-  private handleResize(entries: ResizeObserverEntry[]) {
-    const { width, height } = entries[0].contentRect;
-    this.size = this.vertical ? height : width;
+		// Resize when a primary panel is set
+		if (this.primary) {
+			this.position = this.pixelsToPercentage(this.cachedPositionInPixels)
+		}
+	}
 
-    // There's some weird logic that gets `this.cachedPositionInPixels = NaN` or `this.position === Infinity` when
-    // a split-panel goes from `display: none;` to showing.
-    if (isNaN(this.cachedPositionInPixels) || this.position === Infinity) {
-      this.cachedPositionInPixels = Number(this.getAttribute('position-in-pixels'));
-      this.positionInPixels = Number(this.getAttribute('position-in-pixels'));
-      this.position = this.pixelsToPercentage(this.positionInPixels);
-    }
+	@watch("position")
+	handlePositionChange() {
+		this.cachedPositionInPixels = this.percentageToPixels(this.position)
+		this.positionInPixels = this.percentageToPixels(this.position)
+		this.emit("sl-reposition")
+	}
 
-    // Resize when a primary panel is set
-    if (this.primary) {
-      this.position = this.pixelsToPercentage(this.cachedPositionInPixels);
-    }
-  }
+	@watch("positionInPixels")
+	handlePositionInPixelsChange() {
+		this.position = this.pixelsToPercentage(this.positionInPixels)
+	}
 
-  @watch('position')
-  handlePositionChange() {
-    this.cachedPositionInPixels = this.percentageToPixels(this.position);
-    this.positionInPixels = this.percentageToPixels(this.position);
-    this.emit('sl-reposition');
-  }
+	@watch("vertical")
+	handleVerticalChange() {
+		this.detectSize()
+	}
 
-  @watch('positionInPixels')
-  handlePositionInPixelsChange() {
-    this.position = this.pixelsToPercentage(this.positionInPixels);
-  }
-
-  @watch('vertical')
-  handleVerticalChange() {
-    this.detectSize();
-  }
-
-  render() {
-    const gridTemplate = this.vertical ? 'gridTemplateRows' : 'gridTemplateColumns';
-    const gridTemplateAlt = this.vertical ? 'gridTemplateColumns' : 'gridTemplateRows';
-    const isRtl = this.matches(':dir(rtl)');
-    const primary = `
+	render() {
+		const gridTemplate = this.vertical ? "gridTemplateRows" : "gridTemplateColumns"
+		const gridTemplateAlt = this.vertical ? "gridTemplateColumns" : "gridTemplateRows"
+		const isRtl = this.matches(":dir(rtl)")
+		const primary = `
       clamp(
         0%,
         clamp(
@@ -234,38 +241,36 @@ export default class SlSplitPanel extends ShoelaceElement {
         ),
         calc(100% - var(--divider-width))
       )
-    `;
-    const secondary = 'auto';
+    `
+		const secondary = "auto"
 
-    if (this.primary === 'end') {
-      if (isRtl && !this.vertical) {
-        this.style[gridTemplate] = `${primary} var(--divider-width) ${secondary}`;
-      } else {
-        this.style[gridTemplate] = `${secondary} var(--divider-width) ${primary}`;
-      }
-    } else {
-      if (isRtl && !this.vertical) {
-        this.style[gridTemplate] = `${secondary} var(--divider-width) ${primary}`;
-      } else {
-        this.style[gridTemplate] = `${primary} var(--divider-width) ${secondary}`;
-      }
-    }
+		if (this.primary === "end") {
+			if (isRtl && !this.vertical) {
+				this.style[gridTemplate] = `${primary} var(--divider-width) ${secondary}`
+			} else {
+				this.style[gridTemplate] = `${secondary} var(--divider-width) ${primary}`
+			}
+		} else if (isRtl && !this.vertical) {
+			this.style[gridTemplate] = `${secondary} var(--divider-width) ${primary}`
+		} else {
+			this.style[gridTemplate] = `${primary} var(--divider-width) ${secondary}`
+		}
 
-    // Unset the alt grid template property
-    this.style[gridTemplateAlt] = '';
+		// Unset the alt grid template property
+		this.style[gridTemplateAlt] = ""
 
-    return html`
+		return html`
       <slot name="start" part="panel start" class="start"></slot>
 
       <div
         part="divider"
         class="divider"
-        tabindex=${ifDefined(this.disabled ? undefined : '0')}
+        tabindex=${ifDefined(this.disabled ? undefined : "0")}
         role="separator"
         aria-valuenow=${this.position}
         aria-valuemin="0"
         aria-valuemax="100"
-        aria-label=${this.localize.term('resize')}
+        aria-label=${this.localize.term("resize")}
         @keydown=${this.handleKeyDown}
         @mousedown=${this.handleDrag}
         @touchstart=${this.handleDrag}
@@ -274,12 +279,12 @@ export default class SlSplitPanel extends ShoelaceElement {
       </div>
 
       <slot name="end" part="panel end" class="end"></slot>
-    `;
-  }
+    `
+	}
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'sl-split-panel': SlSplitPanel;
-  }
+	interface HTMLElementTagNameMap {
+		"sl-split-panel": SlSplitPanel
+	}
 }
