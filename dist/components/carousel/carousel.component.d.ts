@@ -63,8 +63,10 @@ export default class SlCarousel extends ShoelaceElement {
     scrolling: boolean;
     dragging: boolean;
     private autoplayController;
+    private dragStartPosition;
     private readonly localize;
     private mutationObserver;
+    private pendingSlideChange;
     connectedCallback(): void;
     disconnectedCallback(): void;
     protected firstUpdated(): void;
@@ -75,6 +77,7 @@ export default class SlCarousel extends ShoelaceElement {
     private canScrollPrev;
     /** @internal Gets all carousel items. */
     private getSlides;
+    private handleClick;
     private handleKeyDown;
     private handleMouseDragStart;
     private handleMouseDrag;
@@ -87,7 +90,7 @@ export default class SlCarousel extends ShoelaceElement {
     private handleSlotChange;
     initializeSlides(): void;
     private createClones;
-    handelSlideChange(): void;
+    handleSlideChange(): void;
     updateSlidesSnap(): void;
     handleAutoplayChange(): void;
     /**

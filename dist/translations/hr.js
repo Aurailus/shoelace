@@ -1,4 +1,4 @@
-import "../chunks/chunk.IFDWM6P4.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/hr.ts
 import { registerTranslation } from "@shoelace-style/localize";
@@ -18,10 +18,8 @@ var translation = {
   loading: "U\u010Ditavanje",
   nextSlide: "Sljede\u0107i slajd",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "Nije odabrana nijedna opcija";
-    if (num === 1)
-      return "1 opcija je odabrana";
+    if (num === 0) return "Nije odabrana nijedna opcija";
+    if (num === 1) return "1 opcija je odabrana";
     return `${num} odabranih opcija`;
   },
   previousSlide: "Prethodni slajd",

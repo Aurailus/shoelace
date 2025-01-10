@@ -1,9 +1,9 @@
 import {
   LocalizeController,
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
-import "../chunks/chunk.MAS2SHYD.js";
-import "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
+import "../chunks/chunk.7BTDLTNI.js";
+import "../chunks/chunk.KAW7D32O.js";
 export {
   LocalizeController,
   registerTranslation

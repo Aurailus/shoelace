@@ -1,4 +1,4 @@
-import "../chunks/chunk.IFDWM6P4.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/id.ts
 import { registerTranslation } from "@shoelace-style/localize";
@@ -18,10 +18,8 @@ var translation = {
   loading: "Memuat",
   nextSlide: "Slide berikutnya",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "Tidak ada opsi yang dipilih";
-    if (num === 1)
-      return "1 opsi yang dipilih";
+    if (num === 0) return "Tidak ada opsi yang dipilih";
+    if (num === 1) return "1 opsi yang dipilih";
     return `${num} opsi yang dipilih`;
   },
   previousSlide: "Slide sebelumnya",

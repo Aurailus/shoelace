@@ -1,5 +1,7 @@
+import '../../internal/scrollend-polyfill.js';
 import ShoelaceElement from '../../internal/shoelace-element.js';
 import SlIconButton from '../icon-button/icon-button.component.js';
+import SlResizeObserver from '../resize-observer/resize-observer.component.js';
 import type { CSSResultGroup } from 'lit';
 /**
  * @summary Tab groups organize content into a container that shows one section at a time.
@@ -33,18 +35,22 @@ export default class SlTabGroup extends ShoelaceElement {
     static styles: CSSResultGroup;
     static dependencies: {
         'sl-icon-button': typeof SlIconButton;
+        'sl-resize-observer': typeof SlResizeObserver;
     };
-    private readonly localize;
     private activeTab?;
     private mutationObserver;
     private resizeObserver;
     private tabs;
+    private focusableTabs;
     private panels;
+    private readonly localize;
     tabGroup: HTMLElement;
     body: HTMLSlotElement;
     nav: HTMLElement;
     indicator: HTMLElement;
     private hasScrollControls;
+    private shouldHideScrollStartButton;
+    private shouldHideScrollEndButton;
     /** The placement of the tabs. */
     placement: 'top' | 'bottom' | 'start' | 'end';
     /**
@@ -54,6 +60,8 @@ export default class SlTabGroup extends ShoelaceElement {
     activation: 'auto' | 'manual';
     /** Disables the scroll arrows that appear when tabs overflow. */
     noScrollControls: boolean;
+    /** Prevent scroll buttons from being hidden when inactive. */
+    fixedScrollControls: boolean;
     connectedCallback(): void;
     disconnectedCallback(): void;
     private getAllTabs;
@@ -67,6 +75,15 @@ export default class SlTabGroup extends ShoelaceElement {
     private setAriaLabels;
     private repositionIndicator;
     private syncTabsAndPanels;
+    private findNextFocusableTab;
+    /**
+     * The reality of the browser means that we can't expect the scroll position to be exactly what we want it to be, so
+     * we add one pixel of wiggle room to our calculations.
+     */
+    private scrollOffset;
+    private updateScrollButtons;
+    private isScrolledToEnd;
+    private scrollFromStart;
     updateScrollControls(): void;
     syncIndicator(): void;
     /** Shows the specified tab panel. */

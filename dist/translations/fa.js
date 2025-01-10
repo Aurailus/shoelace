@@ -1,8 +1,8 @@
 import {
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
-import "../chunks/chunk.MAS2SHYD.js";
-import "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
+import "../chunks/chunk.7BTDLTNI.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/fa.ts
 var translation = {
@@ -21,10 +21,8 @@ var translation = {
   loading: "\u0628\u0627\u0631\u06AF\u0630\u0627\u0631\u06CC",
   nextSlide: "\u0627\u0633\u0644\u0627\u06CC\u062F \u0628\u0639\u062F\u06CC",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "\u0647\u06CC\u0686 \u06AF\u0632\u06CC\u0646\u0647 \u0627\u06CC \u0627\u0646\u062A\u062E\u0627\u0628 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A";
-    if (num === 1)
-      return "1 \u06AF\u0632\u06CC\u0646\u0647 \u0627\u0646\u062A\u062E\u0627\u0628 \u0634\u062F\u0647 \u0627\u0633\u062A";
+    if (num === 0) return "\u0647\u06CC\u0686 \u06AF\u0632\u06CC\u0646\u0647 \u0627\u06CC \u0627\u0646\u062A\u062E\u0627\u0628 \u0646\u0634\u062F\u0647 \u0627\u0633\u062A";
+    if (num === 1) return "1 \u06AF\u0632\u06CC\u0646\u0647 \u0627\u0646\u062A\u062E\u0627\u0628 \u0634\u062F\u0647 \u0627\u0633\u062A";
     return `${num} \u06AF\u0632\u06CC\u0646\u0647 \u0627\u0646\u062A\u062E\u0627\u0628 \u0634\u062F\u0647 \u0627\u0633\u062A`;
   },
   previousSlide: "\u0627\u0633\u0644\u0627\u06CC\u062F \u0642\u0628\u0644\u06CC",

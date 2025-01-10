@@ -1,14 +1,14 @@
 import {
   de_default
-} from "../chunks/chunk.HLY7QLMF.js";
+} from "../chunks/chunk.3GA5GUNV.js";
 import {
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
-import "../chunks/chunk.MAS2SHYD.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
+import "../chunks/chunk.7BTDLTNI.js";
 import {
   __spreadProps,
   __spreadValues
-} from "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/de-ch.ts
 var translation = __spreadProps(__spreadValues({}, de_default), {

@@ -1,8 +1,8 @@
 import {
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
-import "../chunks/chunk.MAS2SHYD.js";
-import "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
+import "../chunks/chunk.7BTDLTNI.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/pt.ts
 var translation = {
@@ -21,10 +21,8 @@ var translation = {
   loading: "Carregando",
   nextSlide: "Pr\xF3ximo slide",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "Nenhuma op\xE7\xE3o selecionada";
-    if (num === 1)
-      return "1 op\xE7\xE3o selecionada";
+    if (num === 0) return "Nenhuma op\xE7\xE3o selecionada";
+    if (num === 1) return "1 op\xE7\xE3o selecionada";
     return `${num} op\xE7\xF5es selecionadas`;
   },
   previousSlide: "Slide anterior",

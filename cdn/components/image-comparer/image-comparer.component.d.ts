@@ -29,6 +29,7 @@ export default class SlImageComparer extends ShoelaceElement {
     static scopedElement: {
         'sl-icon': typeof SlIcon;
     };
+    private readonly localize;
     base: HTMLElement;
     handle: HTMLElement;
     /** The position of the divider as a percentage. */

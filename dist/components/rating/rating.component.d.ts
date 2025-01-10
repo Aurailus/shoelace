@@ -26,6 +26,7 @@ export default class SlRating extends ShoelaceElement {
     static dependencies: {
         'sl-icon': typeof SlIcon;
     };
+    private readonly localize;
     rating: HTMLElement;
     private hoverValue;
     private isHovering;

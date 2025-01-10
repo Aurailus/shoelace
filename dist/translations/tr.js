@@ -1,8 +1,8 @@
 import {
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
-import "../chunks/chunk.MAS2SHYD.js";
-import "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
+import "../chunks/chunk.7BTDLTNI.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/tr.ts
 var translation = {
@@ -21,10 +21,8 @@ var translation = {
   loading: "Y\xFCkleme",
   nextSlide: "Sonraki slayt",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "Hi\xE7bir se\xE7enek se\xE7ilmedi";
-    if (num === 1)
-      return "1 se\xE7enek se\xE7ildi";
+    if (num === 0) return "Hi\xE7bir se\xE7enek se\xE7ilmedi";
+    if (num === 1) return "1 se\xE7enek se\xE7ildi";
     return `${num} se\xE7enek se\xE7ildi`;
   },
   previousSlide: "Bir onceki slayt",

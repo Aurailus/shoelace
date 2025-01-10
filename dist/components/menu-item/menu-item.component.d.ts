@@ -37,6 +37,7 @@ export default class SlMenuItem extends ShoelaceElement {
         'sl-spinner': typeof SlSpinner;
     };
     private cachedTextLabel;
+    private readonly localize;
     defaultSlot: HTMLSlotElement;
     menuItem: HTMLElement;
     /** The type of menu item to render. To use `checked`, this value must be set to `checkbox`. */

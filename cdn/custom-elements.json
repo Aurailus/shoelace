@@ -62,6 +62,22 @@
             },
             {
               "kind": "field",
+              "name": "remainingTimeInterval",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "countdownAnimation",
+              "type": {
+                "text": "Animation | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
               "name": "hasSlotController",
               "privacy": "private",
               "readonly": true,
@@ -77,6 +93,13 @@
             {
               "kind": "field",
               "name": "base",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "countdownElement",
               "type": {
                 "text": "HTMLElement"
               }
@@ -122,18 +145,43 @@
               "attribute": "duration"
             },
             {
+              "kind": "field",
+              "name": "countdown",
+              "type": {
+                "text": "'rtl' | 'ltr' | undefined"
+              },
+              "description": "Enables a countdown that indicates the remaining time the alert will be displayed.\nTypically used to indicate the remaining time before a whole app refresh.",
+              "attribute": "countdown",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "remainingTime",
+              "privacy": "private"
+            },
+            {
               "kind": "method",
               "name": "restartAutoHide",
               "privacy": "private"
             },
             {
               "kind": "method",
-              "name": "handleCloseClick",
+              "name": "pauseAutoHide",
               "privacy": "private"
             },
             {
               "kind": "method",
-              "name": "handleMouseMove",
+              "name": "resumeAutoHide",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleCountdownChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleCloseClick",
               "privacy": "private"
             },
             {
@@ -218,10 +266,15 @@
               "name": "duration",
               "default": "Infinity",
               "description": "The length of time, in milliseconds, the alert will show before closing itself. If the user interacts with\nthe alert before it closes (e.g. moves the mouse over it), the timer will restart. Defaults to `Infinity`, meaning\nthe alert will not close on its own.",
-              "resolveInitializer": {
-                "module": "src/components/alert/alert.component.ts"
-              },
               "fieldName": "duration"
+            },
+            {
+              "name": "countdown",
+              "type": {
+                "text": "'rtl' | 'ltr' | undefined"
+              },
+              "description": "Enables a countdown that indicates the remaining time the alert will be displayed.\nTypically used to indicate the remaining time before a whole app refresh.",
+              "fieldName": "countdown"
             }
           ],
           "superclass": {
@@ -258,192 +311,6 @@
           "declaration": {
             "name": "SlAlert",
             "module": "components/alert/alert.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "components/animated-image/animated-image.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SlAnimatedImage",
-          "cssProperties": [
-            {
-              "description": "The size of the icon box.",
-              "name": "--control-box-size"
-            },
-            {
-              "description": "The size of the play/pause icons.",
-              "name": "--icon-size"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The container that surrounds the pause/play icons and provides their background.",
-              "name": "control-box"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Optional play icon to use instead of the default. Works best with `<sl-icon>`.",
-              "name": "play-icon"
-            },
-            {
-              "description": "Optional pause icon to use instead of the default. Works best with `<sl-icon>`.",
-              "name": "pause-icon"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "dependencies",
-              "type": {
-                "text": "object"
-              },
-              "static": true,
-              "default": "{ 'sl-icon': SlIcon }"
-            },
-            {
-              "kind": "field",
-              "name": "animatedImage",
-              "type": {
-                "text": "HTMLImageElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "frozenFrame",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "isLoaded",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "src",
-              "type": {
-                "text": "string"
-              },
-              "description": "The path to the image to load.",
-              "attribute": "src"
-            },
-            {
-              "kind": "field",
-              "name": "alt",
-              "type": {
-                "text": "string"
-              },
-              "description": "A description of the image used by assistive devices.",
-              "attribute": "alt"
-            },
-            {
-              "kind": "field",
-              "name": "play",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Plays the animation. When this attribute is remove, the animation will pause.",
-              "attribute": "play",
-              "reflects": true
-            },
-            {
-              "kind": "method",
-              "name": "handleClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleLoad",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleError",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handlePlayChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleSrcChange"
-            }
-          ],
-          "events": [
-            {
-              "description": "Emitted when the image loads successfully.",
-              "name": "sl-load",
-              "reactName": "onSlLoad",
-              "eventName": "SlLoadEvent"
-            },
-            {
-              "description": "Emitted when the image fails to load.",
-              "name": "sl-error",
-              "reactName": "onSlError",
-              "eventName": "SlErrorEvent"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "src",
-              "type": {
-                "text": "string"
-              },
-              "description": "The path to the image to load.",
-              "fieldName": "src"
-            },
-            {
-              "name": "alt",
-              "type": {
-                "text": "string"
-              },
-              "description": "A description of the image used by assistive devices.",
-              "fieldName": "alt"
-            },
-            {
-              "name": "play",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Plays the animation. When this attribute is remove, the animation will pause.",
-              "fieldName": "play"
-            }
-          ],
-          "superclass": {
-            "name": "ShoelaceElement",
-            "module": "/src/internal/shoelace-element.js"
-          },
-          "summary": "A component for displaying animated GIFs and WEBPs that play and pause on interaction.",
-          "tagNameWithoutPrefix": "animated-image",
-          "tagName": "sl-animated-image",
-          "customElement": true,
-          "jsDoc": "/**\n * @summary A component for displaying animated GIFs and WEBPs that play and pause on interaction.\n * @documentation https://shoelace.style/components/animated-image\n * @status stable\n * @since 2.0\n *\n * @dependency sl-icon\n *\n * @event sl-load - Emitted when the image loads successfully.\n * @event sl-error - Emitted when the image fails to load.\n *\n * @slot play-icon - Optional play icon to use instead of the default. Works best with `<sl-icon>`.\n * @slot pause-icon - Optional pause icon to use instead of the default. Works best with `<sl-icon>`.\n *\n * @part control-box - The container that surrounds the pause/play icons and provides their background.\n *\n * @cssproperty --control-box-size - The size of the icon box.\n * @cssproperty --icon-size - The size of the play/pause icons.\n */",
-          "documentation": "https://shoelace.style/components/animated-image",
-          "status": "stable",
-          "since": "2.0",
-          "dependencies": [
-            "sl-icon"
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "SlAnimatedImage",
-            "module": "components/animated-image/animated-image.js"
           }
         }
       ]
@@ -756,9 +623,6 @@
               "name": "iterations",
               "default": "Infinity",
               "description": "The number of iterations to run before the animation completes. Defaults to `Infinity`, which loops.",
-              "resolveInitializer": {
-                "module": "src/components/animation/animation.component.ts"
-              },
               "fieldName": "iterations"
             },
             {
@@ -851,7 +715,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    'sl-icon': SlIcon\n  }"
+              "default": "{ 'sl-icon': SlIcon }"
             },
             {
               "kind": "field",
@@ -916,6 +780,19 @@
             {
               "kind": "method",
               "name": "handleImageChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleImageLoadError",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "description": "The image could not be loaded. This may because of an invalid URL, a temporary network condition, or some unknown cause.",
+              "name": "sl-error",
+              "reactName": "onSlError",
+              "eventName": "SlErrorEvent"
             }
           ],
           "attributes": [
@@ -973,7 +850,7 @@
           "tagNameWithoutPrefix": "avatar",
           "tagName": "sl-avatar",
           "customElement": true,
-          "jsDoc": "/**\n * @summary Avatars are used to represent a person or object.\n * @documentation https://shoelace.style/components/avatar\n * @status stable\n * @since 2.0\n *\n * @dependency sl-icon\n *\n * @slot icon - The default icon to use when no image or initials are present. Works best with `<sl-icon>`.\n *\n * @csspart base - The component's base wrapper.\n * @csspart icon - The container that wraps the avatar's icon.\n * @csspart initials - The container that wraps the avatar's initials.\n * @csspart image - The avatar image. Only shown when the `image` attribute is set.\n *\n * @cssproperty --size - The size of the avatar.\n */",
+          "jsDoc": "/**\n * @summary Avatars are used to represent a person or object.\n * @documentation https://shoelace.style/components/avatar\n * @status stable\n * @since 2.0\n *\n * @dependency sl-icon\n *\n * @event sl-error - The image could not be loaded. This may because of an invalid URL, a temporary network condition, or some\n * unknown cause.\n *\n * @slot icon - The default icon to use when no image or initials are present. Works best with `<sl-icon>`.\n *\n * @csspart base - The component's base wrapper.\n * @csspart icon - The container that wraps the avatar's icon.\n * @csspart initials - The container that wraps the avatar's initials.\n * @csspart image - The avatar image. Only shown when the `image` attribute is set.\n *\n * @cssproperty --size - The size of the avatar.\n */",
           "documentation": "https://shoelace.style/components/avatar",
           "status": "stable",
           "since": "2.0",
@@ -989,115 +866,6 @@
           "declaration": {
             "name": "SlAvatar",
             "module": "components/avatar/avatar.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "components/badge/badge.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SlBadge",
-          "cssParts": [
-            {
-              "description": "The component's base wrapper.",
-              "name": "base"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The badge's content.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "'primary' | 'success' | 'neutral' | 'warning' | 'danger'"
-              },
-              "default": "'primary'",
-              "description": "The badge's theme variant.",
-              "attribute": "variant",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "pill",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Draws a pill-style badge with rounded edges.",
-              "attribute": "pill",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "pulse",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Makes the badge pulsate to draw attention.",
-              "attribute": "pulse",
-              "reflects": true
-            }
-          ],
-          "attributes": [
-            {
-              "name": "variant",
-              "type": {
-                "text": "'primary' | 'success' | 'neutral' | 'warning' | 'danger'"
-              },
-              "default": "'primary'",
-              "description": "The badge's theme variant.",
-              "fieldName": "variant"
-            },
-            {
-              "name": "pill",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Draws a pill-style badge with rounded edges.",
-              "fieldName": "pill"
-            },
-            {
-              "name": "pulse",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Makes the badge pulsate to draw attention.",
-              "fieldName": "pulse"
-            }
-          ],
-          "superclass": {
-            "name": "ShoelaceElement",
-            "module": "/src/internal/shoelace-element.js"
-          },
-          "summary": "Badges are used to draw attention and display statuses or counts.",
-          "tagNameWithoutPrefix": "badge",
-          "tagName": "sl-badge",
-          "customElement": true,
-          "jsDoc": "/**\n * @summary Badges are used to draw attention and display statuses or counts.\n * @documentation https://shoelace.style/components/badge\n * @status stable\n * @since 2.0\n *\n * @slot - The badge's content.\n *\n * @csspart base - The component's base wrapper.\n */",
-          "documentation": "https://shoelace.style/components/badge",
-          "status": "stable",
-          "since": "2.0"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "SlBadge",
-            "module": "components/badge/badge.js"
           }
         }
       ]
@@ -1224,6 +992,115 @@
     },
     {
       "kind": "javascript-module",
+      "path": "components/badge/badge.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SlBadge",
+          "cssParts": [
+            {
+              "description": "The component's base wrapper.",
+              "name": "base"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The badge's content.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'primary' | 'success' | 'neutral' | 'warning' | 'danger'"
+              },
+              "default": "'primary'",
+              "description": "The badge's theme variant.",
+              "attribute": "variant",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "pill",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Draws a pill-style badge with rounded edges.",
+              "attribute": "pill",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "pulse",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Makes the badge pulsate to draw attention.",
+              "attribute": "pulse",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "type": {
+                "text": "'primary' | 'success' | 'neutral' | 'warning' | 'danger'"
+              },
+              "default": "'primary'",
+              "description": "The badge's theme variant.",
+              "fieldName": "variant"
+            },
+            {
+              "name": "pill",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Draws a pill-style badge with rounded edges.",
+              "fieldName": "pill"
+            },
+            {
+              "name": "pulse",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Makes the badge pulsate to draw attention.",
+              "fieldName": "pulse"
+            }
+          ],
+          "superclass": {
+            "name": "ShoelaceElement",
+            "module": "/src/internal/shoelace-element.js"
+          },
+          "summary": "Badges are used to draw attention and display statuses or counts.",
+          "tagNameWithoutPrefix": "badge",
+          "tagName": "sl-badge",
+          "customElement": true,
+          "jsDoc": "/**\n * @summary Badges are used to draw attention and display statuses or counts.\n * @documentation https://shoelace.style/components/badge\n * @status stable\n * @since 2.0\n *\n * @slot - The badge's content.\n *\n * @csspart base - The component's base wrapper.\n */",
+          "documentation": "https://shoelace.style/components/badge",
+          "status": "stable",
+          "since": "2.0"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "SlBadge",
+            "module": "components/badge/badge.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "components/breadcrumb-item/breadcrumb-item.js",
       "declarations": [
         {
@@ -1280,6 +1157,22 @@
             },
             {
               "kind": "field",
+              "name": "defaultSlot",
+              "type": {
+                "text": "HTMLSlotElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "renderType",
+              "type": {
+                "text": "'button' | 'link' | 'dropdown'"
+              },
+              "privacy": "private",
+              "default": "'button'"
+            },
+            {
+              "kind": "field",
               "name": "href",
               "type": {
                 "text": "string | undefined"
@@ -1305,6 +1198,19 @@
               "default": "'noreferrer noopener'",
               "description": "The `rel` attribute to use on the link. Only used when `href` is set.",
               "attribute": "rel"
+            },
+            {
+              "kind": "method",
+              "name": "setRenderType",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "hrefChanged"
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange"
             }
           ],
           "attributes": [
@@ -1415,14 +1321,14 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    'sl-icon': SlIcon,\n    'sl-spinner': SlSpinner\n  }"
+              "default": "{ 'sl-icon': SlIcon, 'sl-spinner': SlSpinner }"
             },
             {
               "kind": "field",
               "name": "formControlController",
               "privacy": "private",
               "readonly": true,
-              "default": "new FormControlController(this, {\n    assumeInteractionOn: ['click']\n  })"
+              "default": "new FormControlController(this, { assumeInteractionOn: ['click'] })"
             },
             {
               "kind": "field",
@@ -2035,6 +1941,192 @@
     },
     {
       "kind": "javascript-module",
+      "path": "components/animated-image/animated-image.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SlAnimatedImage",
+          "cssProperties": [
+            {
+              "description": "The size of the icon box.",
+              "name": "--control-box-size"
+            },
+            {
+              "description": "The size of the play/pause icons.",
+              "name": "--icon-size"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The container that surrounds the pause/play icons and provides their background.",
+              "name": "control-box"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Optional play icon to use instead of the default. Works best with `<sl-icon>`.",
+              "name": "play-icon"
+            },
+            {
+              "description": "Optional pause icon to use instead of the default. Works best with `<sl-icon>`.",
+              "name": "pause-icon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "dependencies",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ 'sl-icon': SlIcon }"
+            },
+            {
+              "kind": "field",
+              "name": "animatedImage",
+              "type": {
+                "text": "HTMLImageElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "frozenFrame",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "isLoaded",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "description": "The path to the image to load.",
+              "attribute": "src"
+            },
+            {
+              "kind": "field",
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "description": "A description of the image used by assistive devices.",
+              "attribute": "alt"
+            },
+            {
+              "kind": "field",
+              "name": "play",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Plays the animation. When this attribute is remove, the animation will pause.",
+              "attribute": "play",
+              "reflects": true
+            },
+            {
+              "kind": "method",
+              "name": "handleClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleLoad",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleError",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handlePlayChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleSrcChange"
+            }
+          ],
+          "events": [
+            {
+              "description": "Emitted when the image loads successfully.",
+              "name": "sl-load",
+              "reactName": "onSlLoad",
+              "eventName": "SlLoadEvent"
+            },
+            {
+              "description": "Emitted when the image fails to load.",
+              "name": "sl-error",
+              "reactName": "onSlError",
+              "eventName": "SlErrorEvent"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "description": "The path to the image to load.",
+              "fieldName": "src"
+            },
+            {
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "description": "A description of the image used by assistive devices.",
+              "fieldName": "alt"
+            },
+            {
+              "name": "play",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Plays the animation. When this attribute is remove, the animation will pause.",
+              "fieldName": "play"
+            }
+          ],
+          "superclass": {
+            "name": "ShoelaceElement",
+            "module": "/src/internal/shoelace-element.js"
+          },
+          "summary": "A component for displaying animated GIFs and WEBPs that play and pause on interaction.",
+          "tagNameWithoutPrefix": "animated-image",
+          "tagName": "sl-animated-image",
+          "customElement": true,
+          "jsDoc": "/**\n * @summary A component for displaying animated GIFs and WEBPs that play and pause on interaction.\n * @documentation https://shoelace.style/components/animated-image\n * @status stable\n * @since 2.0\n *\n * @dependency sl-icon\n *\n * @event sl-load - Emitted when the image loads successfully.\n * @event sl-error - Emitted when the image fails to load.\n *\n * @slot play-icon - Optional play icon to use instead of the default. Works best with `<sl-icon>`.\n * @slot pause-icon - Optional pause icon to use instead of the default. Works best with `<sl-icon>`.\n *\n * @part control-box - The container that surrounds the pause/play icons and provides their background.\n *\n * @cssproperty --control-box-size - The size of the icon box.\n * @cssproperty --icon-size - The size of the play/pause icons.\n */",
+          "documentation": "https://shoelace.style/components/animated-image",
+          "status": "stable",
+          "since": "2.0",
+          "dependencies": [
+            "sl-icon"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "SlAnimatedImage",
+            "module": "components/animated-image/animated-image.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "components/button-group/button-group.js",
       "declarations": [
         {
@@ -2275,6 +2367,1056 @@
     },
     {
       "kind": "javascript-module",
+      "path": "components/carousel/carousel.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SlCarousel",
+          "cssProperties": [
+            {
+              "description": "The space between each slide.",
+              "name": "--slide-gap"
+            },
+            {
+              "description": "The aspect ratio of each slide.",
+              "name": "--aspect-ratio",
+              "default": "16/9"
+            },
+            {
+              "description": "The amount of padding to apply to the scroll area, allowing adjacent slides to become partially visible as a scroll hint.",
+              "name": "--scroll-hint"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The carousel's internal wrapper.",
+              "name": "base"
+            },
+            {
+              "description": "The scroll container that wraps the slides.",
+              "name": "scroll-container"
+            },
+            {
+              "description": "The pagination indicators wrapper.",
+              "name": "pagination"
+            },
+            {
+              "description": "The pagination indicator.",
+              "name": "pagination-item"
+            },
+            {
+              "description": "Applied when the item is active.",
+              "name": "pagination-item--active"
+            },
+            {
+              "description": "The navigation wrapper.",
+              "name": "navigation"
+            },
+            {
+              "description": "The navigation button.",
+              "name": "navigation-button"
+            },
+            {
+              "description": "Applied to the previous button.",
+              "name": "navigation-button--previous"
+            },
+            {
+              "description": "Applied to the next button.",
+              "name": "navigation-button--next"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The carousel's main content, one or more `<sl-carousel-item>` elements.",
+              "name": ""
+            },
+            {
+              "description": "Optional next icon to use instead of the default. Works best with `<sl-icon>`.",
+              "name": "next-icon"
+            },
+            {
+              "description": "Optional previous icon to use instead of the default. Works best with `<sl-icon>`.",
+              "name": "previous-icon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "dependencies",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ 'sl-icon': SlIcon }"
+            },
+            {
+              "kind": "field",
+              "name": "loop",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When set, allows the user to navigate the carousel in the same direction indefinitely.",
+              "attribute": "loop",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "navigation",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When set, show the carousel's navigation.",
+              "attribute": "navigation",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "pagination",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When set, show the carousel's pagination indicators.",
+              "attribute": "pagination",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "autoplay",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When set, the slides will scroll automatically when the user is not interacting with them.",
+              "attribute": "autoplay",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "autoplayInterval",
+              "type": {
+                "text": "number"
+              },
+              "default": "3000",
+              "description": "Specifies the amount of time, in milliseconds, between each automatic scroll.",
+              "attribute": "autoplay-interval"
+            },
+            {
+              "kind": "field",
+              "name": "slidesPerPage",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Specifies how many slides should be shown at a given time.",
+              "attribute": "slides-per-page"
+            },
+            {
+              "kind": "field",
+              "name": "slidesPerMove",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Specifies the number of slides the carousel will advance when scrolling, useful when specifying a `slides-per-page`\ngreater than one. It can't be higher than `slides-per-page`.",
+              "attribute": "slides-per-move"
+            },
+            {
+              "kind": "field",
+              "name": "orientation",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'horizontal'",
+              "description": "Specifies the orientation in which the carousel will lay out.",
+              "attribute": "orientation"
+            },
+            {
+              "kind": "field",
+              "name": "mouseDragging",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When set, it is possible to scroll through the slides by dragging them with the mouse.",
+              "attribute": "mouse-dragging",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "scrollContainer",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "paginationContainer",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "activeSlide",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "scrolling",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "dragging",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "autoplayController",
+              "privacy": "private",
+              "default": "new AutoplayController(this, () => this.next())"
+            },
+            {
+              "kind": "field",
+              "name": "dragStartPosition",
+              "type": {
+                "text": "[number, number]"
+              },
+              "privacy": "private",
+              "default": "[-1, -1]"
+            },
+            {
+              "kind": "field",
+              "name": "localize",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new LocalizeController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "mutationObserver",
+              "type": {
+                "text": "MutationObserver"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "pendingSlideChange",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "getPageCount",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "getCurrentPage",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "canScrollNext",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "canScrollPrev",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "handleClick",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleKeyDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleMouseDragStart",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "PointerEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleMouseDrag",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleMouseDragEnd",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleScroll",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleScrollEnd",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "isCarouselItem",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "node is SlCarouselItem"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "node",
+                  "type": {
+                    "text": "Node"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleSlotChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "initializeSlides"
+            },
+            {
+              "kind": "method",
+              "name": "createClones",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleSlideChange"
+            },
+            {
+              "kind": "method",
+              "name": "updateSlidesSnap"
+            },
+            {
+              "kind": "method",
+              "name": "handleAutoplayChange"
+            },
+            {
+              "kind": "method",
+              "name": "previous",
+              "parameters": [
+                {
+                  "name": "behavior",
+                  "default": "'smooth'",
+                  "type": {
+                    "text": "ScrollBehavior"
+                  },
+                  "description": "The behavior used for scrolling."
+                }
+              ],
+              "description": "Move the carousel backward by `slides-per-move` slides."
+            },
+            {
+              "kind": "method",
+              "name": "next",
+              "parameters": [
+                {
+                  "name": "behavior",
+                  "default": "'smooth'",
+                  "type": {
+                    "text": "ScrollBehavior"
+                  },
+                  "description": "The behavior used for scrolling."
+                }
+              ],
+              "description": "Move the carousel forward by `slides-per-move` slides."
+            },
+            {
+              "kind": "method",
+              "name": "goToSlide",
+              "parameters": [
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  },
+                  "description": "The slide index."
+                },
+                {
+                  "name": "behavior",
+                  "default": "'smooth'",
+                  "type": {
+                    "text": "ScrollBehavior"
+                  },
+                  "description": "The behavior used for scrolling."
+                }
+              ],
+              "description": "Scrolls the carousel to the slide specified by `index`."
+            },
+            {
+              "kind": "method",
+              "name": "scrollToSlide",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "slide",
+                  "type": {
+                    "text": "HTMLElement"
+                  }
+                },
+                {
+                  "name": "behavior",
+                  "default": "'smooth'",
+                  "type": {
+                    "text": "ScrollBehavior"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "{ index: number, slide: SlCarouselItem }"
+              },
+              "description": "Emitted when the active slide changes.",
+              "name": "sl-slide-change",
+              "reactName": "onSlSlideChange",
+              "eventName": "SlSlideChangeEvent"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "loop",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When set, allows the user to navigate the carousel in the same direction indefinitely.",
+              "fieldName": "loop"
+            },
+            {
+              "name": "navigation",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When set, show the carousel's navigation.",
+              "fieldName": "navigation"
+            },
+            {
+              "name": "pagination",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When set, show the carousel's pagination indicators.",
+              "fieldName": "pagination"
+            },
+            {
+              "name": "autoplay",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When set, the slides will scroll automatically when the user is not interacting with them.",
+              "fieldName": "autoplay"
+            },
+            {
+              "name": "autoplay-interval",
+              "type": {
+                "text": "number"
+              },
+              "default": "3000",
+              "description": "Specifies the amount of time, in milliseconds, between each automatic scroll.",
+              "fieldName": "autoplayInterval"
+            },
+            {
+              "name": "slides-per-page",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Specifies how many slides should be shown at a given time.",
+              "fieldName": "slidesPerPage"
+            },
+            {
+              "name": "slides-per-move",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Specifies the number of slides the carousel will advance when scrolling, useful when specifying a `slides-per-page`\ngreater than one. It can't be higher than `slides-per-page`.",
+              "fieldName": "slidesPerMove"
+            },
+            {
+              "name": "orientation",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'horizontal'",
+              "description": "Specifies the orientation in which the carousel will lay out.",
+              "fieldName": "orientation"
+            },
+            {
+              "name": "mouse-dragging",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When set, it is possible to scroll through the slides by dragging them with the mouse.",
+              "fieldName": "mouseDragging"
+            }
+          ],
+          "superclass": {
+            "name": "ShoelaceElement",
+            "module": "/src/internal/shoelace-element.js"
+          },
+          "summary": "Carousels display an arbitrary number of content slides along a horizontal or vertical axis.",
+          "tagNameWithoutPrefix": "carousel",
+          "tagName": "sl-carousel",
+          "customElement": true,
+          "jsDoc": "/**\n * @summary Carousels display an arbitrary number of content slides along a horizontal or vertical axis.\n *\n * @since 2.2\n * @status experimental\n *\n * @dependency sl-icon\n *\n * @event {{ index: number, slide: SlCarouselItem }} sl-slide-change - Emitted when the active slide changes.\n *\n * @slot - The carousel's main content, one or more `<sl-carousel-item>` elements.\n * @slot next-icon - Optional next icon to use instead of the default. Works best with `<sl-icon>`.\n * @slot previous-icon - Optional previous icon to use instead of the default. Works best with `<sl-icon>`.\n *\n * @csspart base - The carousel's internal wrapper.\n * @csspart scroll-container - The scroll container that wraps the slides.\n * @csspart pagination - The pagination indicators wrapper.\n * @csspart pagination-item - The pagination indicator.\n * @csspart pagination-item--active - Applied when the item is active.\n * @csspart navigation - The navigation wrapper.\n * @csspart navigation-button - The navigation button.\n * @csspart navigation-button--previous - Applied to the previous button.\n * @csspart navigation-button--next - Applied to the next button.\n *\n * @cssproperty --slide-gap - The space between each slide.\n * @cssproperty [--aspect-ratio=16/9] - The aspect ratio of each slide.\n * @cssproperty --scroll-hint - The amount of padding to apply to the scroll area, allowing adjacent slides to become\n *  partially visible as a scroll hint.\n */",
+          "since": "2.2",
+          "status": "experimental",
+          "dependencies": [
+            "sl-icon"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "SlCarousel",
+            "module": "components/carousel/carousel.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "components/checkbox/checkbox.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SlCheckbox",
+          "cssParts": [
+            {
+              "description": "The component's base wrapper.",
+              "name": "base"
+            },
+            {
+              "description": "The square container that wraps the checkbox's checked state.",
+              "name": "control"
+            },
+            {
+              "description": "Matches the control part when the checkbox is checked.",
+              "name": "control--checked"
+            },
+            {
+              "description": "Matches the control part when the checkbox is indeterminate.",
+              "name": "control--indeterminate"
+            },
+            {
+              "description": "The checked icon, an `<sl-icon>` element.",
+              "name": "checked-icon"
+            },
+            {
+              "description": "The indeterminate icon, an `<sl-icon>` element.",
+              "name": "indeterminate-icon"
+            },
+            {
+              "description": "The container that wraps the checkbox's label.",
+              "name": "label"
+            },
+            {
+              "description": "The help text's wrapper.",
+              "name": "form-control-help-text"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The checkbox's label.",
+              "name": ""
+            },
+            {
+              "description": "Text that describes how to use the checkbox. Alternatively, you can use the `help-text` attribute.",
+              "name": "help-text"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "dependencies",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ 'sl-icon': SlIcon }"
+            },
+            {
+              "kind": "field",
+              "name": "formControlController",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new FormControlController(this, { value: (control: SlCheckbox) => (control.checked ? control.value || 'on' : undefined), defaultValue: (control: SlCheckbox) => control.defaultChecked, setValue: (control: SlCheckbox, checked: boolean) => (control.checked = checked) })"
+            },
+            {
+              "kind": "field",
+              "name": "hasSlotController",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new HasSlotController(this, 'help-text')"
+            },
+            {
+              "kind": "field",
+              "name": "input",
+              "type": {
+                "text": "HTMLInputElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hasFocus",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "title"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "The name of the checkbox, submitted as a name/value pair with form data.",
+              "attribute": "name"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The current value of the checkbox, submitted as a name/value pair with form data.",
+              "attribute": "value"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "The checkbox's size.",
+              "attribute": "size",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables the checkbox.",
+              "attribute": "disabled",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Draws the checkbox in a checked state.",
+              "attribute": "checked",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "indeterminate",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Draws the checkbox in an indeterminate state. This is usually applied to checkboxes that represents a \"select\nall/none\" behavior when associated checkboxes have a mix of checked and unchecked states.",
+              "attribute": "indeterminate",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "defaultChecked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "The default value of the form control. Primarily used for resetting the form control."
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
+              "attribute": "form",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Makes the checkbox a required field.",
+              "attribute": "required",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "helpText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "The checkbox's help text. If you need to display HTML, use the `help-text` slot instead.",
+              "attribute": "help-text"
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "description": "Gets the validity state object",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "description": "Gets the validation message",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "handleClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleBlur",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleInvalid",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleDisabledChange"
+            },
+            {
+              "kind": "method",
+              "name": "handleStateChange"
+            },
+            {
+              "kind": "method",
+              "name": "click",
+              "description": "Simulates a click on the checkbox."
+            },
+            {
+              "kind": "method",
+              "name": "focus",
+              "parameters": [
+                {
+                  "name": "options",
+                  "optional": true,
+                  "type": {
+                    "text": "FocusOptions"
+                  }
+                }
+              ],
+              "description": "Sets focus on the checkbox."
+            },
+            {
+              "kind": "method",
+              "name": "blur",
+              "description": "Removes focus from the checkbox."
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "description": "Checks for validity but does not show a validation message. Returns `true` when valid and `false` when invalid."
+            },
+            {
+              "kind": "method",
+              "name": "getForm",
+              "return": {
+                "type": {
+                  "text": "HTMLFormElement | null"
+                }
+              },
+              "description": "Gets the associated form, if one exists."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "description": "Checks for validity and shows the browser's validation message if the control is invalid."
+            },
+            {
+              "kind": "method",
+              "name": "setCustomValidity",
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Sets a custom validation message. The value provided will be shown to the user when the form is submitted. To clear\nthe custom validation message, call this method with an empty string."
+            }
+          ],
+          "events": [
+            {
+              "description": "Emitted when the checkbox loses focus.",
+              "name": "sl-blur",
+              "reactName": "onSlBlur",
+              "eventName": "SlBlurEvent"
+            },
+            {
+              "description": "Emitted when the checked state changes.",
+              "name": "sl-change",
+              "reactName": "onSlChange",
+              "eventName": "SlChangeEvent"
+            },
+            {
+              "description": "Emitted when the checkbox gains focus.",
+              "name": "sl-focus",
+              "reactName": "onSlFocus",
+              "eventName": "SlFocusEvent"
+            },
+            {
+              "description": "Emitted when the checkbox receives input.",
+              "name": "sl-input",
+              "reactName": "onSlInput",
+              "eventName": "SlInputEvent"
+            },
+            {
+              "description": "Emitted when the form control has been checked for validity and its constraints aren't satisfied.",
+              "name": "sl-invalid",
+              "reactName": "onSlInvalid",
+              "eventName": "SlInvalidEvent"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "title"
+            },
+            {
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "The name of the checkbox, submitted as a name/value pair with form data.",
+              "fieldName": "name"
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The current value of the checkbox, submitted as a name/value pair with form data.",
+              "fieldName": "value"
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "description": "The checkbox's size.",
+              "fieldName": "size"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables the checkbox.",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Draws the checkbox in a checked state.",
+              "fieldName": "checked"
+            },
+            {
+              "name": "indeterminate",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Draws the checkbox in an indeterminate state. This is usually applied to checkboxes that represents a \"select\nall/none\" behavior when associated checkboxes have a mix of checked and unchecked states.",
+              "fieldName": "indeterminate"
+            },
+            {
+              "name": "form",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
+              "fieldName": "form"
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Makes the checkbox a required field.",
+              "fieldName": "required"
+            },
+            {
+              "name": "help-text",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "The checkbox's help text. If you need to display HTML, use the `help-text` slot instead.",
+              "fieldName": "helpText"
+            }
+          ],
+          "superclass": {
+            "name": "ShoelaceElement",
+            "module": "/src/internal/shoelace-element.js"
+          },
+          "summary": "Checkboxes allow the user to toggle an option on or off.",
+          "tagNameWithoutPrefix": "checkbox",
+          "tagName": "sl-checkbox",
+          "customElement": true,
+          "jsDoc": "/**\n * @summary Checkboxes allow the user to toggle an option on or off.\n * @documentation https://shoelace.style/components/checkbox\n * @status stable\n * @since 2.0\n *\n * @dependency sl-icon\n *\n * @slot - The checkbox's label.\n * @slot help-text - Text that describes how to use the checkbox. Alternatively, you can use the `help-text` attribute.\n *\n * @event sl-blur - Emitted when the checkbox loses focus.\n * @event sl-change - Emitted when the checked state changes.\n * @event sl-focus - Emitted when the checkbox gains focus.\n * @event sl-input - Emitted when the checkbox receives input.\n * @event sl-invalid - Emitted when the form control has been checked for validity and its constraints aren't satisfied.\n *\n * @csspart base - The component's base wrapper.\n * @csspart control - The square container that wraps the checkbox's checked state.\n * @csspart control--checked - Matches the control part when the checkbox is checked.\n * @csspart control--indeterminate - Matches the control part when the checkbox is indeterminate.\n * @csspart checked-icon - The checked icon, an `<sl-icon>` element.\n * @csspart indeterminate-icon - The indeterminate icon, an `<sl-icon>` element.\n * @csspart label - The container that wraps the checkbox's label.\n * @csspart form-control-help-text - The help text's wrapper.\n */",
+          "documentation": "https://shoelace.style/components/checkbox",
+          "status": "stable",
+          "since": "2.0",
+          "dependencies": [
+            "sl-icon"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "SlCheckbox",
+            "module": "components/checkbox/checkbox.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "components/carousel-item/carousel-item.js",
       "declarations": [
         {
@@ -2472,7 +3614,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    'sl-button-group': SlButtonGroup,\n    'sl-button': SlButton,\n    'sl-dropdown': SlDropdown,\n    'sl-icon': SlIcon,\n    'sl-input': SlInput,\n    'sl-visually-hidden': SlVisuallyHidden\n  }"
+              "default": "{ 'sl-button-group': SlButtonGroup, 'sl-button': SlButton, 'sl-dropdown': SlDropdown, 'sl-icon': SlIcon, 'sl-input': SlInput, 'sl-visually-hidden': SlVisuallyHidden }"
             },
             {
               "kind": "field",
@@ -3402,7 +4544,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    'sl-icon': SlIcon,\n    'sl-tooltip': SlTooltip\n  }"
+              "default": "{ 'sl-icon': SlIcon, 'sl-tooltip': SlTooltip }"
             },
             {
               "kind": "field",
@@ -3757,7 +4899,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    'sl-icon': SlIcon\n  }"
+              "default": "{ 'sl-icon': SlIcon }"
             },
             {
               "kind": "field",
@@ -4059,7 +5201,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    'sl-icon-button': SlIconButton\n  }"
+              "default": "{ 'sl-icon-button': SlIconButton }"
             },
             {
               "kind": "field",
@@ -4311,81 +5453,6 @@
           "declaration": {
             "name": "SlDialog",
             "module": "components/dialog/dialog.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "components/divider/divider.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SlDivider",
-          "cssProperties": [
-            {
-              "description": "The color of the divider.",
-              "name": "--color"
-            },
-            {
-              "description": "The width of the divider.",
-              "name": "--width"
-            },
-            {
-              "description": "The spacing of the divider.",
-              "name": "--spacing"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "vertical",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Draws the divider in a vertical orientation.",
-              "attribute": "vertical",
-              "reflects": true
-            },
-            {
-              "kind": "method",
-              "name": "handleVerticalChange"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "vertical",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Draws the divider in a vertical orientation.",
-              "fieldName": "vertical"
-            }
-          ],
-          "superclass": {
-            "name": "ShoelaceElement",
-            "module": "/src/internal/shoelace-element.js"
-          },
-          "summary": "Dividers are used to visually separate or group elements.",
-          "tagNameWithoutPrefix": "divider",
-          "tagName": "sl-divider",
-          "customElement": true,
-          "jsDoc": "/**\n * @summary Dividers are used to visually separate or group elements.\n * @documentation https://shoelace.style/components/divider\n * @status stable\n * @since 2.0\n *\n * @cssproperty --color - The color of the divider.\n * @cssproperty --width - The width of the divider.\n * @cssproperty --spacing - The spacing of the divider.\n */",
-          "documentation": "https://shoelace.style/components/divider",
-          "status": "stable",
-          "since": "2.0"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "SlDivider",
-            "module": "components/divider/divider.js"
           }
         }
       ]
@@ -4810,1010 +5877,66 @@
     },
     {
       "kind": "javascript-module",
-      "path": "components/carousel/carousel.js",
+      "path": "components/divider/divider.js",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "SlCarousel",
+          "name": "SlDivider",
           "cssProperties": [
             {
-              "description": "The space between each slide.",
-              "name": "--slide-gap"
+              "description": "The color of the divider.",
+              "name": "--color"
             },
             {
-              "description": "The aspect ratio of each slide.",
-              "name": "--aspect-ratio",
-              "default": "16/9"
+              "description": "The width of the divider.",
+              "name": "--width"
             },
             {
-              "description": "The amount of padding to apply to the scroll area, allowing adjacent slides to become partially visible as a scroll hint.",
-              "name": "--scroll-hint"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The carousel's internal wrapper.",
-              "name": "base"
-            },
-            {
-              "description": "The scroll container that wraps the slides.",
-              "name": "scroll-container"
-            },
-            {
-              "description": "The pagination indicators wrapper.",
-              "name": "pagination"
-            },
-            {
-              "description": "The pagination indicator.",
-              "name": "pagination-item"
-            },
-            {
-              "description": "Applied when the item is active.",
-              "name": "pagination-item--active"
-            },
-            {
-              "description": "The navigation wrapper.",
-              "name": "navigation"
-            },
-            {
-              "description": "The navigation button.",
-              "name": "navigation-button"
-            },
-            {
-              "description": "Applied to the previous button.",
-              "name": "navigation-button--previous"
-            },
-            {
-              "description": "Applied to the next button.",
-              "name": "navigation-button--next"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The carousel's main content, one or more `<sl-carousel-item>` elements.",
-              "name": ""
-            },
-            {
-              "description": "Optional next icon to use instead of the default. Works best with `<sl-icon>`.",
-              "name": "next-icon"
-            },
-            {
-              "description": "Optional previous icon to use instead of the default. Works best with `<sl-icon>`.",
-              "name": "previous-icon"
+              "description": "The spacing of the divider.",
+              "name": "--spacing"
             }
           ],
           "members": [
             {
               "kind": "field",
-              "name": "dependencies",
-              "type": {
-                "text": "object"
-              },
-              "static": true,
-              "default": "{ 'sl-icon': SlIcon }"
-            },
-            {
-              "kind": "field",
-              "name": "loop",
+              "name": "vertical",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "When set, allows the user to navigate the carousel in the same direction indefinitely.",
-              "attribute": "loop",
+              "description": "Draws the divider in a vertical orientation.",
+              "attribute": "vertical",
               "reflects": true
             },
             {
-              "kind": "field",
-              "name": "navigation",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When set, show the carousel's navigation.",
-              "attribute": "navigation",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "pagination",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When set, show the carousel's pagination indicators.",
-              "attribute": "pagination",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "autoplay",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When set, the slides will scroll automatically when the user is not interacting with them.",
-              "attribute": "autoplay",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "autoplayInterval",
-              "type": {
-                "text": "number"
-              },
-              "default": "3000",
-              "description": "Specifies the amount of time, in milliseconds, between each automatic scroll.",
-              "attribute": "autoplay-interval"
-            },
-            {
-              "kind": "field",
-              "name": "slidesPerPage",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Specifies how many slides should be shown at a given time.",
-              "attribute": "slides-per-page"
-            },
-            {
-              "kind": "field",
-              "name": "slidesPerMove",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Specifies the number of slides the carousel will advance when scrolling, useful when specifying a `slides-per-page`\ngreater than one. It can't be higher than `slides-per-page`.",
-              "attribute": "slides-per-move"
-            },
-            {
-              "kind": "field",
-              "name": "orientation",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              },
-              "default": "'horizontal'",
-              "description": "Specifies the orientation in which the carousel will lay out.",
-              "attribute": "orientation"
-            },
-            {
-              "kind": "field",
-              "name": "mouseDragging",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When set, it is possible to scroll through the slides by dragging them with the mouse.",
-              "attribute": "mouse-dragging",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "scrollContainer",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "paginationContainer",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "activeSlide",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "scrolling",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "dragging",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "autoplayController",
-              "privacy": "private",
-              "default": "new AutoplayController(this, () => this.next())"
-            },
-            {
-              "kind": "field",
-              "name": "localize",
-              "privacy": "private",
-              "readonly": true,
-              "default": "new LocalizeController(this)"
-            },
-            {
-              "kind": "field",
-              "name": "mutationObserver",
-              "type": {
-                "text": "MutationObserver"
-              },
-              "privacy": "private"
-            },
-            {
               "kind": "method",
-              "name": "getPageCount",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "getCurrentPage",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "canScrollNext",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "canScrollPrev",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "handleKeyDown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleMouseDragStart",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "PointerEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "handleMouseDrag",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleMouseDragEnd",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleScroll",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleScrollEnd",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "isCarouselItem",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "node is SlCarouselItem"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "node",
-                  "type": {
-                    "text": "Node"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "handleSlotChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "initializeSlides"
-            },
-            {
-              "kind": "method",
-              "name": "createClones",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handelSlideChange"
-            },
-            {
-              "kind": "method",
-              "name": "updateSlidesSnap"
-            },
-            {
-              "kind": "method",
-              "name": "handleAutoplayChange"
-            },
-            {
-              "kind": "method",
-              "name": "previous",
-              "parameters": [
-                {
-                  "name": "behavior",
-                  "default": "'smooth'",
-                  "type": {
-                    "text": "ScrollBehavior"
-                  },
-                  "description": "The behavior used for scrolling."
-                }
-              ],
-              "description": "Move the carousel backward by `slides-per-move` slides."
-            },
-            {
-              "kind": "method",
-              "name": "next",
-              "parameters": [
-                {
-                  "name": "behavior",
-                  "default": "'smooth'",
-                  "type": {
-                    "text": "ScrollBehavior"
-                  },
-                  "description": "The behavior used for scrolling."
-                }
-              ],
-              "description": "Move the carousel forward by `slides-per-move` slides."
-            },
-            {
-              "kind": "method",
-              "name": "goToSlide",
-              "parameters": [
-                {
-                  "name": "index",
-                  "type": {
-                    "text": "number"
-                  },
-                  "description": "The slide index."
-                },
-                {
-                  "name": "behavior",
-                  "default": "'smooth'",
-                  "type": {
-                    "text": "ScrollBehavior"
-                  },
-                  "description": "The behavior used for scrolling."
-                }
-              ],
-              "description": "Scrolls the carousel to the slide specified by `index`."
-            },
-            {
-              "kind": "method",
-              "name": "scrollToSlide",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "slide",
-                  "type": {
-                    "text": "HTMLElement"
-                  }
-                },
-                {
-                  "name": "behavior",
-                  "default": "'smooth'",
-                  "type": {
-                    "text": "ScrollBehavior"
-                  }
-                }
-              ]
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "{ index: number, slide: SlCarouselItem }"
-              },
-              "description": "Emitted when the active slide changes.",
-              "name": "sl-slide-change",
-              "reactName": "onSlSlideChange",
-              "eventName": "SlSlideChangeEvent"
+              "name": "handleVerticalChange"
             }
           ],
           "attributes": [
             {
-              "name": "loop",
+              "name": "vertical",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "When set, allows the user to navigate the carousel in the same direction indefinitely.",
-              "fieldName": "loop"
-            },
-            {
-              "name": "navigation",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When set, show the carousel's navigation.",
-              "fieldName": "navigation"
-            },
-            {
-              "name": "pagination",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When set, show the carousel's pagination indicators.",
-              "fieldName": "pagination"
-            },
-            {
-              "name": "autoplay",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When set, the slides will scroll automatically when the user is not interacting with them.",
-              "fieldName": "autoplay"
-            },
-            {
-              "name": "autoplay-interval",
-              "type": {
-                "text": "number"
-              },
-              "default": "3000",
-              "description": "Specifies the amount of time, in milliseconds, between each automatic scroll.",
-              "fieldName": "autoplayInterval"
-            },
-            {
-              "name": "slides-per-page",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Specifies how many slides should be shown at a given time.",
-              "fieldName": "slidesPerPage"
-            },
-            {
-              "name": "slides-per-move",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Specifies the number of slides the carousel will advance when scrolling, useful when specifying a `slides-per-page`\ngreater than one. It can't be higher than `slides-per-page`.",
-              "fieldName": "slidesPerMove"
-            },
-            {
-              "name": "orientation",
-              "type": {
-                "text": "'horizontal' | 'vertical'"
-              },
-              "default": "'horizontal'",
-              "description": "Specifies the orientation in which the carousel will lay out.",
-              "fieldName": "orientation"
-            },
-            {
-              "name": "mouse-dragging",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When set, it is possible to scroll through the slides by dragging them with the mouse.",
-              "fieldName": "mouseDragging"
+              "description": "Draws the divider in a vertical orientation.",
+              "fieldName": "vertical"
             }
           ],
           "superclass": {
             "name": "ShoelaceElement",
             "module": "/src/internal/shoelace-element.js"
           },
-          "summary": "Carousels display an arbitrary number of content slides along a horizontal or vertical axis.",
-          "tagNameWithoutPrefix": "carousel",
-          "tagName": "sl-carousel",
+          "summary": "Dividers are used to visually separate or group elements.",
+          "tagNameWithoutPrefix": "divider",
+          "tagName": "sl-divider",
           "customElement": true,
-          "jsDoc": "/**\n * @summary Carousels display an arbitrary number of content slides along a horizontal or vertical axis.\n *\n * @since 2.2\n * @status experimental\n *\n * @dependency sl-icon\n *\n * @event {{ index: number, slide: SlCarouselItem }} sl-slide-change - Emitted when the active slide changes.\n *\n * @slot - The carousel's main content, one or more `<sl-carousel-item>` elements.\n * @slot next-icon - Optional next icon to use instead of the default. Works best with `<sl-icon>`.\n * @slot previous-icon - Optional previous icon to use instead of the default. Works best with `<sl-icon>`.\n *\n * @csspart base - The carousel's internal wrapper.\n * @csspart scroll-container - The scroll container that wraps the slides.\n * @csspart pagination - The pagination indicators wrapper.\n * @csspart pagination-item - The pagination indicator.\n * @csspart pagination-item--active - Applied when the item is active.\n * @csspart navigation - The navigation wrapper.\n * @csspart navigation-button - The navigation button.\n * @csspart navigation-button--previous - Applied to the previous button.\n * @csspart navigation-button--next - Applied to the next button.\n *\n * @cssproperty --slide-gap - The space between each slide.\n * @cssproperty [--aspect-ratio=16/9] - The aspect ratio of each slide.\n * @cssproperty --scroll-hint - The amount of padding to apply to the scroll area, allowing adjacent slides to become\n *  partially visible as a scroll hint.\n */",
-          "since": "2.2",
-          "status": "experimental",
-          "dependencies": [
-            "sl-icon"
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "SlCarousel",
-            "module": "components/carousel/carousel.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "components/checkbox/checkbox.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SlCheckbox",
-          "cssParts": [
-            {
-              "description": "The component's base wrapper.",
-              "name": "base"
-            },
-            {
-              "description": "The square container that wraps the checkbox's checked state.",
-              "name": "control"
-            },
-            {
-              "description": "Matches the control part when the checkbox is checked.",
-              "name": "control--checked"
-            },
-            {
-              "description": "Matches the control part when the checkbox is indeterminate.",
-              "name": "control--indeterminate"
-            },
-            {
-              "description": "The checked icon, an `<sl-icon>` element.",
-              "name": "checked-icon"
-            },
-            {
-              "description": "The indeterminate icon, an `<sl-icon>` element.",
-              "name": "indeterminate-icon"
-            },
-            {
-              "description": "The container that wraps the checkbox's label.",
-              "name": "label"
-            },
-            {
-              "description": "The help text's wrapper.",
-              "name": "form-control-help-text"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The checkbox's label.",
-              "name": ""
-            },
-            {
-              "description": "Text that describes how to use the checkbox. Alternatively, you can use the `help-text` attribute.",
-              "name": "help-text"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "dependencies",
-              "type": {
-                "text": "object"
-              },
-              "static": true,
-              "default": "{ 'sl-icon': SlIcon }"
-            },
-            {
-              "kind": "field",
-              "name": "formControlController",
-              "privacy": "private",
-              "readonly": true,
-              "default": "new FormControlController(this, {\n    value: (control: SlCheckbox) => (control.checked ? control.value || 'on' : undefined),\n    defaultValue: (control: SlCheckbox) => control.defaultChecked,\n    setValue: (control: SlCheckbox, checked: boolean) => (control.checked = checked)\n  })"
-            },
-            {
-              "kind": "field",
-              "name": "hasSlotController",
-              "privacy": "private",
-              "readonly": true,
-              "default": "new HasSlotController(this, 'help-text')"
-            },
-            {
-              "kind": "field",
-              "name": "input",
-              "type": {
-                "text": "HTMLInputElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "hasFocus",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "attribute": "title"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "The name of the checkbox, submitted as a name/value pair with form data.",
-              "attribute": "name"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "description": "The current value of the checkbox, submitted as a name/value pair with form data.",
-              "attribute": "value"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "The checkbox's size.",
-              "attribute": "size",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disables the checkbox.",
-              "attribute": "disabled",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Draws the checkbox in a checked state.",
-              "attribute": "checked",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "indeterminate",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Draws the checkbox in an indeterminate state. This is usually applied to checkboxes that represents a \"select\nall/none\" behavior when associated checkboxes have a mix of checked and unchecked states.",
-              "attribute": "indeterminate",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "defaultChecked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "The default value of the form control. Primarily used for resetting the form control."
-            },
-            {
-              "kind": "field",
-              "name": "form",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
-              "attribute": "form",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Makes the checkbox a required field.",
-              "attribute": "required",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "helpText",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "The checkbox's help text. If you need to display HTML, use the `help-text` slot instead.",
-              "attribute": "help-text"
-            },
-            {
-              "kind": "field",
-              "name": "validity",
-              "description": "Gets the validity state object",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "validationMessage",
-              "description": "Gets the validation message",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "handleClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleBlur",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleInvalid",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleDisabledChange"
-            },
-            {
-              "kind": "method",
-              "name": "handleStateChange"
-            },
-            {
-              "kind": "method",
-              "name": "click",
-              "description": "Simulates a click on the checkbox."
-            },
-            {
-              "kind": "method",
-              "name": "focus",
-              "parameters": [
-                {
-                  "name": "options",
-                  "optional": true,
-                  "type": {
-                    "text": "FocusOptions"
-                  }
-                }
-              ],
-              "description": "Sets focus on the checkbox."
-            },
-            {
-              "kind": "method",
-              "name": "blur",
-              "description": "Removes focus from the checkbox."
-            },
-            {
-              "kind": "method",
-              "name": "checkValidity",
-              "description": "Checks for validity but does not show a validation message. Returns `true` when valid and `false` when invalid."
-            },
-            {
-              "kind": "method",
-              "name": "getForm",
-              "return": {
-                "type": {
-                  "text": "HTMLFormElement | null"
-                }
-              },
-              "description": "Gets the associated form, if one exists."
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity",
-              "description": "Checks for validity and shows the browser's validation message if the control is invalid."
-            },
-            {
-              "kind": "method",
-              "name": "setCustomValidity",
-              "parameters": [
-                {
-                  "name": "message",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ],
-              "description": "Sets a custom validation message. The value provided will be shown to the user when the form is submitted. To clear\nthe custom validation message, call this method with an empty string."
-            }
-          ],
-          "events": [
-            {
-              "description": "Emitted when the checkbox loses focus.",
-              "name": "sl-blur",
-              "reactName": "onSlBlur",
-              "eventName": "SlBlurEvent"
-            },
-            {
-              "description": "Emitted when the checked state changes.",
-              "name": "sl-change",
-              "reactName": "onSlChange",
-              "eventName": "SlChangeEvent"
-            },
-            {
-              "description": "Emitted when the checkbox gains focus.",
-              "name": "sl-focus",
-              "reactName": "onSlFocus",
-              "eventName": "SlFocusEvent"
-            },
-            {
-              "description": "Emitted when the checkbox receives input.",
-              "name": "sl-input",
-              "reactName": "onSlInput",
-              "eventName": "SlInputEvent"
-            },
-            {
-              "description": "Emitted when the form control has been checked for validity and its constraints aren't satisfied.",
-              "name": "sl-invalid",
-              "reactName": "onSlInvalid",
-              "eventName": "SlInvalidEvent"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "fieldName": "title"
-            },
-            {
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "The name of the checkbox, submitted as a name/value pair with form data.",
-              "fieldName": "name"
-            },
-            {
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "description": "The current value of the checkbox, submitted as a name/value pair with form data.",
-              "fieldName": "value"
-            },
-            {
-              "name": "size",
-              "type": {
-                "text": "'small' | 'medium' | 'large'"
-              },
-              "default": "'medium'",
-              "description": "The checkbox's size.",
-              "fieldName": "size"
-            },
-            {
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disables the checkbox.",
-              "fieldName": "disabled"
-            },
-            {
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Draws the checkbox in a checked state.",
-              "fieldName": "checked"
-            },
-            {
-              "name": "indeterminate",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Draws the checkbox in an indeterminate state. This is usually applied to checkboxes that represents a \"select\nall/none\" behavior when associated checkboxes have a mix of checked and unchecked states.",
-              "fieldName": "indeterminate"
-            },
-            {
-              "name": "form",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
-              "fieldName": "form"
-            },
-            {
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Makes the checkbox a required field.",
-              "fieldName": "required"
-            },
-            {
-              "name": "help-text",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "The checkbox's help text. If you need to display HTML, use the `help-text` slot instead.",
-              "fieldName": "helpText"
-            }
-          ],
-          "superclass": {
-            "name": "ShoelaceElement",
-            "module": "/src/internal/shoelace-element.js"
-          },
-          "summary": "Checkboxes allow the user to toggle an option on or off.",
-          "tagNameWithoutPrefix": "checkbox",
-          "tagName": "sl-checkbox",
-          "customElement": true,
-          "jsDoc": "/**\n * @summary Checkboxes allow the user to toggle an option on or off.\n * @documentation https://shoelace.style/components/checkbox\n * @status stable\n * @since 2.0\n *\n * @dependency sl-icon\n *\n * @slot - The checkbox's label.\n * @slot help-text - Text that describes how to use the checkbox. Alternatively, you can use the `help-text` attribute.\n *\n * @event sl-blur - Emitted when the checkbox loses focus.\n * @event sl-change - Emitted when the checked state changes.\n * @event sl-focus - Emitted when the checkbox gains focus.\n * @event sl-input - Emitted when the checkbox receives input.\n * @event sl-invalid - Emitted when the form control has been checked for validity and its constraints aren't satisfied.\n *\n * @csspart base - The component's base wrapper.\n * @csspart control - The square container that wraps the checkbox's checked state.\n * @csspart control--checked - Matches the control part when the checkbox is checked.\n * @csspart control--indeterminate - Matches the control part when the checkbox is indeterminate.\n * @csspart checked-icon - The checked icon, an `<sl-icon>` element.\n * @csspart indeterminate-icon - The indeterminate icon, an `<sl-icon>` element.\n * @csspart label - The container that wraps the checkbox's label.\n * @csspart form-control-help-text - The help text's wrapper.\n */",
-          "documentation": "https://shoelace.style/components/checkbox",
+          "jsDoc": "/**\n * @summary Dividers are used to visually separate or group elements.\n * @documentation https://shoelace.style/components/divider\n * @status stable\n * @since 2.0\n *\n * @cssproperty --color - The color of the divider.\n * @cssproperty --width - The width of the divider.\n * @cssproperty --spacing - The spacing of the divider.\n */",
+          "documentation": "https://shoelace.style/components/divider",
           "status": "stable",
-          "since": "2.0",
-          "dependencies": [
-            "sl-icon"
-          ]
+          "since": "2.0"
         }
       ],
       "exports": [
@@ -5821,8 +5944,8 @@
           "kind": "js",
           "name": "default",
           "declaration": {
-            "name": "SlCheckbox",
-            "module": "components/checkbox/checkbox.js"
+            "name": "SlDivider",
+            "module": "components/divider/divider.js"
           }
         }
       ]
@@ -5837,8 +5960,12 @@
           "name": "SlDropdown",
           "cssParts": [
             {
-              "description": "The component's base wrapper.",
+              "description": "The component's base wrapper, an `<sl-popup>` element.",
               "name": "base"
+            },
+            {
+              "description": "The popup's exported `popup` part. Use this to target the tooltip's popup container.",
+              "name": "base__popup"
             },
             {
               "description": "The container that wraps the trigger.",
@@ -6187,9 +6314,6 @@
               },
               "default": "undefined",
               "description": "Syncs the popup width or height to that of the trigger element.",
-              "resolveInitializer": {
-                "module": "src/components/dropdown/dropdown.component.ts"
-              },
               "fieldName": "sync"
             }
           ],
@@ -6201,7 +6325,7 @@
           "tagNameWithoutPrefix": "dropdown",
           "tagName": "sl-dropdown",
           "customElement": true,
-          "jsDoc": "/**\n * @summary Dropdowns expose additional content that \"drops down\" in a panel.\n * @documentation https://shoelace.style/components/dropdown\n * @status stable\n * @since 2.0\n *\n * @dependency sl-popup\n *\n * @slot - The dropdown's main content.\n * @slot trigger - The dropdown's trigger, usually a `<sl-button>` element.\n *\n * @event sl-show - Emitted when the dropdown opens.\n * @event sl-after-show - Emitted after the dropdown opens and all animations are complete.\n * @event sl-hide - Emitted when the dropdown closes.\n * @event sl-after-hide - Emitted after the dropdown closes and all animations are complete.\n *\n * @csspart base - The component's base wrapper.\n * @csspart trigger - The container that wraps the trigger.\n * @csspart panel - The panel that gets shown when the dropdown is open.\n *\n * @animation dropdown.show - The animation to use when showing the dropdown.\n * @animation dropdown.hide - The animation to use when hiding the dropdown.\n */",
+          "jsDoc": "/**\n * @summary Dropdowns expose additional content that \"drops down\" in a panel.\n * @documentation https://shoelace.style/components/dropdown\n * @status stable\n * @since 2.0\n *\n * @dependency sl-popup\n *\n * @slot - The dropdown's main content.\n * @slot trigger - The dropdown's trigger, usually a `<sl-button>` element.\n *\n * @event sl-show - Emitted when the dropdown opens.\n * @event sl-after-show - Emitted after the dropdown opens and all animations are complete.\n * @event sl-hide - Emitted when the dropdown closes.\n * @event sl-after-hide - Emitted after the dropdown closes and all animations are complete.\n *\n * @csspart base - The component's base wrapper, an `<sl-popup>` element.\n * @csspart base__popup - The popup's exported `popup` part. Use this to target the tooltip's popup container.\n * @csspart trigger - The container that wraps the trigger.\n * @csspart panel - The panel that gets shown when the dropdown is open.\n *\n * @animation dropdown.show - The animation to use when showing the dropdown.\n * @animation dropdown.hide - The animation to use when hiding the dropdown.\n */",
           "documentation": "https://shoelace.style/components/dropdown",
           "status": "stable",
           "since": "2.0",
@@ -7280,6 +7404,180 @@
     },
     {
       "kind": "javascript-module",
+      "path": "components/image-comparer/image-comparer.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SlImageComparer",
+          "cssProperties": [
+            {
+              "description": "The width of the dividing line.",
+              "name": "--divider-width"
+            },
+            {
+              "description": "The size of the compare handle.",
+              "name": "--handle-size"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The component's base wrapper.",
+              "name": "base"
+            },
+            {
+              "description": "The container that wraps the before image.",
+              "name": "before"
+            },
+            {
+              "description": "The container that wraps the after image.",
+              "name": "after"
+            },
+            {
+              "description": "The divider that separates the images.",
+              "name": "divider"
+            },
+            {
+              "description": "The handle that the user drags to expose the after image.",
+              "name": "handle"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The before image, an `<img>` or `<svg>` element.",
+              "name": "before"
+            },
+            {
+              "description": "The after image, an `<img>` or `<svg>` element.",
+              "name": "after"
+            },
+            {
+              "description": "The icon used inside the handle.",
+              "name": "handle"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "scopedElement",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ 'sl-icon': SlIcon }"
+            },
+            {
+              "kind": "field",
+              "name": "localize",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new LocalizeController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "base",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "handle",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "number"
+              },
+              "default": "50",
+              "description": "The position of the divider as a percentage.",
+              "attribute": "position",
+              "reflects": true
+            },
+            {
+              "kind": "method",
+              "name": "handleDrag",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "PointerEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleKeyDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handlePositionChange"
+            }
+          ],
+          "events": [
+            {
+              "description": "Emitted when the position changes.",
+              "name": "sl-change",
+              "reactName": "onSlChange",
+              "eventName": "SlChangeEvent"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "position",
+              "type": {
+                "text": "number"
+              },
+              "default": "50",
+              "description": "The position of the divider as a percentage.",
+              "fieldName": "position"
+            }
+          ],
+          "superclass": {
+            "name": "ShoelaceElement",
+            "module": "/src/internal/shoelace-element.js"
+          },
+          "summary": "Compare visual differences between similar photos with a sliding panel.",
+          "tagNameWithoutPrefix": "image-comparer",
+          "tagName": "sl-image-comparer",
+          "customElement": true,
+          "jsDoc": "/**\n * @summary Compare visual differences between similar photos with a sliding panel.\n * @documentation https://shoelace.style/components/image-comparer\n * @status stable\n * @since 2.0\n *\n * @dependency sl-icon\n *\n * @slot before - The before image, an `<img>` or `<svg>` element.\n * @slot after - The after image, an `<img>` or `<svg>` element.\n * @slot handle - The icon used inside the handle.\n *\n * @event sl-change - Emitted when the position changes.\n *\n * @csspart base - The component's base wrapper.\n * @csspart before - The container that wraps the before image.\n * @csspart after - The container that wraps the after image.\n * @csspart divider - The divider that separates the images.\n * @csspart handle - The handle that the user drags to expose the after image.\n *\n * @cssproperty --divider-width - The width of the dividing line.\n * @cssproperty --handle-size - The size of the compare handle.\n */",
+          "documentation": "https://shoelace.style/components/image-comparer",
+          "status": "stable",
+          "since": "2.0",
+          "dependencies": [
+            "sl-icon"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "SlImageComparer",
+            "module": "components/image-comparer/image-comparer.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "components/include/include.js",
       "declarations": [
         {
@@ -7406,173 +7704,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "components/image-comparer/image-comparer.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SlImageComparer",
-          "cssProperties": [
-            {
-              "description": "The width of the dividing line.",
-              "name": "--divider-width"
-            },
-            {
-              "description": "The size of the compare handle.",
-              "name": "--handle-size"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The component's base wrapper.",
-              "name": "base"
-            },
-            {
-              "description": "The container that wraps the before image.",
-              "name": "before"
-            },
-            {
-              "description": "The container that wraps the after image.",
-              "name": "after"
-            },
-            {
-              "description": "The divider that separates the images.",
-              "name": "divider"
-            },
-            {
-              "description": "The handle that the user drags to expose the after image.",
-              "name": "handle"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The before image, an `<img>` or `<svg>` element.",
-              "name": "before"
-            },
-            {
-              "description": "The after image, an `<img>` or `<svg>` element.",
-              "name": "after"
-            },
-            {
-              "description": "The icon used inside the handle.",
-              "name": "handle"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "scopedElement",
-              "type": {
-                "text": "object"
-              },
-              "static": true,
-              "default": "{ 'sl-icon': SlIcon }"
-            },
-            {
-              "kind": "field",
-              "name": "base",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "handle",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "number"
-              },
-              "default": "50",
-              "description": "The position of the divider as a percentage.",
-              "attribute": "position",
-              "reflects": true
-            },
-            {
-              "kind": "method",
-              "name": "handleDrag",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "PointerEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleKeyDown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handlePositionChange"
-            }
-          ],
-          "events": [
-            {
-              "description": "Emitted when the position changes.",
-              "name": "sl-change",
-              "reactName": "onSlChange",
-              "eventName": "SlChangeEvent"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "position",
-              "type": {
-                "text": "number"
-              },
-              "default": "50",
-              "description": "The position of the divider as a percentage.",
-              "fieldName": "position"
-            }
-          ],
-          "superclass": {
-            "name": "ShoelaceElement",
-            "module": "/src/internal/shoelace-element.js"
-          },
-          "summary": "Compare visual differences between similar photos with a sliding panel.",
-          "tagNameWithoutPrefix": "image-comparer",
-          "tagName": "sl-image-comparer",
-          "customElement": true,
-          "jsDoc": "/**\n * @summary Compare visual differences between similar photos with a sliding panel.\n * @documentation https://shoelace.style/components/image-comparer\n * @status stable\n * @since 2.0\n *\n * @dependency sl-icon\n *\n * @slot before - The before image, an `<img>` or `<svg>` element.\n * @slot after - The after image, an `<img>` or `<svg>` element.\n * @slot handle - The icon used inside the handle.\n *\n * @event sl-change - Emitted when the position changes.\n *\n * @csspart base - The component's base wrapper.\n * @csspart before - The container that wraps the before image.\n * @csspart after - The container that wraps the after image.\n * @csspart divider - The divider that separates the images.\n * @csspart handle - The handle that the user drags to expose the after image.\n *\n * @cssproperty --divider-width - The width of the dividing line.\n * @cssproperty --handle-size - The size of the compare handle.\n */",
-          "documentation": "https://shoelace.style/components/image-comparer",
-          "status": "stable",
-          "since": "2.0",
-          "dependencies": [
-            "sl-icon"
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "SlImageComparer",
-            "module": "components/image-comparer/image-comparer.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "components/input/input.js",
       "declarations": [
         {
@@ -7666,7 +7797,7 @@
               "name": "formControlController",
               "privacy": "private",
               "readonly": true,
-              "default": "new FormControlController(this, {\n    assumeInteractionOn: ['sl-blur', 'sl-input']\n  })"
+              "default": "new FormControlController(this, { assumeInteractionOn: ['sl-blur', 'sl-input'] })"
             },
             {
               "kind": "field",
@@ -8705,52 +8836,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "components/menu-label/menu-label.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SlMenuLabel",
-          "cssParts": [
-            {
-              "description": "The component's base wrapper.",
-              "name": "base"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The menu label's content.",
-              "name": ""
-            }
-          ],
-          "members": [],
-          "superclass": {
-            "name": "ShoelaceElement",
-            "module": "/src/internal/shoelace-element.js"
-          },
-          "summary": "Menu labels are used to describe a group of menu items.",
-          "tagNameWithoutPrefix": "menu-label",
-          "tagName": "sl-menu-label",
-          "customElement": true,
-          "jsDoc": "/**\n * @summary Menu labels are used to describe a group of menu items.\n * @documentation https://shoelace.style/components/menu-label\n * @status stable\n * @since 2.0\n *\n * @slot - The menu label's content.\n *\n * @csspart base - The component's base wrapper.\n */",
-          "documentation": "https://shoelace.style/components/menu-label",
-          "status": "stable",
-          "since": "2.0"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "SlMenuLabel",
-            "module": "components/menu-label/menu-label.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "components/menu-item/menu-item.js",
       "declarations": [
         {
@@ -8824,7 +8909,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    'sl-icon': SlIcon,\n    'sl-popup': SlPopup,\n    'sl-spinner': SlSpinner\n  }"
+              "default": "{ 'sl-icon': SlIcon, 'sl-popup': SlPopup, 'sl-spinner': SlSpinner }"
             },
             {
               "kind": "field",
@@ -8833,6 +8918,13 @@
                 "text": "string"
               },
               "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "localize",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new LocalizeController(this)"
             },
             {
               "kind": "field",
@@ -9027,6 +9119,52 @@
           "declaration": {
             "name": "SlMenuItem",
             "module": "components/menu-item/menu-item.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "components/menu-label/menu-label.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SlMenuLabel",
+          "cssParts": [
+            {
+              "description": "The component's base wrapper.",
+              "name": "base"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The menu label's content.",
+              "name": ""
+            }
+          ],
+          "members": [],
+          "superclass": {
+            "name": "ShoelaceElement",
+            "module": "/src/internal/shoelace-element.js"
+          },
+          "summary": "Menu labels are used to describe a group of menu items.",
+          "tagNameWithoutPrefix": "menu-label",
+          "tagName": "sl-menu-label",
+          "customElement": true,
+          "jsDoc": "/**\n * @summary Menu labels are used to describe a group of menu items.\n * @documentation https://shoelace.style/components/menu-label\n * @status stable\n * @since 2.0\n *\n * @slot - The menu label's content.\n *\n * @csspart base - The component's base wrapper.\n */",
+          "documentation": "https://shoelace.style/components/menu-label",
+          "status": "stable",
+          "since": "2.0"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "SlMenuLabel",
+            "module": "components/menu-label/menu-label.js"
           }
         }
       ]
@@ -9290,18 +9428,19 @@
             },
             {
               "kind": "field",
-              "name": "cachedTextLabel",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
               "name": "localize",
               "privacy": "private",
               "readonly": true,
               "default": "new LocalizeController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "isInitialized",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
             },
             {
               "kind": "field",
@@ -9439,147 +9578,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "components/progress-bar/progress-bar.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "SlProgressBar",
-          "cssProperties": [
-            {
-              "description": "The progress bar's height.",
-              "name": "--height"
-            },
-            {
-              "description": "The color of the track.",
-              "name": "--track-color"
-            },
-            {
-              "description": "The color of the indicator.",
-              "name": "--indicator-color"
-            },
-            {
-              "description": "The color of the label.",
-              "name": "--label-color"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The component's base wrapper.",
-              "name": "base"
-            },
-            {
-              "description": "The progress bar's indicator.",
-              "name": "indicator"
-            },
-            {
-              "description": "The progress bar's label.",
-              "name": "label"
-            }
-          ],
-          "slots": [
-            {
-              "description": "A label to show inside the progress indicator.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "localize",
-              "privacy": "private",
-              "readonly": true,
-              "default": "new LocalizeController(this)"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "The current progress as a percentage, 0 to 100.",
-              "attribute": "value",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "indeterminate",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When true, percentage is ignored, the label is hidden, and the progress bar is drawn in an indeterminate state.",
-              "attribute": "indeterminate",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "A custom label for assistive devices.",
-              "attribute": "label"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "value",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "The current progress as a percentage, 0 to 100.",
-              "fieldName": "value"
-            },
-            {
-              "name": "indeterminate",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When true, percentage is ignored, the label is hidden, and the progress bar is drawn in an indeterminate state.",
-              "fieldName": "indeterminate"
-            },
-            {
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "A custom label for assistive devices.",
-              "fieldName": "label"
-            }
-          ],
-          "superclass": {
-            "name": "ShoelaceElement",
-            "module": "/src/internal/shoelace-element.js"
-          },
-          "summary": "Progress bars are used to show the status of an ongoing operation.",
-          "tagNameWithoutPrefix": "progress-bar",
-          "tagName": "sl-progress-bar",
-          "customElement": true,
-          "jsDoc": "/**\n * @summary Progress bars are used to show the status of an ongoing operation.\n * @documentation https://shoelace.style/components/progress-bar\n * @status stable\n * @since 2.0\n *\n * @slot - A label to show inside the progress indicator.\n *\n * @csspart base - The component's base wrapper.\n * @csspart indicator - The progress bar's indicator.\n * @csspart label - The progress bar's label.\n *\n * @cssproperty --height - The progress bar's height.\n * @cssproperty --track-color - The color of the track.\n * @cssproperty --indicator-color - The color of the indicator.\n * @cssproperty --label-color - The color of the label.\n */",
-          "documentation": "https://shoelace.style/components/progress-bar",
-          "status": "stable",
-          "since": "2.0"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "SlProgressBar",
-            "module": "components/progress-bar/progress-bar.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "components/popup/popup.js",
       "declarations": [
         {
@@ -9646,6 +9644,13 @@
                 "text": "ReturnType<typeof autoUpdate> | undefined"
               },
               "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "localize",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new LocalizeController(this)"
             },
             {
               "kind": "field",
@@ -10134,6 +10139,147 @@
           "declaration": {
             "name": "SlPopup",
             "module": "components/popup/popup.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "components/progress-bar/progress-bar.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SlProgressBar",
+          "cssProperties": [
+            {
+              "description": "The progress bar's height.",
+              "name": "--height"
+            },
+            {
+              "description": "The color of the track.",
+              "name": "--track-color"
+            },
+            {
+              "description": "The color of the indicator.",
+              "name": "--indicator-color"
+            },
+            {
+              "description": "The color of the label.",
+              "name": "--label-color"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The component's base wrapper.",
+              "name": "base"
+            },
+            {
+              "description": "The progress bar's indicator.",
+              "name": "indicator"
+            },
+            {
+              "description": "The progress bar's label.",
+              "name": "label"
+            }
+          ],
+          "slots": [
+            {
+              "description": "A label to show inside the progress indicator.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "localize",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new LocalizeController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "The current progress as a percentage, 0 to 100.",
+              "attribute": "value",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "indeterminate",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When true, percentage is ignored, the label is hidden, and the progress bar is drawn in an indeterminate state.",
+              "attribute": "indeterminate",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "A custom label for assistive devices.",
+              "attribute": "label"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "The current progress as a percentage, 0 to 100.",
+              "fieldName": "value"
+            },
+            {
+              "name": "indeterminate",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When true, percentage is ignored, the label is hidden, and the progress bar is drawn in an indeterminate state.",
+              "fieldName": "indeterminate"
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "A custom label for assistive devices.",
+              "fieldName": "label"
+            }
+          ],
+          "superclass": {
+            "name": "ShoelaceElement",
+            "module": "/src/internal/shoelace-element.js"
+          },
+          "summary": "Progress bars are used to show the status of an ongoing operation.",
+          "tagNameWithoutPrefix": "progress-bar",
+          "tagName": "sl-progress-bar",
+          "customElement": true,
+          "jsDoc": "/**\n * @summary Progress bars are used to show the status of an ongoing operation.\n * @documentation https://shoelace.style/components/progress-bar\n * @status stable\n * @since 2.0\n *\n * @slot - A label to show inside the progress indicator.\n *\n * @csspart base - The component's base wrapper.\n * @csspart indicator - The progress bar's indicator.\n * @csspart label - The progress bar's label.\n *\n * @cssproperty --height - The progress bar's height.\n * @cssproperty --track-color - The color of the track.\n * @cssproperty --indicator-color - The color of the indicator.\n * @cssproperty --label-color - The color of the label.\n */",
+          "documentation": "https://shoelace.style/components/progress-bar",
+          "status": "stable",
+          "since": "2.0"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "SlProgressBar",
+            "module": "components/progress-bar/progress-bar.js"
           }
         }
       ]
@@ -11223,6 +11369,21 @@
                 }
               ],
               "description": "Sets a custom validation message. Pass an empty string to restore validity."
+            },
+            {
+              "kind": "method",
+              "name": "focus",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "options",
+                  "optional": true,
+                  "type": {
+                    "text": "FocusOptions"
+                  }
+                }
+              ],
+              "description": "Sets focus on the radio-group."
             }
           ],
           "events": [
@@ -11959,6 +12120,13 @@
             },
             {
               "kind": "field",
+              "name": "localize",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new LocalizeController(this)"
+            },
+            {
+              "kind": "field",
               "name": "rating",
               "type": {
                 "text": "HTMLElement"
@@ -12399,15 +12567,6 @@
             },
             {
               "kind": "field",
-              "name": "titleTime",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "field",
               "name": "date",
               "type": {
                 "text": "Date | string"
@@ -12646,12 +12805,16 @@
               "name": "form-control-help-text"
             },
             {
-              "description": "The container the wraps the prefix, combobox, clear icon, and expand button.",
+              "description": "The container the wraps the prefix, suffix, combobox, clear icon, and expand button.",
               "name": "combobox"
             },
             {
               "description": "The container that wraps the prefix slot.",
               "name": "prefix"
+            },
+            {
+              "description": "The container that wraps the suffix slot.",
+              "name": "suffix"
             },
             {
               "description": "The element that displays the selected option's label, an `<input>` element.",
@@ -12708,6 +12871,10 @@
               "name": "prefix"
             },
             {
+              "description": "Used to append a presentational icon or similar element to the combobox.",
+              "name": "suffix"
+            },
+            {
               "description": "An icon to use in lieu of the default clear icon.",
               "name": "clear-icon"
             },
@@ -12728,14 +12895,14 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    'sl-icon': SlIcon,\n    'sl-popup': SlPopup,\n    'sl-tag': SlTag\n  }"
+              "default": "{ 'sl-icon': SlIcon, 'sl-popup': SlPopup, 'sl-tag': SlTag }"
             },
             {
               "kind": "field",
               "name": "formControlController",
               "privacy": "private",
               "readonly": true,
-              "default": "new FormControlController(this, {\n    assumeInteractionOn: ['sl-blur', 'sl-input']\n  })"
+              "default": "new FormControlController(this, { assumeInteractionOn: ['sl-blur', 'sl-input'] })"
             },
             {
               "kind": "field",
@@ -12845,6 +13012,15 @@
             },
             {
               "kind": "field",
+              "name": "valueHasChanged",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "name",
               "type": {
                 "text": "string"
@@ -12855,13 +13031,17 @@
             },
             {
               "kind": "field",
-              "name": "value",
+              "name": "_value",
               "type": {
                 "text": "string | string[]"
               },
-              "default": "''",
-              "description": "The current value of the select, submitted as a name/value pair with form data. When `multiple` is enabled, the\nvalue attribute will be a space-delimited list of values based on the options selected, and the value property will\nbe an array. **For this reason, values must not contain spaces.**",
-              "attribute": "value"
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "description": "The current value of the select, submitted as a name/value pair with form data. When `multiple` is enabled, the\nvalue attribute will be a space-delimited list of values based on the options selected, and the value property will\nbe an array. **For this reason, values must not contain spaces.**"
             },
             {
               "kind": "field",
@@ -12870,7 +13050,8 @@
                 "text": "string | string[]"
               },
               "default": "''",
-              "description": "The default value of the form control. Primarily used for resetting the form control."
+              "description": "The default value of the form control. Primarily used for resetting the form control.",
+              "attribute": "value"
             },
             {
               "kind": "field",
@@ -13160,7 +13341,7 @@
             {
               "kind": "method",
               "name": "handleDefaultSlotChange",
-              "privacy": "private"
+              "privacy": "public"
             },
             {
               "kind": "method",
@@ -13414,8 +13595,8 @@
                 "text": "string | string[]"
               },
               "default": "''",
-              "description": "The current value of the select, submitted as a name/value pair with form data. When `multiple` is enabled, the\nvalue attribute will be a space-delimited list of values based on the options selected, and the value property will\nbe an array. **For this reason, values must not contain spaces.**",
-              "fieldName": "value"
+              "description": "The default value of the form control. Primarily used for resetting the form control.",
+              "fieldName": "defaultValue"
             },
             {
               "name": "size",
@@ -13569,7 +13750,7 @@
           "tagNameWithoutPrefix": "select",
           "tagName": "sl-select",
           "customElement": true,
-          "jsDoc": "/**\n * @summary Selects allow you to choose items from a menu of predefined options.\n * @documentation https://shoelace.style/components/select\n * @status stable\n * @since 2.0\n *\n * @dependency sl-icon\n * @dependency sl-popup\n * @dependency sl-tag\n *\n * @slot - The listbox options. Must be `<sl-option>` elements. You can use `<sl-divider>` to group items visually.\n * @slot label - The input's label. Alternatively, you can use the `label` attribute.\n * @slot prefix - Used to prepend a presentational icon or similar element to the combobox.\n * @slot clear-icon - An icon to use in lieu of the default clear icon.\n * @slot expand-icon - The icon to show when the control is expanded and collapsed. Rotates on open and close.\n * @slot help-text - Text that describes how to use the input. Alternatively, you can use the `help-text` attribute.\n *\n * @event sl-change - Emitted when the control's value changes.\n * @event sl-clear - Emitted when the control's value is cleared.\n * @event sl-input - Emitted when the control receives input.\n * @event sl-focus - Emitted when the control gains focus.\n * @event sl-blur - Emitted when the control loses focus.\n * @event sl-show - Emitted when the select's menu opens.\n * @event sl-after-show - Emitted after the select's menu opens and all animations are complete.\n * @event sl-hide - Emitted when the select's menu closes.\n * @event sl-after-hide - Emitted after the select's menu closes and all animations are complete.\n * @event sl-invalid - Emitted when the form control has been checked for validity and its constraints aren't satisfied.\n *\n * @csspart form-control - The form control that wraps the label, input, and help text.\n * @csspart form-control-label - The label's wrapper.\n * @csspart form-control-input - The select's wrapper.\n * @csspart form-control-help-text - The help text's wrapper.\n * @csspart combobox - The container the wraps the prefix, combobox, clear icon, and expand button.\n * @csspart prefix - The container that wraps the prefix slot.\n * @csspart display-input - The element that displays the selected option's label, an `<input>` element.\n * @csspart listbox - The listbox container where options are slotted.\n * @csspart tags - The container that houses option tags when `multiselect` is used.\n * @csspart tag - The individual tags that represent each multiselect option.\n * @csspart tag__base - The tag's base part.\n * @csspart tag__content - The tag's content part.\n * @csspart tag__remove-button - The tag's remove button.\n * @csspart tag__remove-button__base - The tag's remove button base part.\n * @csspart clear-button - The clear button.\n * @csspart expand-icon - The container that wraps the expand icon.\n */",
+          "jsDoc": "/**\n * @summary Selects allow you to choose items from a menu of predefined options.\n * @documentation https://shoelace.style/components/select\n * @status stable\n * @since 2.0\n *\n * @dependency sl-icon\n * @dependency sl-popup\n * @dependency sl-tag\n *\n * @slot - The listbox options. Must be `<sl-option>` elements. You can use `<sl-divider>` to group items visually.\n * @slot label - The input's label. Alternatively, you can use the `label` attribute.\n * @slot prefix - Used to prepend a presentational icon or similar element to the combobox.\n * @slot suffix - Used to append a presentational icon or similar element to the combobox.\n * @slot clear-icon - An icon to use in lieu of the default clear icon.\n * @slot expand-icon - The icon to show when the control is expanded and collapsed. Rotates on open and close.\n * @slot help-text - Text that describes how to use the input. Alternatively, you can use the `help-text` attribute.\n *\n * @event sl-change - Emitted when the control's value changes.\n * @event sl-clear - Emitted when the control's value is cleared.\n * @event sl-input - Emitted when the control receives input.\n * @event sl-focus - Emitted when the control gains focus.\n * @event sl-blur - Emitted when the control loses focus.\n * @event sl-show - Emitted when the select's menu opens.\n * @event sl-after-show - Emitted after the select's menu opens and all animations are complete.\n * @event sl-hide - Emitted when the select's menu closes.\n * @event sl-after-hide - Emitted after the select's menu closes and all animations are complete.\n * @event sl-invalid - Emitted when the form control has been checked for validity and its constraints aren't satisfied.\n *\n * @csspart form-control - The form control that wraps the label, input, and help text.\n * @csspart form-control-label - The label's wrapper.\n * @csspart form-control-input - The select's wrapper.\n * @csspart form-control-help-text - The help text's wrapper.\n * @csspart combobox - The container the wraps the prefix, suffix, combobox, clear icon, and expand button.\n * @csspart prefix - The container that wraps the prefix slot.\n * @csspart suffix - The container that wraps the suffix slot.\n * @csspart display-input - The element that displays the selected option's label, an `<input>` element.\n * @csspart listbox - The listbox container where options are slotted.\n * @csspart tags - The container that houses option tags when `multiselect` is used.\n * @csspart tag - The individual tags that represent each multiselect option.\n * @csspart tag__base - The tag's base part.\n * @csspart tag__content - The tag's content part.\n * @csspart tag__remove-button - The tag's remove button.\n * @csspart tag__remove-button__base - The tag's remove button base part.\n * @csspart clear-button - The clear button.\n * @csspart expand-icon - The container that wraps the expand icon.\n */",
           "documentation": "https://shoelace.style/components/select",
           "status": "stable",
           "since": "2.0",
@@ -13810,10 +13991,28 @@
             },
             {
               "kind": "field",
+              "name": "isCollapsed",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "localize",
               "privacy": "private",
               "readonly": true,
               "default": "new LocalizeController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "positionBeforeCollapsing",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
             },
             {
               "kind": "field",
@@ -14165,7 +14364,7 @@
               "name": "formControlController",
               "privacy": "private",
               "readonly": true,
-              "default": "new FormControlController(this, {\n    value: (control: SlSwitch) => (control.checked ? control.value || 'on' : undefined),\n    defaultValue: (control: SlSwitch) => control.defaultChecked,\n    setValue: (control: SlSwitch, checked: boolean) => (control.checked = checked)\n  })"
+              "default": "new FormControlController(this, { value: (control: SlSwitch) => (control.checked ? control.value || 'on' : undefined), defaultValue: (control: SlSwitch) => control.defaultChecked, setValue: (control: SlSwitch, checked: boolean) => (control.checked = checked) })"
             },
             {
               "kind": "field",
@@ -14668,14 +14867,6 @@
               "reflects": true
             },
             {
-              "kind": "field",
-              "name": "tabIndex",
-              "type": {
-                "text": "number"
-              },
-              "default": "-1"
-            },
-            {
               "kind": "method",
               "name": "handleCloseClick",
               "privacy": "private",
@@ -14849,14 +15040,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{ 'sl-icon-button': SlIconButton }"
-            },
-            {
-              "kind": "field",
-              "name": "localize",
-              "privacy": "private",
-              "readonly": true,
-              "default": "new LocalizeController(this)"
+              "default": "{ 'sl-icon-button': SlIconButton, 'sl-resize-observer': SlResizeObserver }"
             },
             {
               "kind": "field",
@@ -14893,12 +15077,28 @@
             },
             {
               "kind": "field",
+              "name": "focusableTabs",
+              "type": {
+                "text": "SlTab[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
               "name": "panels",
               "type": {
                 "text": "SlTabPanel[]"
               },
               "privacy": "private",
               "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "localize",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new LocalizeController(this)"
             },
             {
               "kind": "field",
@@ -14939,6 +15139,24 @@
             },
             {
               "kind": "field",
+              "name": "shouldHideScrollStartButton",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "shouldHideScrollEndButton",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "placement",
               "type": {
                 "text": "'top' | 'bottom' | 'start' | 'end'"
@@ -14968,18 +15186,19 @@
               "attribute": "no-scroll-controls"
             },
             {
+              "kind": "field",
+              "name": "fixedScrollControls",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Prevent scroll buttons from being hidden when inactive.",
+              "attribute": "fixed-scroll-controls"
+            },
+            {
               "kind": "method",
               "name": "getAllTabs",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "options",
-                  "default": "{ includeDisabled: true }",
-                  "type": {
-                    "text": "{ includeDisabled: boolean }"
-                  }
-                }
-              ]
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -15064,6 +15283,50 @@
             },
             {
               "kind": "method",
+              "name": "findNextFocusableTab",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "currentIndex",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "direction",
+                  "type": {
+                    "text": "'forward' | 'backward'"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "scrollOffset",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "1",
+              "description": "The reality of the browser means that we can't expect the scroll position to be exactly what we want it to be, so\nwe add one pixel of wiggle room to our calculations."
+            },
+            {
+              "kind": "method",
+              "name": "updateScrollButtons",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "isScrolledToEnd",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "scrollFromStart",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
               "name": "updateScrollControls"
             },
             {
@@ -15131,6 +15394,15 @@
               "default": "false",
               "description": "Disables the scroll arrows that appear when tabs overflow.",
               "fieldName": "noScrollControls"
+            },
+            {
+              "name": "fixed-scroll-controls",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Prevent scroll buttons from being hidden when inactive.",
+              "fieldName": "fixedScrollControls"
             }
           ],
           "superclass": {
@@ -15499,7 +15771,7 @@
               "name": "formControlController",
               "privacy": "private",
               "readonly": true,
-              "default": "new FormControlController(this, {\n    assumeInteractionOn: ['sl-blur', 'sl-input']\n  })"
+              "default": "new FormControlController(this, { assumeInteractionOn: ['sl-blur', 'sl-input'] })"
             },
             {
               "kind": "field",
@@ -15519,6 +15791,13 @@
             {
               "kind": "field",
               "name": "input",
+              "type": {
+                "text": "HTMLTextAreaElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "sizeAdjuster",
               "type": {
                 "text": "HTMLTextAreaElement"
               }
@@ -16727,6 +17006,13 @@
               "default": "null"
             },
             {
+              "kind": "field",
+              "name": "localize",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new LocalizeController(this)"
+            },
+            {
               "kind": "method",
               "name": "getExpandButtonIcon",
               "privacy": "private",
@@ -16998,7 +17284,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    'sl-checkbox': SlCheckbox,\n    'sl-icon': SlIcon,\n    'sl-spinner': SlSpinner\n  }"
+              "default": "{ 'sl-checkbox': SlCheckbox, 'sl-icon': SlIcon, 'sl-spinner': SlSpinner }"
             },
             {
               "kind": "method",
@@ -17350,7 +17636,7 @@
   "package": {
     "name": "@shoelace-style/shoelace",
     "description": "A forward-thinking library of web components.",
-    "version": "2.15.1",
+    "version": "2.19.1",
     "author": "Cory LaViska",
     "homepage": "https://github.com/shoelace-style/shoelace",
     "license": "MIT"

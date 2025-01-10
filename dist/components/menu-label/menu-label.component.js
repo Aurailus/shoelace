@@ -1,10 +1,10 @@
 import {
   SlMenuLabel
-} from "../../chunks/chunk.4I3MPDQ4.js";
+} from "../../chunks/chunk.6PAZSLXU.js";
 import "../../chunks/chunk.ORTZCIID.js";
 import "../../chunks/chunk.TUVJKY7S.js";
-import "../../chunks/chunk.TUZSOS6C.js";
-import "../../chunks/chunk.IFDWM6P4.js";
+import "../../chunks/chunk.EMG3ZSPT.js";
+import "../../chunks/chunk.KAW7D32O.js";
 export {
   SlMenuLabel as default
 };

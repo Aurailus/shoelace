@@ -10,7 +10,6 @@ export default class SlRelativeTime extends ShoelaceElement {
     private updateTimeout;
     private isoTime;
     private relativeTime;
-    private titleTime;
     /**
      * The date from which to calculate time from. If not set, the current date and time will be used. When passing a
      * string, it's strongly recommended to use the ISO 8601 format to ensure timezones are handled correctly. To convert

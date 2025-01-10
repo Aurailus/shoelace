@@ -5,10 +5,10 @@ import type { SlAvatar } from "../../components/avatar/avatar.component.js";
 import type { SlBadge } from "../../components/badge/badge.component.js";
 import type { SlBreadcrumb } from "../../components/breadcrumb/breadcrumb.component.js";
 import type { SlBreadcrumbItem } from "../../components/breadcrumb-item/breadcrumb-item.component.js";
+import type { SlAnimation } from "../../components/animation/animation.component.js";
 import type { SlButton } from "../../components/button/button.component.js";
 import type { SlAnimatedImage } from "../../components/animated-image/animated-image.component.js";
 import type { SlButtonGroup } from "../../components/button-group/button-group.component.js";
-import type { SlAnimation } from "../../components/animation/animation.component.js";
 import type { SlCard } from "../../components/card/card.component.js";
 import type { SlCarousel } from "../../components/carousel/carousel.component.js";
 import type { SlCarouselItem } from "../../components/carousel-item/carousel-item.component.js";
@@ -35,8 +35,8 @@ import type { SlMutationObserver } from "../../components/mutation-observer/muta
 import type { SlOption } from "../../components/option/option.component.js";
 import type { SlPopup } from "../../components/popup/popup.component.js";
 import type { SlProgressBar } from "../../components/progress-bar/progress-bar.component.js";
-import type { SlQrCode } from "../../components/qr-code/qr-code.component.js";
 import type { SlProgressRing } from "../../components/progress-ring/progress-ring.component.js";
+import type { SlQrCode } from "../../components/qr-code/qr-code.component.js";
 import type { SlRadio } from "../../components/radio/radio.component.js";
 import type { SlRadioButton } from "../../components/radio-button/radio-button.component.js";
 import type { SlRadioGroup } from "../../components/radio-group/radio-group.component.js";
@@ -71,16 +71,21 @@ use the `show()` and `hide()` methods and this attribute will reflect the alert'
 the alert before it closes (e.g. moves the mouse over it), the timer will restart. Defaults to `Infinity`, meaning
 the alert will not close on its own. */
   duration?: SlAlert["duration"];
+  /** Enables a countdown that indicates the remaining time the alert will be displayed.
+Typically used to indicate the remaining time before a whole app refresh. */
+  countdown?: SlAlert["countdown"];
   /**  */
   base?: SlAlert["base"];
+  /**  */
+  countdownElement?: SlAlert["countdownElement"];
   /** Emitted when the alert opens. */
-  onSlShow?: (e: CustomEvent<never>) => void;
+  "onsl-show"?: (e: CustomEvent<never>) => void;
   /** Emitted after the alert opens and all animations are complete. */
-  onSlAfterShow?: (e: CustomEvent<never>) => void;
+  "onsl-after-show"?: (e: CustomEvent<never>) => void;
   /** Emitted when the alert closes. */
-  onSlHide?: (e: CustomEvent<never>) => void;
+  "onsl-hide"?: (e: CustomEvent<never>) => void;
   /** Emitted after the alert closes and all animations are complete. */
-  onSlAfterHide?: (e: CustomEvent<never>) => void;
+  "onsl-after-hide"?: (e: CustomEvent<never>) => void;
 };
 
 type SlAvatarProps = {
@@ -94,6 +99,9 @@ type SlAvatarProps = {
   loading?: SlAvatar["loading"];
   /** The shape of the avatar. */
   shape?: SlAvatar["shape"];
+
+  /** The image could not be loaded. This may because of an invalid URL, a temporary network condition, or some unknown cause. */
+  "onsl-error"?: (e: CustomEvent<never>) => void;
 };
 
 type SlBadgeProps = {
@@ -123,6 +131,50 @@ internally. When unset, a button will be rendered instead. */
   target?: SlBreadcrumbItem["target"];
   /** The `rel` attribute to use on the link. Only used when `href` is set. */
   rel?: SlBreadcrumbItem["rel"];
+  /**  */
+  defaultSlot?: SlBreadcrumbItem["defaultSlot"];
+};
+
+type SlAnimationProps = {
+  /** The name of the built-in animation to use. For custom animations, use the `keyframes` prop. */
+  name?: SlAnimation["name"];
+  /** Plays the animation. When omitted, the animation will be paused. This attribute will be automatically removed when
+the animation finishes or gets canceled. */
+  play?: SlAnimation["play"];
+  /** The number of milliseconds to delay the start of the animation. */
+  delay?: SlAnimation["delay"];
+  /** Determines the direction of playback as well as the behavior when reaching the end of an iteration.
+[Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction) */
+  direction?: SlAnimation["direction"];
+  /** The number of milliseconds each iteration of the animation takes to complete. */
+  duration?: SlAnimation["duration"];
+  /** The easing function to use for the animation. This can be a Shoelace easing function or a custom easing function
+such as `cubic-bezier(0, 1, .76, 1.14)`. */
+  easing?: SlAnimation["easing"];
+  /** The number of milliseconds to delay after the active period of an animation sequence. */
+  "end-delay"?: SlAnimation["endDelay"];
+  /** Sets how the animation applies styles to its target before and after its execution. */
+  fill?: SlAnimation["fill"];
+  /** The number of iterations to run before the animation completes. Defaults to `Infinity`, which loops. */
+  iterations?: SlAnimation["iterations"];
+  /** The offset at which to start the animation, usually between 0 (start) and 1 (end). */
+  "iteration-start"?: SlAnimation["iterationStart"];
+  /** Sets the animation's playback rate. The default is `1`, which plays the animation at a normal speed. Setting this
+to `2`, for example, will double the animation's speed. A negative value can be used to reverse the animation. This
+value can be changed without causing the animation to restart. */
+  "playback-rate"?: SlAnimation["playbackRate"];
+  /**  */
+  defaultSlot?: SlAnimation["defaultSlot"];
+  /** The keyframes to use for the animation. If this is set, `name` will be ignored. */
+  keyframes?: SlAnimation["keyframes"];
+  /** Gets and sets the current animation time. */
+  currentTime?: SlAnimation["currentTime"];
+  /** Emitted when the animation is canceled. */
+  "onsl-cancel"?: (e: CustomEvent<never>) => void;
+  /** Emitted when the animation finishes. */
+  "onsl-finish"?: (e: CustomEvent<never>) => void;
+  /** Emitted when the animation starts or restarts. */
+  "onsl-start"?: (e: CustomEvent<never>) => void;
 };
 
 type SlButtonProps = {
@@ -187,11 +239,11 @@ value of this attribute must be an id of a form in the same document or shadow r
   /** Gets the validation message */
   validationMessage?: SlButton["validationMessage"];
   /** Emitted when the button loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when the button gains focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
   /** Emitted when the form control has been checked for validity and its constraints aren't satisfied. */
-  onSlInvalid?: (e: CustomEvent<never>) => void;
+  "onsl-invalid"?: (e: CustomEvent<never>) => void;
 };
 
 type SlAnimatedImageProps = {
@@ -208,9 +260,9 @@ type SlAnimatedImageProps = {
   /**  */
   isLoaded?: SlAnimatedImage["isLoaded"];
   /** Emitted when the image loads successfully. */
-  onSlLoad?: (e: CustomEvent<never>) => void;
+  "onsl-load"?: (e: CustomEvent<never>) => void;
   /** Emitted when the image fails to load. */
-  onSlError?: (e: CustomEvent<never>) => void;
+  "onsl-error"?: (e: CustomEvent<never>) => void;
 };
 
 type SlButtonGroupProps = {
@@ -221,48 +273,6 @@ devices when interacting with the control and is strongly recommended. */
   defaultSlot?: SlButtonGroup["defaultSlot"];
   /**  */
   disableRole?: SlButtonGroup["disableRole"];
-};
-
-type SlAnimationProps = {
-  /** The name of the built-in animation to use. For custom animations, use the `keyframes` prop. */
-  name?: SlAnimation["name"];
-  /** Plays the animation. When omitted, the animation will be paused. This attribute will be automatically removed when
-the animation finishes or gets canceled. */
-  play?: SlAnimation["play"];
-  /** The number of milliseconds to delay the start of the animation. */
-  delay?: SlAnimation["delay"];
-  /** Determines the direction of playback as well as the behavior when reaching the end of an iteration.
-[Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction) */
-  direction?: SlAnimation["direction"];
-  /** The number of milliseconds each iteration of the animation takes to complete. */
-  duration?: SlAnimation["duration"];
-  /** The easing function to use for the animation. This can be a Shoelace easing function or a custom easing function
-such as `cubic-bezier(0, 1, .76, 1.14)`. */
-  easing?: SlAnimation["easing"];
-  /** The number of milliseconds to delay after the active period of an animation sequence. */
-  "end-delay"?: SlAnimation["endDelay"];
-  /** Sets how the animation applies styles to its target before and after its execution. */
-  fill?: SlAnimation["fill"];
-  /** The number of iterations to run before the animation completes. Defaults to `Infinity`, which loops. */
-  iterations?: SlAnimation["iterations"];
-  /** The offset at which to start the animation, usually between 0 (start) and 1 (end). */
-  "iteration-start"?: SlAnimation["iterationStart"];
-  /** Sets the animation's playback rate. The default is `1`, which plays the animation at a normal speed. Setting this
-to `2`, for example, will double the animation's speed. A negative value can be used to reverse the animation. This
-value can be changed without causing the animation to restart. */
-  "playback-rate"?: SlAnimation["playbackRate"];
-  /**  */
-  defaultSlot?: SlAnimation["defaultSlot"];
-  /** The keyframes to use for the animation. If this is set, `name` will be ignored. */
-  keyframes?: SlAnimation["keyframes"];
-  /** Gets and sets the current animation time. */
-  currentTime?: SlAnimation["currentTime"];
-  /** Emitted when the animation is canceled. */
-  onSlCancel?: (e: CustomEvent<never>) => void;
-  /** Emitted when the animation finishes. */
-  onSlFinish?: (e: CustomEvent<never>) => void;
-  /** Emitted when the animation starts or restarts. */
-  onSlStart?: (e: CustomEvent<never>) => void;
 };
 
 type SlCardProps = {};
@@ -298,7 +308,7 @@ greater than one. It can't be higher than `slides-per-page`. */
   /**  */
   dragging?: SlCarousel["dragging"];
   /** Emitted when the active slide changes. */
-  onSlSlideChange?: (e: CustomEvent<{ index: number; slide: SlCarouselItem }>) => void;
+  "onsl-slide-change"?: (e: CustomEvent<{ index: number; slide: SlCarouselItem }>) => void;
 };
 
 type SlCarouselItemProps = {};
@@ -336,15 +346,15 @@ the same document or shadow root for this to work. */
   /** Gets the validation message */
   validationMessage?: SlCheckbox["validationMessage"];
   /** Emitted when the checkbox loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when the checked state changes. */
-  onSlChange?: (e: CustomEvent<never>) => void;
+  "onsl-change"?: (e: CustomEvent<never>) => void;
   /** Emitted when the checkbox gains focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
   /** Emitted when the checkbox receives input. */
-  onSlInput?: (e: CustomEvent<never>) => void;
+  "onsl-input"?: (e: CustomEvent<never>) => void;
   /** Emitted when the form control has been checked for validity and its constraints aren't satisfied. */
-  onSlInvalid?: (e: CustomEvent<never>) => void;
+  "onsl-invalid"?: (e: CustomEvent<never>) => void;
 };
 
 type SlColorPickerProps = {
@@ -402,15 +412,15 @@ the same document or shadow root for this to work. */
   /** Gets the validation message */
   validationMessage?: SlColorPicker["validationMessage"];
   /** Emitted when the color picker loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when the color picker's value changes. */
-  onSlChange?: (e: CustomEvent<never>) => void;
+  "onsl-change"?: (e: CustomEvent<never>) => void;
   /** Emitted when the color picker receives focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
   /** Emitted when the color picker receives input. */
-  onSlInput?: (e: CustomEvent<never>) => void;
+  "onsl-input"?: (e: CustomEvent<never>) => void;
   /** Emitted when the form control has been checked for validity and its constraints aren't satisfied. */
-  onSlInvalid?: (e: CustomEvent<never>) => void;
+  "onsl-invalid"?: (e: CustomEvent<never>) => void;
 };
 
 type SlCopyButtonProps = {
@@ -450,9 +460,9 @@ scenarios. */
   /**  */
   status?: SlCopyButton["status"];
   /** Emitted when the data has been copied. */
-  onSlCopy?: (e: CustomEvent<never>) => void;
+  "onsl-copy"?: (e: CustomEvent<never>) => void;
   /** Emitted when the data could not be copied. */
-  onSlError?: (e: CustomEvent<never>) => void;
+  "onsl-error"?: (e: CustomEvent<never>) => void;
 };
 
 type SlDetailsProps = {
@@ -474,13 +484,13 @@ can use the `show()` and `hide()` methods and this attribute will reflect the de
   /**  */
   detailsObserver?: SlDetails["detailsObserver"];
   /** Emitted when the details opens. */
-  onSlShow?: (e: CustomEvent<never>) => void;
+  "onsl-show"?: (e: CustomEvent<never>) => void;
   /** Emitted after the details opens and all animations are complete. */
-  onSlAfterShow?: (e: CustomEvent<never>) => void;
+  "onsl-after-show"?: (e: CustomEvent<never>) => void;
   /** Emitted when the details closes. */
-  onSlHide?: (e: CustomEvent<never>) => void;
+  "onsl-hide"?: (e: CustomEvent<never>) => void;
   /** Emitted after the details closes and all animations are complete. */
-  onSlAfterHide?: (e: CustomEvent<never>) => void;
+  "onsl-after-hide"?: (e: CustomEvent<never>) => void;
 };
 
 type SlDialogProps = {
@@ -502,17 +512,17 @@ accessible way for users to dismiss the dialog. */
   /**  */
   overlay?: SlDialog["overlay"];
   /** Emitted when the dialog opens. */
-  onSlShow?: (e: CustomEvent<never>) => void;
+  "onsl-show"?: (e: CustomEvent<never>) => void;
   /** Emitted after the dialog opens and all animations are complete. */
-  onSlAfterShow?: (e: CustomEvent<never>) => void;
+  "onsl-after-show"?: (e: CustomEvent<never>) => void;
   /** Emitted when the dialog closes. */
-  onSlHide?: (e: CustomEvent<never>) => void;
+  "onsl-hide"?: (e: CustomEvent<never>) => void;
   /** Emitted after the dialog closes and all animations are complete. */
-  onSlAfterHide?: (e: CustomEvent<never>) => void;
+  "onsl-after-hide"?: (e: CustomEvent<never>) => void;
   /** Emitted when the dialog opens and is ready to receive focus. Calling `event.preventDefault()` will prevent focusing and allow you to set it on a different element, such as an input. */
-  onSlInitialFocus?: (e: CustomEvent<never>) => void;
+  "onsl-initial-focus"?: (e: CustomEvent<never>) => void;
   /** Emitted when the user attempts to close the dialog by clicking the close button, clicking the overlay, or pressing escape. Calling `event.preventDefault()` will keep the dialog open. Avoid using this unless closing the dialog will result in destructive behavior such as data loss. */
-  onSlRequestClose?: (e: CustomEvent<{ source: "close-button" | "keyboard" | "overlay" }>) => void;
+  "onsl-request-close"?: (e: CustomEvent<{ source: "close-button" | "keyboard" | "overlay" }>) => void;
 };
 
 type SlDividerProps = {
@@ -544,17 +554,17 @@ accessible way for users to dismiss the drawer. */
   /**  */
   overlay?: SlDrawer["overlay"];
   /** Emitted when the drawer opens. */
-  onSlShow?: (e: CustomEvent<never>) => void;
+  "onsl-show"?: (e: CustomEvent<never>) => void;
   /** Emitted after the drawer opens and all animations are complete. */
-  onSlAfterShow?: (e: CustomEvent<never>) => void;
+  "onsl-after-show"?: (e: CustomEvent<never>) => void;
   /** Emitted when the drawer closes. */
-  onSlHide?: (e: CustomEvent<never>) => void;
+  "onsl-hide"?: (e: CustomEvent<never>) => void;
   /** Emitted after the drawer closes and all animations are complete. */
-  onSlAfterHide?: (e: CustomEvent<never>) => void;
+  "onsl-after-hide"?: (e: CustomEvent<never>) => void;
   /** Emitted when the drawer opens and is ready to receive focus. Calling `event.preventDefault()` will prevent focusing and allow you to set it on a different element, such as an input. */
-  onSlInitialFocus?: (e: CustomEvent<never>) => void;
+  "onsl-initial-focus"?: (e: CustomEvent<never>) => void;
   /** Emitted when the user attempts to close the drawer by clicking the close button, clicking the overlay, or pressing escape. Calling `event.preventDefault()` will keep the drawer open. Avoid using this unless closing the drawer will result in destructive behavior such as data loss. */
-  onSlRequestClose?: (e: CustomEvent<{ source: "close-button" | "keyboard" | "overlay" }>) => void;
+  "onsl-request-close"?: (e: CustomEvent<{ source: "close-button" | "keyboard" | "overlay" }>) => void;
 };
 
 type SlDropdownProps = {
@@ -588,13 +598,13 @@ dropdowns that allow for multiple interactions. */
 components that use a dropdown internally. */
   containingElement?: SlDropdown["containingElement"];
   /** Emitted when the dropdown opens. */
-  onSlShow?: (e: CustomEvent<never>) => void;
+  "onsl-show"?: (e: CustomEvent<never>) => void;
   /** Emitted after the dropdown opens and all animations are complete. */
-  onSlAfterShow?: (e: CustomEvent<never>) => void;
+  "onsl-after-show"?: (e: CustomEvent<never>) => void;
   /** Emitted when the dropdown closes. */
-  onSlHide?: (e: CustomEvent<never>) => void;
+  "onsl-hide"?: (e: CustomEvent<never>) => void;
   /** Emitted after the dropdown closes and all animations are complete. */
-  onSlAfterHide?: (e: CustomEvent<never>) => void;
+  "onsl-after-hide"?: (e: CustomEvent<never>) => void;
 };
 
 type SlFormatBytesProps = {
@@ -671,9 +681,9 @@ ignored by assistive devices. */
   library?: SlIcon["library"];
 
   /** Emitted when the icon has loaded. When using `spriteSheet: true` this will not emit. */
-  onSlLoad?: (e: CustomEvent<never>) => void;
+  "onsl-load"?: (e: CustomEvent<never>) => void;
   /** Emitted when the icon fails to load due to an error. When using `spriteSheet: true` this will not emit. */
-  onSlError?: (e: CustomEvent<never>) => void;
+  "onsl-error"?: (e: CustomEvent<never>) => void;
 };
 
 type SlIconButtonProps = {
@@ -698,9 +708,9 @@ that describes what the icon button does. */
   /**  */
   button?: SlIconButton["button"];
   /** Emitted when the icon button loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when the icon button gains focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
 };
 
 type SlImageComparerProps = {
@@ -711,7 +721,7 @@ type SlImageComparerProps = {
   /**  */
   handle?: SlImageComparer["handle"];
   /** Emitted when the position changes. */
-  onSlChange?: (e: CustomEvent<never>) => void;
+  "onsl-change"?: (e: CustomEvent<never>) => void;
 };
 
 type SlIncludeProps = {
@@ -725,9 +735,9 @@ code and can result in XSS attacks. */
   "allow-scripts"?: SlInclude["allowScripts"];
 
   /** Emitted when the included file is loaded. */
-  onSlLoad?: (e: CustomEvent<never>) => void;
+  "onsl-load"?: (e: CustomEvent<never>) => void;
   /** Emitted when the included file fails to load due to an error. */
-  onSlError?: (e: CustomEvent<{ status: number }>) => void;
+  "onsl-error"?: (e: CustomEvent<{ status: number }>) => void;
 };
 
 type SlInputProps = {
@@ -812,24 +822,24 @@ keyboard on supportive devices. */
   /** Gets the validation message */
   validationMessage?: SlInput["validationMessage"];
   /** Emitted when the control loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when an alteration to the control's value is committed by the user. */
-  onSlChange?: (e: CustomEvent<never>) => void;
+  "onsl-change"?: (e: CustomEvent<never>) => void;
   /** Emitted when the clear button is activated. */
-  onSlClear?: (e: CustomEvent<never>) => void;
+  "onsl-clear"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control gains focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control receives input. */
-  onSlInput?: (e: CustomEvent<never>) => void;
+  "onsl-input"?: (e: CustomEvent<never>) => void;
   /** Emitted when the form control has been checked for validity and its constraints aren't satisfied. */
-  onSlInvalid?: (e: CustomEvent<never>) => void;
+  "onsl-invalid"?: (e: CustomEvent<never>) => void;
 };
 
 type SlMenuProps = {
   /**  */
   defaultSlot?: SlMenu["defaultSlot"];
   /** Emitted when a menu item is selected. */
-  onSlSelect?: (e: CustomEvent<{ item: SlMenuItem }>) => void;
+  "onsl-select"?: (e: CustomEvent<{ item: SlMenuItem }>) => void;
 };
 
 type SlMenuItemProps = {
@@ -867,7 +877,7 @@ type SlMutationObserverProps = {
   disabled?: SlMutationObserver["disabled"];
 
   /** Emitted when a mutation occurs. */
-  onSlMutation?: (e: CustomEvent<{ mutationList: MutationRecord[] }>) => void;
+  "onsl-mutation"?: (e: CustomEvent<{ mutationList: MutationRecord[] }>) => void;
 };
 
 type SlOptionProps = {
@@ -959,7 +969,7 @@ active. */
   /** A reference to the internal popup container. Useful for animating and styling the popup with JavaScript. */
   popup?: SlPopup["popup"];
   /** Emitted when the popup is repositioned. This event can fire a lot, so avoid putting expensive operations in your listener or consider debouncing it. */
-  onSlReposition?: (e: CustomEvent<never>) => void;
+  "onsl-reposition"?: (e: CustomEvent<never>) => void;
 };
 
 type SlProgressBarProps = {
@@ -969,6 +979,17 @@ type SlProgressBarProps = {
   indeterminate?: SlProgressBar["indeterminate"];
   /** A custom label for assistive devices. */
   label?: SlProgressBar["label"];
+};
+
+type SlProgressRingProps = {
+  /** The current progress as a percentage, 0 to 100. */
+  value?: SlProgressRing["value"];
+  /** A custom label for assistive devices. */
+  label?: SlProgressRing["label"];
+  /**  */
+  indicator?: SlProgressRing["indicator"];
+  /**  */
+  indicatorOffset?: SlProgressRing["indicatorOffset"];
 };
 
 type SlQrCodeProps = {
@@ -990,17 +1011,6 @@ type SlQrCodeProps = {
   canvas?: SlQrCode["canvas"];
 };
 
-type SlProgressRingProps = {
-  /** The current progress as a percentage, 0 to 100. */
-  value?: SlProgressRing["value"];
-  /** A custom label for assistive devices. */
-  label?: SlProgressRing["label"];
-  /**  */
-  indicator?: SlProgressRing["indicator"];
-  /**  */
-  indicatorOffset?: SlProgressRing["indicatorOffset"];
-};
-
 type SlRadioProps = {
   /** The radio's value. When selected, the radio group will receive this value. */
   value?: SlRadio["value"];
@@ -1012,9 +1022,9 @@ attribute can typically be omitted. */
   /**  */
   checked?: SlRadio["checked"];
   /** Emitted when the control loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control gains focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
 };
 
 type SlRadioButtonProps = {
@@ -1032,9 +1042,9 @@ this attribute can typically be omitted. */
   /**  */
   hiddenInput?: SlRadioButton["hiddenInput"];
   /** Emitted when the button loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when the button gains focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
 };
 
 type SlRadioGroupProps = {
@@ -1066,11 +1076,11 @@ the same document or shadow root for this to work. */
   /** Gets the validation message */
   validationMessage?: SlRadioGroup["validationMessage"];
   /** Emitted when the radio group's selected value changes. */
-  onSlChange?: (e: CustomEvent<never>) => void;
+  "onsl-change"?: (e: CustomEvent<never>) => void;
   /** Emitted when the radio group receives user input. */
-  onSlInput?: (e: CustomEvent<never>) => void;
+  "onsl-input"?: (e: CustomEvent<never>) => void;
   /** Emitted when the form control has been checked for validity and its constraints aren't satisfied. */
-  onSlInvalid?: (e: CustomEvent<never>) => void;
+  "onsl-invalid"?: (e: CustomEvent<never>) => void;
 };
 
 type SlRangeProps = {
@@ -1112,15 +1122,15 @@ function should return a string to display in the tooltip. */
   /** Gets the validation message */
   validationMessage?: SlRange["validationMessage"];
   /** Emitted when the control loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when an alteration to the control's value is committed by the user. */
-  onSlChange?: (e: CustomEvent<never>) => void;
+  "onsl-change"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control gains focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control receives input. */
-  onSlInput?: (e: CustomEvent<never>) => void;
+  "onsl-input"?: (e: CustomEvent<never>) => void;
   /** Emitted when the form control has been checked for validity and its constraints aren't satisfied. */
-  onSlInvalid?: (e: CustomEvent<never>) => void;
+  "onsl-invalid"?: (e: CustomEvent<never>) => void;
 };
 
 type SlRatingProps = {
@@ -1144,9 +1154,9 @@ well with `<sl-icon>` elements. */
   /**  */
   rating?: SlRating["rating"];
   /** Emitted when the rating's value changes. */
-  onSlChange?: (e: CustomEvent<never>) => void;
+  "onsl-change"?: (e: CustomEvent<never>) => void;
   /** Emitted when the user hovers over a value. The `phase` property indicates when hovering starts, moves to a new value, or ends. The `value` property tells what the rating's value would be if the user were to commit to the hovered value. */
-  onSlHover?: (e: CustomEvent<{ phase: "start" | "move" | "end"; value: number }>) => void;
+  "onsl-hover"?: (e: CustomEvent<{ phase: "start" | "move" | "end"; value: number }>) => void;
 };
 
 type SlRelativeTimeProps = {
@@ -1168,16 +1178,14 @@ type SlResizeObserverProps = {
   disabled?: SlResizeObserver["disabled"];
 
   /** Emitted when the element is resized. */
-  onSlResize?: (e: CustomEvent<{ entries: ResizeObserverEntry[] }>) => void;
+  "onsl-resize"?: (e: CustomEvent<{ entries: ResizeObserverEntry[] }>) => void;
 };
 
 type SlSelectProps = {
   /** The name of the select, submitted as a name/value pair with form data. */
   name?: SlSelect["name"];
-  /** The current value of the select, submitted as a name/value pair with form data. When `multiple` is enabled, the
-value attribute will be a space-delimited list of values based on the options selected, and the value property will
-be an array. **For this reason, values must not contain spaces.** */
-  value?: SlSelect["value"];
+  /** The default value of the form control. Primarily used for resetting the form control. */
+  value?: SlSelect["defaultValue"];
   /** The select's size. */
   size?: SlSelect["size"];
   /** Placeholder text to show as a hint when the select is empty. */
@@ -1234,32 +1242,34 @@ the specified value. */
   currentOption?: SlSelect["currentOption"];
   /**  */
   selectedOptions?: SlSelect["selectedOptions"];
-  /** The default value of the form control. Primarily used for resetting the form control. */
-  defaultValue?: SlSelect["defaultValue"];
+  /** The current value of the select, submitted as a name/value pair with form data. When `multiple` is enabled, the
+value attribute will be a space-delimited list of values based on the options selected, and the value property will
+be an array. **For this reason, values must not contain spaces.** */
+  value?: SlSelect["value"];
   /** Gets the validity state object */
   validity?: SlSelect["validity"];
   /** Gets the validation message */
   validationMessage?: SlSelect["validationMessage"];
   /** Emitted when the control's value changes. */
-  onSlChange?: (e: CustomEvent<never>) => void;
+  "onsl-change"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control's value is cleared. */
-  onSlClear?: (e: CustomEvent<never>) => void;
+  "onsl-clear"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control receives input. */
-  onSlInput?: (e: CustomEvent<never>) => void;
+  "onsl-input"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control gains focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when the select's menu opens. */
-  onSlShow?: (e: CustomEvent<never>) => void;
+  "onsl-show"?: (e: CustomEvent<never>) => void;
   /** Emitted after the select's menu opens and all animations are complete. */
-  onSlAfterShow?: (e: CustomEvent<never>) => void;
+  "onsl-after-show"?: (e: CustomEvent<never>) => void;
   /** Emitted when the select's menu closes. */
-  onSlHide?: (e: CustomEvent<never>) => void;
+  "onsl-hide"?: (e: CustomEvent<never>) => void;
   /** Emitted after the select's menu closes and all animations are complete. */
-  onSlAfterHide?: (e: CustomEvent<never>) => void;
+  "onsl-after-hide"?: (e: CustomEvent<never>) => void;
   /** Emitted when the form control has been checked for validity and its constraints aren't satisfied. */
-  onSlInvalid?: (e: CustomEvent<never>) => void;
+  "onsl-invalid"?: (e: CustomEvent<never>) => void;
 };
 
 type SlSkeletonProps = {
@@ -1293,7 +1303,7 @@ host element is resized. */
   /**  */
   divider?: SlSplitPanel["divider"];
   /** Emitted when the divider's position changes. */
-  onSlReposition?: (e: CustomEvent<never>) => void;
+  "onsl-reposition"?: (e: CustomEvent<never>) => void;
 };
 
 type SlSwitchProps = {
@@ -1326,15 +1336,15 @@ the same document or shadow root for this to work. */
   /** Gets the validation message */
   validationMessage?: SlSwitch["validationMessage"];
   /** Emitted when the control loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control's checked state changes. */
-  onSlChange?: (e: CustomEvent<never>) => void;
+  "onsl-change"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control receives input. */
-  onSlInput?: (e: CustomEvent<never>) => void;
+  "onsl-input"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control gains focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
   /** Emitted when the form control has been checked for validity and its constraints aren't satisfied. */
-  onSlInvalid?: (e: CustomEvent<never>) => void;
+  "onsl-invalid"?: (e: CustomEvent<never>) => void;
 };
 
 type SlTabProps = {
@@ -1348,10 +1358,8 @@ type SlTabProps = {
   disabled?: SlTab["disabled"];
   /**  */
   tab?: SlTab["tab"];
-  /**  */
-  tabIndex?: SlTab["tabIndex"];
   /** Emitted when the tab is closable and the close button is activated. */
-  onSlClose?: (e: CustomEvent<never>) => void;
+  "onsl-close"?: (e: CustomEvent<never>) => void;
 };
 
 type SlTabGroupProps = {
@@ -1362,6 +1370,8 @@ manual, the tab will receive focus but will not show until the user presses spac
   activation?: SlTabGroup["activation"];
   /** Disables the scroll arrows that appear when tabs overflow. */
   "no-scroll-controls"?: SlTabGroup["noScrollControls"];
+  /** Prevent scroll buttons from being hidden when inactive. */
+  "fixed-scroll-controls"?: SlTabGroup["fixedScrollControls"];
   /**  */
   tabGroup?: SlTabGroup["tabGroup"];
   /**  */
@@ -1371,9 +1381,9 @@ manual, the tab will receive focus but will not show until the user presses spac
   /**  */
   indicator?: SlTabGroup["indicator"];
   /** Emitted when a tab is shown. */
-  onSlTabShow?: (e: CustomEvent<{ name: String }>) => void;
+  "onsl-tab-show"?: (e: CustomEvent<{ name: String }>) => void;
   /** Emitted when a tab is hidden. */
-  onSlTabHide?: (e: CustomEvent<{ name: String }>) => void;
+  "onsl-tab-hide"?: (e: CustomEvent<{ name: String }>) => void;
 };
 
 type SlTabPanelProps = {
@@ -1394,7 +1404,7 @@ type SlTagProps = {
   removable?: SlTag["removable"];
 
   /** Emitted when the remove button is activated. */
-  onSlRemove?: (e: CustomEvent<never>) => void;
+  "onsl-remove"?: (e: CustomEvent<never>) => void;
 };
 
 type SlTextareaProps = {
@@ -1450,6 +1460,8 @@ keyboard on supportive devices. */
   inputmode?: SlTextarea["inputmode"];
   /**  */
   input?: SlTextarea["input"];
+  /**  */
+  sizeAdjuster?: SlTextarea["sizeAdjuster"];
   /** The default value of the form control. Primarily used for resetting the form control. */
   defaultValue?: SlTextarea["defaultValue"];
   /** Gets the validity state object */
@@ -1457,15 +1469,15 @@ keyboard on supportive devices. */
   /** Gets the validation message */
   validationMessage?: SlTextarea["validationMessage"];
   /** Emitted when the control loses focus. */
-  onSlBlur?: (e: CustomEvent<never>) => void;
+  "onsl-blur"?: (e: CustomEvent<never>) => void;
   /** Emitted when an alteration to the control's value is committed by the user. */
-  onSlChange?: (e: CustomEvent<never>) => void;
+  "onsl-change"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control gains focus. */
-  onSlFocus?: (e: CustomEvent<never>) => void;
+  "onsl-focus"?: (e: CustomEvent<never>) => void;
   /** Emitted when the control receives input. */
-  onSlInput?: (e: CustomEvent<never>) => void;
+  "onsl-input"?: (e: CustomEvent<never>) => void;
   /** Emitted when the form control has been checked for validity and its constraints aren't satisfied. */
-  onSlInvalid?: (e: CustomEvent<never>) => void;
+  "onsl-invalid"?: (e: CustomEvent<never>) => void;
 };
 
 type SlTooltipProps = {
@@ -1497,13 +1509,13 @@ scenarios. */
   /**  */
   popup?: SlTooltip["popup"];
   /** Emitted when the tooltip begins to show. */
-  onSlShow?: (e: CustomEvent<never>) => void;
+  "onsl-show"?: (e: CustomEvent<never>) => void;
   /** Emitted after the tooltip has shown and all animations are complete. */
-  onSlAfterShow?: (e: CustomEvent<never>) => void;
+  "onsl-after-show"?: (e: CustomEvent<never>) => void;
   /** Emitted when the tooltip begins to hide. */
-  onSlHide?: (e: CustomEvent<never>) => void;
+  "onsl-hide"?: (e: CustomEvent<never>) => void;
   /** Emitted after the tooltip has hidden and all animations are complete. */
-  onSlAfterHide?: (e: CustomEvent<never>) => void;
+  "onsl-after-hide"?: (e: CustomEvent<never>) => void;
 };
 
 type SlTreeProps = {
@@ -1517,7 +1529,7 @@ displays checkboxes and allows more than one node to be selected. Leaf allows on
   /**  */
   collapsedIconSlot?: SlTree["collapsedIconSlot"];
   /** Emitted when a tree item is selected or deselected. */
-  onSlSelectionChange?: (e: CustomEvent<{ selection: SlTreeItem[] }>) => void;
+  "onsl-selection-change"?: (e: CustomEvent<{ selection: SlTreeItem[] }>) => void;
 };
 
 type SlTreeItemProps = {
@@ -1548,17 +1560,17 @@ type SlTreeItemProps = {
   /**  */
   expandButtonSlot?: SlTreeItem["expandButtonSlot"];
   /** Emitted when the tree item expands. */
-  onSlExpand?: (e: CustomEvent<never>) => void;
+  "onsl-expand"?: (e: CustomEvent<never>) => void;
   /** Emitted after the tree item expands and all animations are complete. */
-  onSlAfterExpand?: (e: CustomEvent<never>) => void;
+  "onsl-after-expand"?: (e: CustomEvent<never>) => void;
   /** Emitted when the tree item collapses. */
-  onSlCollapse?: (e: CustomEvent<never>) => void;
+  "onsl-collapse"?: (e: CustomEvent<never>) => void;
   /** Emitted after the tree item collapses and all animations are complete. */
-  onSlAfterCollapse?: (e: CustomEvent<never>) => void;
+  "onsl-after-collapse"?: (e: CustomEvent<never>) => void;
   /** Emitted when the tree item's lazy state changes. */
-  onSlLazyChange?: (e: CustomEvent<never>) => void;
+  "onsl-lazy-change"?: (e: CustomEvent<never>) => void;
   /** Emitted when a lazy item is selected. Use this event to asynchronously load data and append items to the tree before expanding. After appending new items, remove the `lazy` attribute to remove the loading state and update the tree. */
-  onSlLazyLoad?: (e: CustomEvent<never>) => void;
+  "onsl-lazy-load"?: (e: CustomEvent<never>) => void;
 };
 
 type SlVisuallyHiddenProps = {};
@@ -1599,6 +1611,9 @@ export type CustomElements = {
    * Avatars are used to represent a person or object.
    * ---
    *
+   *
+   * ### **Events:**
+   *  - **sl-error** - The image could not be loaded. This may because of an invalid URL, a temporary network condition, or some unknown cause.
    *
    * ### **Slots:**
    *  - **icon** - The default icon to use when no image or initials are present. Works best with `<sl-icon>`.
@@ -1660,6 +1675,25 @@ export type CustomElements = {
    * - **separator** - The container that wraps the separator.
    */
   "sl-breadcrumb-item": DefineComponent<SlBreadcrumbItemProps>;
+
+  /**
+   * Animate elements declaratively with nearly 100 baked-in presets, or roll your own with custom keyframes. Powered by the [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API).
+   * ---
+   *
+   *
+   * ### **Events:**
+   *  - **sl-cancel** - Emitted when the animation is canceled.
+   * - **sl-finish** - Emitted when the animation finishes.
+   * - **sl-start** - Emitted when the animation starts or restarts.
+   *
+   * ### **Methods:**
+   *  - **cancel()** - Clears all keyframe effects caused by this animation and aborts its playback.
+   * - **finish()** - Sets the playback time to the end of the animation corresponding to the current playback direction.
+   *
+   * ### **Slots:**
+   *  - _default_ - The element to animate. Avoid slotting in more than one element, as subsequent ones will be ignored. To animate multiple elements, either wrap them in a single container or use multiple `<sl-animation>` elements.
+   */
+  "sl-animation": DefineComponent<SlAnimationProps>;
 
   /**
    * Buttons represent actions that are available to the user.
@@ -1729,25 +1763,6 @@ export type CustomElements = {
    *  - **base** - The component's base wrapper.
    */
   "sl-button-group": DefineComponent<SlButtonGroupProps>;
-
-  /**
-   * Animate elements declaratively with nearly 100 baked-in presets, or roll your own with custom keyframes. Powered by the [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API).
-   * ---
-   *
-   *
-   * ### **Events:**
-   *  - **sl-cancel** - Emitted when the animation is canceled.
-   * - **sl-finish** - Emitted when the animation finishes.
-   * - **sl-start** - Emitted when the animation starts or restarts.
-   *
-   * ### **Methods:**
-   *  - **cancel()** - Clears all keyframe effects caused by this animation and aborts its playback.
-   * - **finish()** - Sets the playback time to the end of the animation corresponding to the current playback direction.
-   *
-   * ### **Slots:**
-   *  - _default_ - The element to animate. Avoid slotting in more than one element, as subsequent ones will be ignored. To animate multiple elements, either wrap them in a single container or use multiple `<sl-animation>` elements.
-   */
-  "sl-animation": DefineComponent<SlAnimationProps>;
 
   /**
    * Cards can be used to group related subjects in a container.
@@ -2104,7 +2119,8 @@ export type CustomElements = {
    * - **trigger** - The dropdown's trigger, usually a `<sl-button>` element.
    *
    * ### **CSS Parts:**
-   *  - **base** - The component's base wrapper.
+   *  - **base** - The component's base wrapper, an `<sl-popup>` element.
+   * - **base__popup** - The popup's exported `popup` part. Use this to target the tooltip's popup container.
    * - **trigger** - The container that wraps the trigger.
    * - **panel** - The panel that gets shown when the dropdown is open.
    */
@@ -2392,16 +2408,6 @@ export type CustomElements = {
   "sl-progress-bar": DefineComponent<SlProgressBarProps>;
 
   /**
-   * Generates a [QR code](https://www.qrcode.com/) and renders it using the [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
-   * ---
-   *
-   *
-   * ### **CSS Parts:**
-   *  - **base** - The component's base wrapper.
-   */
-  "sl-qr-code": DefineComponent<SlQrCodeProps>;
-
-  /**
    * Progress rings are used to show the progress of a determinate operation in a circular fashion.
    * ---
    *
@@ -2422,6 +2428,16 @@ export type CustomElements = {
    * - **label** - The progress ring label.
    */
   "sl-progress-ring": DefineComponent<SlProgressRingProps>;
+
+  /**
+   * Generates a [QR code](https://www.qrcode.com/) and renders it using the [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
+   * ---
+   *
+   *
+   * ### **CSS Parts:**
+   *  - **base** - The component's base wrapper.
+   */
+  "sl-qr-code": DefineComponent<SlQrCodeProps>;
 
   /**
    * Radios allow the user to select a single option from a group.
@@ -2487,6 +2503,7 @@ export type CustomElements = {
    * - **getForm(): _HTMLFormElement | null_** - Gets the associated form, if one exists.
    * - **reportValidity(): _boolean_** - Checks for validity and shows the browser's validation message if the control is invalid.
    * - **setCustomValidity(message)** - Sets a custom validation message. Pass an empty string to restore validity.
+   * - **focus(options: _FocusOptions_)** - Sets focus on the radio-group.
    *
    * ### **Slots:**
    *  - _default_ - The default slot where `<sl-radio>` or `<sl-radio-button>` elements are placed.
@@ -2623,6 +2640,7 @@ export type CustomElements = {
    *  - _default_ - The listbox options. Must be `<sl-option>` elements. You can use `<sl-divider>` to group items visually.
    * - **label** - The input's label. Alternatively, you can use the `label` attribute.
    * - **prefix** - Used to prepend a presentational icon or similar element to the combobox.
+   * - **suffix** - Used to append a presentational icon or similar element to the combobox.
    * - **clear-icon** - An icon to use in lieu of the default clear icon.
    * - **expand-icon** - The icon to show when the control is expanded and collapsed. Rotates on open and close.
    * - **help-text** - Text that describes how to use the input. Alternatively, you can use the `help-text` attribute.
@@ -2632,8 +2650,9 @@ export type CustomElements = {
    * - **form-control-label** - The label's wrapper.
    * - **form-control-input** - The select's wrapper.
    * - **form-control-help-text** - The help text's wrapper.
-   * - **combobox** - The container the wraps the prefix, combobox, clear icon, and expand button.
+   * - **combobox** - The container the wraps the prefix, suffix, combobox, clear icon, and expand button.
    * - **prefix** - The container that wraps the prefix slot.
+   * - **suffix** - The container that wraps the suffix slot.
    * - **display-input** - The element that displays the selected option's label, an `<input>` element.
    * - **listbox** - The listbox container where options are slotted.
    * - **tags** - The container that houses option tags when `multiselect` is used.

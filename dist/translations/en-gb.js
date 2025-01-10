@@ -1,13 +1,13 @@
 import {
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
 import {
   en_default
-} from "../chunks/chunk.MAS2SHYD.js";
+} from "../chunks/chunk.7BTDLTNI.js";
 import {
   __spreadProps,
   __spreadValues
-} from "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/en-gb.ts
 var translation = __spreadProps(__spreadValues({}, en_default), {

@@ -16,7 +16,7 @@ export declare function stopAnimations(el: HTMLElement): Promise<unknown[]>;
  */
 export declare function shimKeyframesHeightAuto(keyframes: Keyframe[], calculatedHeight: number): {
     height: string | number | null | undefined;
-    composite?: CompositeOperationOrAuto | undefined;
-    easing?: string | undefined;
-    offset?: number | null | undefined;
+    composite?: CompositeOperationOrAuto;
+    easing?: string;
+    offset?: number | null;
 }[];

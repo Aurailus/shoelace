@@ -29,6 +29,7 @@ export default class SlTextarea extends ShoelaceElement implements ShoelaceFormC
     private readonly hasSlotController;
     private resizeObserver;
     input: HTMLTextAreaElement;
+    sizeAdjuster: HTMLTextAreaElement;
     private hasFocus;
     title: string;
     /** The name of the textarea, submitted as a name/value pair with form data. */

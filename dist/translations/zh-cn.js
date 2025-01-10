@@ -1,8 +1,8 @@
 import {
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
-import "../chunks/chunk.MAS2SHYD.js";
-import "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
+import "../chunks/chunk.7BTDLTNI.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/zh-cn.ts
 var translation = {
@@ -21,10 +21,8 @@ var translation = {
   loading: "\u52A0\u8F7D\u4E2D",
   nextSlide: "\u4E0B\u4E00\u5F20\u5E7B\u706F\u7247",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "\u672A\u9009\u62E9\u4EFB\u4F55\u9879\u76EE";
-    if (num === 1)
-      return "\u5DF2\u9009\u62E9 1 \u4E2A\u9879\u76EE";
+    if (num === 0) return "\u672A\u9009\u62E9\u4EFB\u4F55\u9879\u76EE";
+    if (num === 1) return "\u5DF2\u9009\u62E9 1 \u4E2A\u9879\u76EE";
     return `${num} \u9009\u62E9\u9879\u76EE`;
   },
   previousSlide: "\u4E0A\u4E00\u5F20\u5E7B\u706F\u7247",

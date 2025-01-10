@@ -1,4 +1,4 @@
-import "../chunks/chunk.IFDWM6P4.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/sl.ts
 import { registerTranslation } from "@shoelace-style/localize";
@@ -18,14 +18,10 @@ var translation = {
   loading: "Nalaganje",
   nextSlide: "Naslednji diapozitiv",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "Nobena mo\u017Enost ni izbrana";
-    if (num === 1)
-      return "1 mo\u017Enost izbrana";
-    if (num === 2)
-      return "2 mo\u017Enosti izbrani";
-    if (num === 3 || num === 4)
-      return `${num} mo\u017Enosti izbrane`;
+    if (num === 0) return "Nobena mo\u017Enost ni izbrana";
+    if (num === 1) return "1 mo\u017Enost izbrana";
+    if (num === 2) return "2 mo\u017Enosti izbrani";
+    if (num === 3 || num === 4) return `${num} mo\u017Enosti izbrane`;
     return `${num} mo\u017Enosti izbranih`;
   },
   previousSlide: "Prej\u0161nji diapozitiv",

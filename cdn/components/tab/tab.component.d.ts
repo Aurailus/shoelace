@@ -34,6 +34,10 @@ export default class SlTab extends ShoelaceElement {
     closable: boolean;
     /** Disables the tab and prevents selection. */
     disabled: boolean;
+    /**
+     * @internal
+     * Need to wrap in a `@property()` otherwise CustomElement throws a "The result must not have attributes" runtime error.
+     */
     tabIndex: number;
     connectedCallback(): void;
     private handleCloseClick;

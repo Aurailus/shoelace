@@ -18,6 +18,7 @@ import type SlOption from '../option/option.component.js';
  * @slot - The listbox options. Must be `<sl-option>` elements. You can use `<sl-divider>` to group items visually.
  * @slot label - The input's label. Alternatively, you can use the `label` attribute.
  * @slot prefix - Used to prepend a presentational icon or similar element to the combobox.
+ * @slot suffix - Used to append a presentational icon or similar element to the combobox.
  * @slot clear-icon - An icon to use in lieu of the default clear icon.
  * @slot expand-icon - The icon to show when the control is expanded and collapsed. Rotates on open and close.
  * @slot help-text - Text that describes how to use the input. Alternatively, you can use the `help-text` attribute.
@@ -37,8 +38,9 @@ import type SlOption from '../option/option.component.js';
  * @csspart form-control-label - The label's wrapper.
  * @csspart form-control-input - The select's wrapper.
  * @csspart form-control-help-text - The help text's wrapper.
- * @csspart combobox - The container the wraps the prefix, combobox, clear icon, and expand button.
+ * @csspart combobox - The container the wraps the prefix, suffix, combobox, clear icon, and expand button.
  * @csspart prefix - The container that wraps the prefix slot.
+ * @csspart suffix - The container that wraps the suffix slot.
  * @csspart display-input - The element that displays the selected option's label, an `<input>` element.
  * @csspart listbox - The listbox container where options are slotted.
  * @csspart tags - The container that houses option tags when `multiselect` is used.
@@ -72,14 +74,17 @@ export default class SlSelect extends ShoelaceElement implements ShoelaceFormCon
     displayLabel: string;
     currentOption: SlOption;
     selectedOptions: SlOption[];
+    private valueHasChanged;
     /** The name of the select, submitted as a name/value pair with form data. */
     name: string;
+    private _value;
+    get value(): string | string[];
     /**
      * The current value of the select, submitted as a name/value pair with form data. When `multiple` is enabled, the
      * value attribute will be a space-delimited list of values based on the options selected, and the value property will
      * be an array. **For this reason, values must not contain spaces.**
      */
-    value: string | string[];
+    set value(val: string | string[]);
     /** The default value of the form control. Primarily used for resetting the form control. */
     defaultValue: string | string[];
     /** The select's size. */
@@ -152,7 +157,7 @@ export default class SlSelect extends ShoelaceElement implements ShoelaceFormCon
     private handleClearClick;
     private handleClearMouseDown;
     private handleOptionClick;
-    private handleDefaultSlotChange;
+    handleDefaultSlotChange(): void;
     private handleTagRemove;
     private getAllOptions;
     private getFirstOption;
@@ -163,6 +168,7 @@ export default class SlSelect extends ShoelaceElement implements ShoelaceFormCon
     protected get tags(): TemplateResult<1>[];
     private handleInvalid;
     handleDisabledChange(): void;
+    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void;
     handleValueChange(): void;
     handleOpenChange(): Promise<void>;
     /** Shows the listbox. */

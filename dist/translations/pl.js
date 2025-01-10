@@ -1,8 +1,8 @@
 import {
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
-import "../chunks/chunk.MAS2SHYD.js";
-import "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
+import "../chunks/chunk.7BTDLTNI.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/pl.ts
 var translation = {
@@ -21,10 +21,8 @@ var translation = {
   loading: "\u0141adowanie",
   nextSlide: "Nast\u0119pny slajd",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "Nie wybrano opcji";
-    if (num === 1)
-      return "Wybrano 1\xA0opcj\u0119";
+    if (num === 0) return "Nie wybrano opcji";
+    if (num === 1) return "Wybrano 1\xA0opcj\u0119";
     return `Wybrano ${num} opcje`;
   },
   previousSlide: "Poprzedni slajd",

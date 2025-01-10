@@ -1,8 +1,8 @@
 import {
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
-import "../chunks/chunk.MAS2SHYD.js";
-import "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
+import "../chunks/chunk.7BTDLTNI.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/hu.ts
 var translation = {
@@ -21,10 +21,8 @@ var translation = {
   loading: "Bet\xF6lt\xE9s",
   nextSlide: "K\xF6vetkez\u0151 dia",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "Nincsenek kiv\xE1lasztva opci\xF3k";
-    if (num === 1)
-      return "1 lehet\u0151s\xE9g kiv\xE1lasztva";
+    if (num === 0) return "Nincsenek kiv\xE1lasztva opci\xF3k";
+    if (num === 1) return "1 lehet\u0151s\xE9g kiv\xE1lasztva";
     return `${num} lehet\u0151s\xE9g kiv\xE1lasztva`;
   },
   previousSlide: "El\u0151z\u0151 dia",

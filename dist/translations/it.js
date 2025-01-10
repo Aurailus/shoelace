@@ -1,4 +1,4 @@
-import "../chunks/chunk.IFDWM6P4.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/it.ts
 import { registerTranslation } from "@shoelace-style/localize";
@@ -18,10 +18,8 @@ var translation = {
   loading: "In caricamento",
   nextSlide: "Prossima diapositiva",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "Nessuna opzione selezionata";
-    if (num === 1)
-      return "1 opzione selezionata";
+    if (num === 0) return "Nessuna opzione selezionata";
+    if (num === 1) return "1 opzione selezionata";
     return `${num} opzioni selezionate`;
   },
   previousSlide: "Diapositiva precedente",

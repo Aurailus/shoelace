@@ -21,6 +21,8 @@ import type { CSSResultGroup } from 'lit';
 export default class SlBreadcrumbItem extends ShoelaceElement {
     static styles: CSSResultGroup;
     private readonly hasSlotController;
+    defaultSlot: HTMLSlotElement;
+    private renderType;
     /**
      * Optional URL to direct the user to when the breadcrumb item is activated. When set, a link will be rendered
      * internally. When unset, a button will be rendered instead.
@@ -30,5 +32,8 @@ export default class SlBreadcrumbItem extends ShoelaceElement {
     target?: '_blank' | '_parent' | '_self' | '_top';
     /** The `rel` attribute to use on the link. Only used when `href` is set. */
     rel: string;
+    private setRenderType;
+    hrefChanged(): void;
+    handleSlotChange(): void;
     render(): import("lit-html").TemplateResult<1>;
 }

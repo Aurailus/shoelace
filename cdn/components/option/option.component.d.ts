@@ -24,8 +24,8 @@ export default class SlOption extends ShoelaceElement {
     static dependencies: {
         'sl-icon': typeof SlIcon;
     };
-    private cachedTextLabel;
     private readonly localize;
+    private isInitialized;
     defaultSlot: HTMLSlotElement;
     current: boolean;
     selected: boolean;

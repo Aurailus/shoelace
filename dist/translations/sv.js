@@ -1,8 +1,8 @@
 import {
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
-import "../chunks/chunk.MAS2SHYD.js";
-import "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
+import "../chunks/chunk.7BTDLTNI.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/sv.ts
 var translation = {
@@ -21,10 +21,8 @@ var translation = {
   loading: "L\xE4ser in",
   nextSlide: "N\xE4sta bild",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "Inga alternativ har valts";
-    if (num === 1)
-      return "1 alternativ valt";
+    if (num === 0) return "Inga alternativ har valts";
+    if (num === 1) return "1 alternativ valt";
     return `${num} alternativ valda`;
   },
   previousSlide: "F\xF6reg\xE5ende bild",

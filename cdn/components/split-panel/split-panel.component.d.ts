@@ -1,6 +1,6 @@
-import type { CSSResultGroup } from "lit";
-import ShoelaceElement from "../../internal/shoelace-element.js";
-import type { SnapFunction } from "./utility.js";
+import { type SnapFunction } from './utility.js';
+import ShoelaceElement from '../../internal/shoelace-element.js';
+import type { CSSResultGroup } from 'lit';
 /**
  * @summary Split panels display two adjacent panels, allowing the user to reposition them.
  * @documentation https://shoelace.style/components/split-panel
@@ -27,7 +27,9 @@ import type { SnapFunction } from "./utility.js";
 export default class SlSplitPanel extends ShoelaceElement {
     static styles: CSSResultGroup;
     private cachedPositionInPixels;
+    private isCollapsed;
     private readonly localize;
+    private positionBeforeCollapsing;
     private resizeObserver;
     private size;
     divider: HTMLElement;

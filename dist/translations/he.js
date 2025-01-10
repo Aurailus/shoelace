@@ -1,8 +1,8 @@
 import {
   registerTranslation
-} from "../chunks/chunk.WLV3FVBR.js";
-import "../chunks/chunk.MAS2SHYD.js";
-import "../chunks/chunk.IFDWM6P4.js";
+} from "../chunks/chunk.6CTB5ZDJ.js";
+import "../chunks/chunk.7BTDLTNI.js";
+import "../chunks/chunk.KAW7D32O.js";
 
 // src/translations/he.ts
 var translation = {
@@ -21,10 +21,8 @@ var translation = {
   loading: "\u05D8\u05D5\u05E2\u05DF",
   nextSlide: "Next slide",
   numOptionsSelected: (num) => {
-    if (num === 0)
-      return "\u05DC\u05D0 \u05E0\u05D1\u05D7\u05E8\u05D5 \u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA";
-    if (num === 1)
-      return "\u05E0\u05D1\u05D7\u05E8\u05D4 \u05D0\u05E4\u05E9\u05E8\u05D5\u05EA \u05D0\u05D7\u05EA";
+    if (num === 0) return "\u05DC\u05D0 \u05E0\u05D1\u05D7\u05E8\u05D5 \u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA";
+    if (num === 1) return "\u05E0\u05D1\u05D7\u05E8\u05D4 \u05D0\u05E4\u05E9\u05E8\u05D5\u05EA \u05D0\u05D7\u05EA";
     return `\u05E0\u05D1\u05D7\u05E8\u05D5 ${num} \u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA`;
   },
   previousSlide: "Previous slide",

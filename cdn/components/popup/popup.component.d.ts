@@ -37,6 +37,7 @@ export default class SlPopup extends ShoelaceElement {
     static styles: CSSResultGroup;
     private anchorEl;
     private cleanup;
+    private readonly localize;
     /** A reference to the internal popup container. Useful for animating and styling the popup with JavaScript. */
     popup: HTMLElement;
     private arrowEl;

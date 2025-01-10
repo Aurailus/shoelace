@@ -86,5 +86,7 @@ export default class SlRadioGroup extends ShoelaceElement implements ShoelaceFor
     reportValidity(): boolean;
     /** Sets a custom validation message. Pass an empty string to restore validity. */
     setCustomValidity(message?: string): void;
+    /** Sets focus on the radio-group. */
+    focus(options?: FocusOptions): void;
     render(): import("lit-html").TemplateResult<1>;
 }

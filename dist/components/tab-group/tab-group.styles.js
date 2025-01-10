@@ -1,7 +1,7 @@
 import {
   tab_group_styles_default
-} from "../../chunks/chunk.G4XIACTT.js";
-import "../../chunks/chunk.IFDWM6P4.js";
+} from "../../chunks/chunk.XJU7WU2G.js";
+import "../../chunks/chunk.KAW7D32O.js";
 export {
   tab_group_styles_default as default
 };

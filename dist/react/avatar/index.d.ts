@@ -1,4 +1,7 @@
 import Component from '../../components/avatar/avatar.component.js';
+import { type EventName } from '@lit/react';
+import type { SlErrorEvent } from '../../events/events.js';
+export type { SlErrorEvent } from '../../events/events.js';
 /**
  * @summary Avatars are used to represent a person or object.
  * @documentation https://shoelace.style/components/avatar
@@ -6,6 +9,9 @@ import Component from '../../components/avatar/avatar.component.js';
  * @since 2.0
  *
  * @dependency sl-icon
+ *
+ * @event sl-error - The image could not be loaded. This may because of an invalid URL, a temporary network condition, or some
+ * unknown cause.
  *
  * @slot icon - The default icon to use when no image or initials are present. Works best with `<sl-icon>`.
  *
@@ -16,5 +22,7 @@ import Component from '../../components/avatar/avatar.component.js';
  *
  * @cssproperty --size - The size of the avatar.
  */
-declare const reactWrapper: import("@lit/react").ReactWebComponent<Component, {}>;
+declare const reactWrapper: import("@lit/react").ReactWebComponent<Component, {
+    onSlError: EventName<SlErrorEvent>;
+}>;
 export default reactWrapper;

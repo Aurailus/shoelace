@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
   "name": "@shoelace-style/shoelace",
-  "version": "2.15.1",
+  "version": "2.19.1",
   "description-markup": "markdown",
   "contributions": {
     "html": {
@@ -33,6 +33,11 @@
               "name": "duration",
               "description": "The length of time, in milliseconds, the alert will show before closing itself. If the user interacts with\nthe alert before it closes (e.g. moves the mouse over it), the timer will restart. Defaults to `Infinity`, meaning\nthe alert will not close on its own.",
               "value": { "type": "string", "default": "Infinity" }
+            },
+            {
+              "name": "countdown",
+              "description": "Enables a countdown that indicates the remaining time the alert will be displayed.\nTypically used to indicate the remaining time before a whole app refresh.",
+              "value": { "type": "'rtl' | 'ltr' | undefined" }
             }
           ],
           "slots": [
@@ -62,27 +67,31 @@
           ],
           "js": {
             "properties": [
+              { "name": "base", "type": "HTMLElement" },
+              { "name": "countdownElement", "type": "HTMLElement" },
               {
                 "name": "open",
                 "description": "Indicates whether or not the alert is open. You can toggle this attribute to show and hide the alert, or you can\nuse the `show()` and `hide()` methods and this attribute will reflect the alert's open state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "closable",
                 "description": "Enables a close button that allows the user to dismiss the alert.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "variant",
                 "description": "The alert's theme variant.",
-                "value": {
-                  "type": "'primary' | 'success' | 'neutral' | 'warning' | 'danger'"
-                }
+                "type": "'primary' | 'success' | 'neutral' | 'warning' | 'danger'"
               },
               {
                 "name": "duration",
-                "description": "The length of time, in milliseconds, the alert will show before closing itself. If the user interacts with\nthe alert before it closes (e.g. moves the mouse over it), the timer will restart. Defaults to `Infinity`, meaning\nthe alert will not close on its own.",
-                "value": {}
+                "description": "The length of time, in milliseconds, the alert will show before closing itself. If the user interacts with\nthe alert before it closes (e.g. moves the mouse over it), the timer will restart. Defaults to `Infinity`, meaning\nthe alert will not close on its own."
+              },
+              {
+                "name": "countdown",
+                "description": "Enables a countdown that indicates the remaining time the alert will be displayed.\nTypically used to indicate the remaining time before a whole app refresh.",
+                "type": "'rtl' | 'ltr' | undefined"
               }
             ],
             "events": [
@@ -106,8 +115,173 @@
           }
         },
         {
+          "name": "sl-animation",
+          "description": "Animate elements declaratively with nearly 100 baked-in presets, or roll your own with custom keyframes. Powered by the [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API).\n---\n\n\n### **Events:**\n - **sl-cancel** - Emitted when the animation is canceled.\n- **sl-finish** - Emitted when the animation finishes.\n- **sl-start** - Emitted when the animation starts or restarts.\n\n### **Methods:**\n - **cancel()** - Clears all keyframe effects caused by this animation and aborts its playback.\n- **finish()** - Sets the playback time to the end of the animation corresponding to the current playback direction.\n\n### **Slots:**\n - _default_ - The element to animate. Avoid slotting in more than one element, as subsequent ones will be ignored. To animate multiple elements, either wrap them in a single container or use multiple `<sl-animation>` elements.",
+          "doc-url": "",
+          "attributes": [
+            {
+              "name": "name",
+              "description": "The name of the built-in animation to use. For custom animations, use the `keyframes` prop.",
+              "value": { "type": "string", "default": "'none'" }
+            },
+            {
+              "name": "play",
+              "description": "Plays the animation. When omitted, the animation will be paused. This attribute will be automatically removed when\nthe animation finishes or gets canceled.",
+              "value": { "type": "boolean", "default": "false" }
+            },
+            {
+              "name": "delay",
+              "description": "The number of milliseconds to delay the start of the animation.",
+              "value": { "type": "number", "default": "0" }
+            },
+            {
+              "name": "direction",
+              "description": "Determines the direction of playback as well as the behavior when reaching the end of an iteration.\n[Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction)",
+              "value": { "type": "PlaybackDirection", "default": "'normal'" }
+            },
+            {
+              "name": "duration",
+              "description": "The number of milliseconds each iteration of the animation takes to complete.",
+              "value": { "type": "number", "default": "1000" }
+            },
+            {
+              "name": "easing",
+              "description": "The easing function to use for the animation. This can be a Shoelace easing function or a custom easing function\nsuch as `cubic-bezier(0, 1, .76, 1.14)`.",
+              "value": { "type": "string", "default": "'linear'" }
+            },
+            {
+              "name": "end-delay",
+              "description": "The number of milliseconds to delay after the active period of an animation sequence.",
+              "value": { "type": "number", "default": "0" }
+            },
+            {
+              "name": "fill",
+              "description": "Sets how the animation applies styles to its target before and after its execution.",
+              "value": { "type": "FillMode", "default": "'auto'" }
+            },
+            {
+              "name": "iterations",
+              "description": "The number of iterations to run before the animation completes. Defaults to `Infinity`, which loops.",
+              "value": { "type": "string", "default": "Infinity" }
+            },
+            {
+              "name": "iteration-start",
+              "description": "The offset at which to start the animation, usually between 0 (start) and 1 (end).",
+              "value": { "type": "number", "default": "0" }
+            },
+            {
+              "name": "playback-rate",
+              "description": "Sets the animation's playback rate. The default is `1`, which plays the animation at a normal speed. Setting this\nto `2`, for example, will double the animation's speed. A negative value can be used to reverse the animation. This\nvalue can be changed without causing the animation to restart.",
+              "value": { "type": "number", "default": "1" }
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "The element to animate. Avoid slotting in more than one element, as subsequent ones will be ignored. To animate multiple elements, either wrap them in a single container or use multiple `<sl-animation>` elements."
+            }
+          ],
+          "events": [
+            {
+              "name": "sl-cancel",
+              "description": "Emitted when the animation is canceled."
+            },
+            {
+              "name": "sl-finish",
+              "description": "Emitted when the animation finishes."
+            },
+            {
+              "name": "sl-start",
+              "description": "Emitted when the animation starts or restarts."
+            }
+          ],
+          "js": {
+            "properties": [
+              { "name": "defaultSlot", "type": "Promise<HTMLSlotElement>" },
+              {
+                "name": "name",
+                "description": "The name of the built-in animation to use. For custom animations, use the `keyframes` prop.",
+                "type": "string"
+              },
+              {
+                "name": "play",
+                "description": "Plays the animation. When omitted, the animation will be paused. This attribute will be automatically removed when\nthe animation finishes or gets canceled.",
+                "type": "boolean"
+              },
+              {
+                "name": "delay",
+                "description": "The number of milliseconds to delay the start of the animation.",
+                "type": "number"
+              },
+              {
+                "name": "direction",
+                "description": "Determines the direction of playback as well as the behavior when reaching the end of an iteration.\n[Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction)",
+                "type": "PlaybackDirection"
+              },
+              {
+                "name": "duration",
+                "description": "The number of milliseconds each iteration of the animation takes to complete.",
+                "type": "number"
+              },
+              {
+                "name": "easing",
+                "description": "The easing function to use for the animation. This can be a Shoelace easing function or a custom easing function\nsuch as `cubic-bezier(0, 1, .76, 1.14)`.",
+                "type": "string"
+              },
+              {
+                "name": "endDelay",
+                "description": "The number of milliseconds to delay after the active period of an animation sequence.",
+                "type": "number"
+              },
+              {
+                "name": "fill",
+                "description": "Sets how the animation applies styles to its target before and after its execution.",
+                "type": "FillMode"
+              },
+              {
+                "name": "iterations",
+                "description": "The number of iterations to run before the animation completes. Defaults to `Infinity`, which loops."
+              },
+              {
+                "name": "iterationStart",
+                "description": "The offset at which to start the animation, usually between 0 (start) and 1 (end).",
+                "type": "number"
+              },
+              {
+                "name": "keyframes",
+                "description": "The keyframes to use for the animation. If this is set, `name` will be ignored.",
+                "type": "Keyframe[] | undefined"
+              },
+              {
+                "name": "playbackRate",
+                "description": "Sets the animation's playback rate. The default is `1`, which plays the animation at a normal speed. Setting this\nto `2`, for example, will double the animation's speed. A negative value can be used to reverse the animation. This\nvalue can be changed without causing the animation to restart.",
+                "type": "number"
+              },
+              {
+                "name": "currentTime",
+                "description": "Gets and sets the current animation time.",
+                "type": "CSSNumberish"
+              }
+            ],
+            "events": [
+              {
+                "name": "sl-cancel",
+                "description": "Emitted when the animation is canceled."
+              },
+              {
+                "name": "sl-finish",
+                "description": "Emitted when the animation finishes."
+              },
+              {
+                "name": "sl-start",
+                "description": "Emitted when the animation starts or restarts."
+              }
+            ]
+          }
+        },
+        {
           "name": "sl-avatar",
-          "description": "Avatars are used to represent a person or object.\n---\n\n\n### **Slots:**\n - **icon** - The default icon to use when no image or initials are present. Works best with `<sl-icon>`.\n\n### **CSS Properties:**\n - **--size** - The size of the avatar. _(default: undefined)_\n\n### **CSS Parts:**\n - **base** - The component's base wrapper.\n- **icon** - The container that wraps the avatar's icon.\n- **initials** - The container that wraps the avatar's initials.\n- **image** - The avatar image. Only shown when the `image` attribute is set.",
+          "description": "Avatars are used to represent a person or object.\n---\n\n\n### **Events:**\n - **sl-error** - The image could not be loaded. This may because of an invalid URL, a temporary network condition, or some unknown cause.\n\n### **Slots:**\n - **icon** - The default icon to use when no image or initials are present. Works best with `<sl-icon>`.\n\n### **CSS Properties:**\n - **--size** - The size of the avatar. _(default: undefined)_\n\n### **CSS Parts:**\n - **base** - The component's base wrapper.\n- **icon** - The container that wraps the avatar's icon.\n- **initials** - The container that wraps the avatar's initials.\n- **image** - The avatar image. Only shown when the `image` attribute is set.",
           "doc-url": "",
           "attributes": [
             {
@@ -145,33 +319,78 @@
               "description": "The default icon to use when no image or initials are present. Works best with `<sl-icon>`."
             }
           ],
-          "events": [],
+          "events": [
+            {
+              "name": "sl-error",
+              "description": "The image could not be loaded. This may because of an invalid URL, a temporary network condition, or some unknown cause."
+            }
+          ],
           "js": {
             "properties": [
               {
                 "name": "image",
                 "description": "The image source to use for the avatar.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "label",
                 "description": "A label to use to describe the avatar to assistive devices.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "initials",
                 "description": "Initials to use as a fallback when no image is available (1-2 characters max recommended).",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "loading",
                 "description": "Indicates how the browser should load the image.",
-                "value": { "type": "'eager' | 'lazy'" }
+                "type": "'eager' | 'lazy'"
               },
               {
                 "name": "shape",
                 "description": "The shape of the avatar.",
-                "value": { "type": "'circle' | 'square' | 'rounded'" }
+                "type": "'circle' | 'square' | 'rounded'"
+              }
+            ],
+            "events": [
+              {
+                "name": "sl-error",
+                "description": "The image could not be loaded. This may because of an invalid URL, a temporary network condition, or some unknown cause."
+              }
+            ]
+          }
+        },
+        {
+          "name": "sl-breadcrumb",
+          "description": "Breadcrumbs provide a group of links so users can easily navigate a website's hierarchy.\n---\n\n\n### **Slots:**\n - _default_ - One or more breadcrumb items to display.\n- **separator** - The separator to use between breadcrumb items. Works best with `<sl-icon>`.\n\n### **CSS Parts:**\n - **base** - The component's base wrapper.",
+          "doc-url": "",
+          "attributes": [
+            {
+              "name": "label",
+              "description": "The label to use for the breadcrumb control. This will not be shown on the screen, but it will be announced by\nscreen readers and other assistive devices to provide more context for users.",
+              "value": { "type": "string", "default": "''" }
+            }
+          ],
+          "slots": [
+            {
+              "name": "",
+              "description": "One or more breadcrumb items to display."
+            },
+            {
+              "name": "separator",
+              "description": "The separator to use between breadcrumb items. Works best with `<sl-icon>`."
+            }
+          ],
+          "events": [],
+          "js": {
+            "properties": [
+              { "name": "defaultSlot", "type": "HTMLSlotElement" },
+              { "name": "separatorSlot", "type": "HTMLSlotElement" },
+              {
+                "name": "label",
+                "description": "The label to use for the breadcrumb control. This will not be shown on the screen, but it will be announced by\nscreen readers and other assistive devices to provide more context for users.",
+                "type": "string"
               }
             ],
             "events": []
@@ -208,52 +427,17 @@
               {
                 "name": "variant",
                 "description": "The badge's theme variant.",
-                "value": {
-                  "type": "'primary' | 'success' | 'neutral' | 'warning' | 'danger'"
-                }
+                "type": "'primary' | 'success' | 'neutral' | 'warning' | 'danger'"
               },
               {
                 "name": "pill",
                 "description": "Draws a pill-style badge with rounded edges.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "pulse",
                 "description": "Makes the badge pulsate to draw attention.",
-                "value": { "type": "boolean" }
-              }
-            ],
-            "events": []
-          }
-        },
-        {
-          "name": "sl-breadcrumb",
-          "description": "Breadcrumbs provide a group of links so users can easily navigate a website's hierarchy.\n---\n\n\n### **Slots:**\n - _default_ - One or more breadcrumb items to display.\n- **separator** - The separator to use between breadcrumb items. Works best with `<sl-icon>`.\n\n### **CSS Parts:**\n - **base** - The component's base wrapper.",
-          "doc-url": "",
-          "attributes": [
-            {
-              "name": "label",
-              "description": "The label to use for the breadcrumb control. This will not be shown on the screen, but it will be announced by\nscreen readers and other assistive devices to provide more context for users.",
-              "value": { "type": "string", "default": "''" }
-            }
-          ],
-          "slots": [
-            {
-              "name": "",
-              "description": "One or more breadcrumb items to display."
-            },
-            {
-              "name": "separator",
-              "description": "The separator to use between breadcrumb items. Works best with `<sl-icon>`."
-            }
-          ],
-          "events": [],
-          "js": {
-            "properties": [
-              {
-                "name": "label",
-                "description": "The label to use for the breadcrumb control. This will not be shown on the screen, but it will be announced by\nscreen readers and other assistive devices to provide more context for users.",
-                "value": { "type": "string" }
+                "type": "boolean"
               }
             ],
             "events": []
@@ -300,22 +484,21 @@
           "events": [],
           "js": {
             "properties": [
+              { "name": "defaultSlot", "type": "HTMLSlotElement" },
               {
                 "name": "href",
                 "description": "Optional URL to direct the user to when the breadcrumb item is activated. When set, a link will be rendered\ninternally. When unset, a button will be rendered instead.",
-                "value": { "type": "string | undefined" }
+                "type": "string | undefined"
               },
               {
                 "name": "target",
                 "description": "Tells the browser where to open the link. Only used when `href` is set.",
-                "value": {
-                  "type": "'_blank' | '_parent' | '_self' | '_top' | undefined"
-                }
+                "type": "'_blank' | '_parent' | '_self' | '_top' | undefined"
               },
               {
                 "name": "rel",
                 "description": "The `rel` attribute to use on the link. Only used when `href` is set.",
-                "value": { "type": "string" }
+                "type": "string"
               }
             ],
             "events": []
@@ -473,117 +656,124 @@
           ],
           "js": {
             "properties": [
-              { "name": "title", "value": { "type": "string" } },
+              {
+                "name": "button",
+                "type": "HTMLButtonElement | HTMLLinkElement"
+              },
+              { "name": "invalid", "type": "boolean" },
+              { "name": "title", "type": "string" },
               {
                 "name": "variant",
                 "description": "The button's theme variant.",
-                "value": {
-                  "type": "'default' | 'primary' | 'success' | 'neutral' | 'warning' | 'danger' | 'text'"
-                }
+                "type": "'default' | 'primary' | 'success' | 'neutral' | 'warning' | 'danger' | 'text'"
               },
               {
                 "name": "size",
                 "description": "The button's size.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
                 "name": "caret",
                 "description": "Draws the button with a caret. Used to indicate that the button triggers a dropdown menu or similar behavior.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "disabled",
                 "description": "Disables the button.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "loading",
                 "description": "Draws the button in a loading state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "outline",
                 "description": "Draws an outlined button.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "pill",
                 "description": "Draws a pill-style button with rounded edges.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "circle",
                 "description": "Draws a circular icon button. When this attribute is present, the button expects a single `<sl-icon>` in the\ndefault slot.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "type",
                 "description": "The type of button. Note that the default value is `button` instead of `submit`, which is opposite of how native\n`<button>` elements behave. When the type is `submit`, the button will submit the surrounding form.",
-                "value": { "type": "'button' | 'submit' | 'reset'" }
+                "type": "'button' | 'submit' | 'reset'"
               },
               {
                 "name": "name",
                 "description": "The name of the button, submitted as a name/value pair with form data, but only when this button is the submitter.\nThis attribute is ignored when `href` is present.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "value",
                 "description": "The value of the button, submitted as a pair with the button's name as part of the form data, but only when this\nbutton is the submitter. This attribute is ignored when `href` is present.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "href",
                 "description": "When set, the underlying button will be rendered as an `<a>` with this `href` instead of a `<button>`.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "target",
                 "description": "Tells the browser where to open the link. Only used when `href` is present.",
-                "value": { "type": "'_blank' | '_parent' | '_self' | '_top'" }
+                "type": "'_blank' | '_parent' | '_self' | '_top'"
               },
               {
                 "name": "rel",
                 "description": "When using `href`, this attribute will map to the underlying link's `rel` attribute. Unlike regular links, the\ndefault is `noreferrer noopener` to prevent security exploits. However, if you're using `target` to point to a\nspecific tab/window, this will prevent that from working correctly. You can remove or change the default value by\nsetting the attribute to an empty string or a value of your choice, respectively.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "download",
                 "description": "Tells the browser to download the linked file as this filename. Only used when `href` is present.",
-                "value": { "type": "string | undefined" }
+                "type": "string | undefined"
               },
               {
                 "name": "form",
                 "description": "The \"form owner\" to associate the button with. If omitted, the closest containing form will be used instead. The\nvalue of this attribute must be an id of a form in the same document or shadow root as the button.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "formaction",
+                "name": "formAction",
                 "description": "Used to override the form owner's `action` attribute.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "formenctype",
+                "name": "formEnctype",
                 "description": "Used to override the form owner's `enctype` attribute.",
-                "value": {
-                  "type": "'application/x-www-form-urlencoded' | 'multipart/form-data' | 'text/plain'"
-                }
+                "type": "'application/x-www-form-urlencoded' | 'multipart/form-data' | 'text/plain'"
               },
               {
-                "name": "formmethod",
+                "name": "formMethod",
                 "description": "Used to override the form owner's `method` attribute.",
-                "value": { "type": "'post' | 'get'" }
+                "type": "'post' | 'get'"
               },
               {
-                "name": "formnovalidate",
+                "name": "formNoValidate",
                 "description": "Used to override the form owner's `novalidate` attribute.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "formtarget",
+                "name": "formTarget",
                 "description": "Used to override the form owner's `target` attribute.",
-                "value": {
-                  "type": "'_self' | '_blank' | '_parent' | '_top' | string"
-                }
+                "type": "'_self' | '_blank' | '_parent' | '_top' | string"
+              },
+              {
+                "name": "validity",
+                "description": "Gets the validity state object"
+              },
+              {
+                "name": "validationMessage",
+                "description": "Gets the validation message"
               }
             ],
             "events": [
@@ -645,20 +835,23 @@
           ],
           "js": {
             "properties": [
+              { "name": "animatedImage", "type": "HTMLImageElement" },
+              { "name": "frozenFrame", "type": "string" },
+              { "name": "isLoaded", "type": "boolean" },
               {
                 "name": "src",
                 "description": "The path to the image to load.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "alt",
                 "description": "A description of the image used by assistive devices.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "play",
                 "description": "Plays the animation. When this attribute is remove, the animation will pause.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -693,168 +886,15 @@
           "events": [],
           "js": {
             "properties": [
+              { "name": "defaultSlot", "type": "HTMLSlotElement" },
+              { "name": "disableRole", "type": "boolean" },
               {
                 "name": "label",
                 "description": "A label to use for the button group. This won't be displayed on the screen, but it will be announced by assistive\ndevices when interacting with the control and is strongly recommended.",
-                "value": { "type": "string" }
+                "type": "string"
               }
             ],
             "events": []
-          }
-        },
-        {
-          "name": "sl-animation",
-          "description": "Animate elements declaratively with nearly 100 baked-in presets, or roll your own with custom keyframes. Powered by the [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API).\n---\n\n\n### **Events:**\n - **sl-cancel** - Emitted when the animation is canceled.\n- **sl-finish** - Emitted when the animation finishes.\n- **sl-start** - Emitted when the animation starts or restarts.\n\n### **Methods:**\n - **cancel()** - Clears all keyframe effects caused by this animation and aborts its playback.\n- **finish()** - Sets the playback time to the end of the animation corresponding to the current playback direction.\n\n### **Slots:**\n - _default_ - The element to animate. Avoid slotting in more than one element, as subsequent ones will be ignored. To animate multiple elements, either wrap them in a single container or use multiple `<sl-animation>` elements.",
-          "doc-url": "",
-          "attributes": [
-            {
-              "name": "name",
-              "description": "The name of the built-in animation to use. For custom animations, use the `keyframes` prop.",
-              "value": { "type": "string", "default": "'none'" }
-            },
-            {
-              "name": "play",
-              "description": "Plays the animation. When omitted, the animation will be paused. This attribute will be automatically removed when\nthe animation finishes or gets canceled.",
-              "value": { "type": "boolean", "default": "false" }
-            },
-            {
-              "name": "delay",
-              "description": "The number of milliseconds to delay the start of the animation.",
-              "value": { "type": "number", "default": "0" }
-            },
-            {
-              "name": "direction",
-              "description": "Determines the direction of playback as well as the behavior when reaching the end of an iteration.\n[Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction)",
-              "value": { "type": "PlaybackDirection", "default": "'normal'" }
-            },
-            {
-              "name": "duration",
-              "description": "The number of milliseconds each iteration of the animation takes to complete.",
-              "value": { "type": "number", "default": "1000" }
-            },
-            {
-              "name": "easing",
-              "description": "The easing function to use for the animation. This can be a Shoelace easing function or a custom easing function\nsuch as `cubic-bezier(0, 1, .76, 1.14)`.",
-              "value": { "type": "string", "default": "'linear'" }
-            },
-            {
-              "name": "end-delay",
-              "description": "The number of milliseconds to delay after the active period of an animation sequence.",
-              "value": { "type": "number", "default": "0" }
-            },
-            {
-              "name": "fill",
-              "description": "Sets how the animation applies styles to its target before and after its execution.",
-              "value": { "type": "FillMode", "default": "'auto'" }
-            },
-            {
-              "name": "iterations",
-              "description": "The number of iterations to run before the animation completes. Defaults to `Infinity`, which loops.",
-              "value": { "type": "string", "default": "Infinity" }
-            },
-            {
-              "name": "iteration-start",
-              "description": "The offset at which to start the animation, usually between 0 (start) and 1 (end).",
-              "value": { "type": "number", "default": "0" }
-            },
-            {
-              "name": "playback-rate",
-              "description": "Sets the animation's playback rate. The default is `1`, which plays the animation at a normal speed. Setting this\nto `2`, for example, will double the animation's speed. A negative value can be used to reverse the animation. This\nvalue can be changed without causing the animation to restart.",
-              "value": { "type": "number", "default": "1" }
-            }
-          ],
-          "slots": [
-            {
-              "name": "",
-              "description": "The element to animate. Avoid slotting in more than one element, as subsequent ones will be ignored. To animate multiple elements, either wrap them in a single container or use multiple `<sl-animation>` elements."
-            }
-          ],
-          "events": [
-            {
-              "name": "sl-cancel",
-              "description": "Emitted when the animation is canceled."
-            },
-            {
-              "name": "sl-finish",
-              "description": "Emitted when the animation finishes."
-            },
-            {
-              "name": "sl-start",
-              "description": "Emitted when the animation starts or restarts."
-            }
-          ],
-          "js": {
-            "properties": [
-              {
-                "name": "name",
-                "description": "The name of the built-in animation to use. For custom animations, use the `keyframes` prop.",
-                "value": { "type": "string" }
-              },
-              {
-                "name": "play",
-                "description": "Plays the animation. When omitted, the animation will be paused. This attribute will be automatically removed when\nthe animation finishes or gets canceled.",
-                "value": { "type": "boolean" }
-              },
-              {
-                "name": "delay",
-                "description": "The number of milliseconds to delay the start of the animation.",
-                "value": { "type": "number" }
-              },
-              {
-                "name": "direction",
-                "description": "Determines the direction of playback as well as the behavior when reaching the end of an iteration.\n[Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction)",
-                "value": { "type": "PlaybackDirection" }
-              },
-              {
-                "name": "duration",
-                "description": "The number of milliseconds each iteration of the animation takes to complete.",
-                "value": { "type": "number" }
-              },
-              {
-                "name": "easing",
-                "description": "The easing function to use for the animation. This can be a Shoelace easing function or a custom easing function\nsuch as `cubic-bezier(0, 1, .76, 1.14)`.",
-                "value": { "type": "string" }
-              },
-              {
-                "name": "end-delay",
-                "description": "The number of milliseconds to delay after the active period of an animation sequence.",
-                "value": { "type": "number" }
-              },
-              {
-                "name": "fill",
-                "description": "Sets how the animation applies styles to its target before and after its execution.",
-                "value": { "type": "FillMode" }
-              },
-              {
-                "name": "iterations",
-                "description": "The number of iterations to run before the animation completes. Defaults to `Infinity`, which loops.",
-                "value": {}
-              },
-              {
-                "name": "iteration-start",
-                "description": "The offset at which to start the animation, usually between 0 (start) and 1 (end).",
-                "value": { "type": "number" }
-              },
-              {
-                "name": "playback-rate",
-                "description": "Sets the animation's playback rate. The default is `1`, which plays the animation at a normal speed. Setting this\nto `2`, for example, will double the animation's speed. A negative value can be used to reverse the animation. This\nvalue can be changed without causing the animation to restart.",
-                "value": { "type": "number" }
-              }
-            ],
-            "events": [
-              {
-                "name": "sl-cancel",
-                "description": "Emitted when the animation is canceled."
-              },
-              {
-                "name": "sl-finish",
-                "description": "Emitted when the animation finishes."
-              },
-              {
-                "name": "sl-start",
-                "description": "Emitted when the animation starts or restarts."
-              }
-            ]
           }
         },
         {
@@ -878,10 +918,7 @@
             }
           ],
           "events": [],
-          "js": {
-            "properties": [{ "name": "hasSlotController", "value": {} }],
-            "events": []
-          }
+          "js": { "properties": [], "events": [] }
         },
         {
           "name": "sl-carousel",
@@ -954,6 +991,7 @@
           "events": [
             {
               "name": "sl-slide-change",
+              "type": "{ index: number, slide: SlCarouselItem }",
               "description": "Emitted when the active slide changes."
             }
           ],
@@ -962,67 +1000,62 @@
               {
                 "name": "loop",
                 "description": "When set, allows the user to navigate the carousel in the same direction indefinitely.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "navigation",
                 "description": "When set, show the carousel's navigation.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "pagination",
                 "description": "When set, show the carousel's pagination indicators.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "autoplay",
                 "description": "When set, the slides will scroll automatically when the user is not interacting with them.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "autoplay-interval",
+                "name": "autoplayInterval",
                 "description": "Specifies the amount of time, in milliseconds, between each automatic scroll.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "slides-per-page",
+                "name": "slidesPerPage",
                 "description": "Specifies how many slides should be shown at a given time.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "slides-per-move",
+                "name": "slidesPerMove",
                 "description": "Specifies the number of slides the carousel will advance when scrolling, useful when specifying a `slides-per-page`\ngreater than one. It can't be higher than `slides-per-page`.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "orientation",
                 "description": "Specifies the orientation in which the carousel will lay out.",
-                "value": { "type": "'horizontal' | 'vertical'" }
+                "type": "'horizontal' | 'vertical'"
               },
               {
-                "name": "mouse-dragging",
+                "name": "mouseDragging",
                 "description": "When set, it is possible to scroll through the slides by dragging them with the mouse.",
-                "value": { "type": "boolean" }
-              }
+                "type": "boolean"
+              },
+              { "name": "scrollContainer", "type": "HTMLElement" },
+              { "name": "paginationContainer", "type": "HTMLElement" },
+              { "name": "activeSlide", "type": "number" },
+              { "name": "scrolling", "type": "boolean" },
+              { "name": "dragging", "type": "boolean" }
             ],
             "events": [
               {
                 "name": "sl-slide-change",
+                "type": "{ index: number, slide: SlCarouselItem }",
                 "description": "Emitted when the active slide changes."
               }
             ]
           }
-        },
-        {
-          "name": "sl-carousel-item",
-          "description": "A carousel item represent a slide within a [carousel](/components/carousel).\n---\n\n\n### **Slots:**\n - _default_ - The carousel item's content..\n\n### **CSS Properties:**\n - **--aspect-ratio** - The slide's aspect ratio. Inherited from the carousel by default. _(default: undefined)_",
-          "doc-url": "",
-          "attributes": [],
-          "slots": [
-            { "name": "", "description": "The carousel item's content.." }
-          ],
-          "events": [],
-          "js": { "properties": [], "events": [] }
         },
         {
           "name": "sl-checkbox",
@@ -1110,51 +1143,65 @@
           ],
           "js": {
             "properties": [
-              { "name": "title", "value": { "type": "string" } },
+              { "name": "input", "type": "HTMLInputElement" },
+              { "name": "title", "type": "string" },
               {
                 "name": "name",
                 "description": "The name of the checkbox, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "value",
                 "description": "The current value of the checkbox, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "size",
                 "description": "The checkbox's size.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
                 "name": "disabled",
                 "description": "Disables the checkbox.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "checked",
                 "description": "Draws the checkbox in a checked state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "indeterminate",
                 "description": "Draws the checkbox in an indeterminate state. This is usually applied to checkboxes that represents a \"select\nall/none\" behavior when associated checkboxes have a mix of checked and unchecked states.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
+              },
+              {
+                "name": "defaultChecked",
+                "description": "The default value of the form control. Primarily used for resetting the form control.",
+                "type": "boolean"
               },
               {
                 "name": "form",
                 "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "required",
                 "description": "Makes the checkbox a required field.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "help-text",
+                "name": "helpText",
                 "description": "The checkbox's help text. If you need to display HTML, use the `help-text` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
+              },
+              {
+                "name": "validity",
+                "description": "Gets the validity state object"
+              },
+              {
+                "name": "validationMessage",
+                "description": "Gets the validation message"
               }
             ],
             "events": [
@@ -1180,6 +1227,17 @@
               }
             ]
           }
+        },
+        {
+          "name": "sl-carousel-item",
+          "description": "A carousel item represent a slide within a [carousel](/components/carousel).\n---\n\n\n### **Slots:**\n - _default_ - The carousel item's content..\n\n### **CSS Properties:**\n - **--aspect-ratio** - The slide's aspect ratio. Inherited from the carousel by default. _(default: undefined)_",
+          "doc-url": "",
+          "attributes": [],
+          "slots": [
+            { "name": "", "description": "The carousel item's content.." }
+          ],
+          "events": [],
+          "js": { "properties": [], "events": [] }
         },
         {
           "name": "sl-color-picker",
@@ -1293,75 +1351,93 @@
           ],
           "js": {
             "properties": [
+              { "name": "base", "type": "HTMLElement" },
+              { "name": "input", "type": "SlInput" },
+              { "name": "dropdown", "type": "SlDropdown" },
+              { "name": "previewButton", "type": "HTMLButtonElement" },
+              { "name": "trigger", "type": "HTMLButtonElement" },
               {
                 "name": "value",
                 "description": "The current value of the color picker. The value's format will vary based the `format` attribute. To get the value\nin a specific format, use the `getFormattedValue()` method. The value is submitted as a name/value pair with form\ndata.",
-                "value": { "type": "string" }
+                "type": "string"
+              },
+              {
+                "name": "defaultValue",
+                "description": "The default value of the form control. Primarily used for resetting the form control.",
+                "type": "string"
               },
               {
                 "name": "label",
                 "description": "The color picker's label. This will not be displayed, but it will be announced by assistive devices. If you need to\ndisplay HTML, you can use the `label` slot` instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "format",
                 "description": "The format to use. If opacity is enabled, these will translate to HEXA, RGBA, HSLA, and HSVA respectively. The color\npicker will accept user input in any format (including CSS color names) and convert it to the desired format.",
-                "value": { "type": "'hex' | 'rgb' | 'hsl' | 'hsv'" }
+                "type": "'hex' | 'rgb' | 'hsl' | 'hsv'"
               },
               {
                 "name": "inline",
                 "description": "Renders the color picker inline rather than in a dropdown.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "size",
                 "description": "Determines the size of the color picker's trigger. This has no effect on inline color pickers.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
-                "name": "no-format-toggle",
+                "name": "noFormatToggle",
                 "description": "Removes the button that lets users toggle between format.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "name",
                 "description": "The name of the form control, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "disabled",
                 "description": "Disables the color picker.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "hoist",
                 "description": "Enable this option to prevent the panel from being clipped when the component is placed inside a container with\n`overflow: auto|scroll`. Hoisting uses a fixed positioning strategy that works in many, but not all, scenarios.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "opacity",
                 "description": "Shows the opacity slider. Enabling this will cause the formatted value to be HEXA, RGBA, or HSLA.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "uppercase",
                 "description": "By default, values are lowercase. With this attribute, values will be uppercase instead.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "swatches",
                 "description": "One or more predefined color swatches to display as presets in the color picker. Can include any format the color\npicker can parse, including HEX(A), RGB(A), HSL(A), HSV(A), and CSS color names. Each color must be separated by a\nsemicolon (`;`). Alternatively, you can pass an array of color values to this property using JavaScript.",
-                "value": { "type": "string | string[]" }
+                "type": "string | string[]"
               },
               {
                 "name": "form",
                 "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "required",
                 "description": "Makes the color picker a required field.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
+              },
+              {
+                "name": "validity",
+                "description": "Gets the validity state object"
+              },
+              {
+                "name": "validationMessage",
+                "description": "Gets the validation message"
               }
             ],
             "events": [
@@ -1468,50 +1544,56 @@
           ],
           "js": {
             "properties": [
+              { "name": "copyIcon", "type": "HTMLSlotElement" },
+              { "name": "successIcon", "type": "HTMLSlotElement" },
+              { "name": "errorIcon", "type": "HTMLSlotElement" },
+              { "name": "tooltip", "type": "SlTooltip" },
+              { "name": "isCopying", "type": "boolean" },
+              { "name": "status", "type": "'rest' | 'success' | 'error'" },
               {
                 "name": "value",
                 "description": "The text value to copy.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "from",
                 "description": "An id that references an element in the same document from which data will be copied. If both this and `value` are\npresent, this value will take precedence. By default, the target element's `textContent` will be copied. To copy an\nattribute, append the attribute name wrapped in square brackets, e.g. `from=\"el[value]\"`. To copy a property,\nappend a dot and the property name, e.g. `from=\"el.value\"`.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "disabled",
                 "description": "Disables the copy button.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "copy-label",
+                "name": "copyLabel",
                 "description": "A custom label to show in the tooltip.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "success-label",
+                "name": "successLabel",
                 "description": "A custom label to show in the tooltip after copying.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "error-label",
+                "name": "errorLabel",
                 "description": "A custom label to show in the tooltip when a copy error occurs.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "feedback-duration",
+                "name": "feedbackDuration",
                 "description": "The length of time to show feedback before restoring the default trigger.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "tooltip-placement",
+                "name": "tooltipPlacement",
                 "description": "The preferred placement of the tooltip.",
-                "value": { "type": "'top' | 'right' | 'bottom' | 'left'" }
+                "type": "'top' | 'right' | 'bottom' | 'left'"
               },
               {
                 "name": "hoist",
                 "description": "Enable this option to prevent the tooltip from being clipped when the component is placed inside a container with\n`overflow: auto|hidden|scroll`. Hoisting uses a fixed positioning strategy that works in many, but not all,\nscenarios.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -1582,20 +1664,25 @@
           ],
           "js": {
             "properties": [
+              { "name": "details", "type": "HTMLDetailsElement" },
+              { "name": "header", "type": "HTMLElement" },
+              { "name": "body", "type": "HTMLElement" },
+              { "name": "expandIconSlot", "type": "HTMLSlotElement" },
+              { "name": "detailsObserver", "type": "MutationObserver" },
               {
                 "name": "open",
                 "description": "Indicates whether or not the details is open. You can toggle this attribute to show and hide the details, or you\ncan use the `show()` and `hide()` methods and this attribute will reflect the details' open state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "summary",
                 "description": "The summary to show in the header. If you need to display HTML, use the `summary` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "disabled",
                 "description": "Disables the details so it can't be toggled.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -1677,25 +1764,33 @@
             },
             {
               "name": "sl-request-close",
+              "type": "{ source: 'close-button' | 'keyboard' | 'overlay' }",
               "description": "Emitted when the user attempts to close the dialog by clicking the close button, clicking the overlay, or pressing escape. Calling `event.preventDefault()` will keep the dialog open. Avoid using this unless closing the dialog will result in destructive behavior such as data loss."
             }
           ],
           "js": {
             "properties": [
               {
+                "name": "modal",
+                "description": "Exposes the internal modal utility that controls focus trapping. To temporarily disable focus trapping and allow third-party modals spawned from an active Shoelace modal, call `modal.activateExternal()` when the third-party modal opens. Upon closing, call `modal.deactivateExternal()` to restore Shoelace's focus trapping."
+              },
+              { "name": "dialog", "type": "HTMLElement" },
+              { "name": "panel", "type": "HTMLElement" },
+              { "name": "overlay", "type": "HTMLElement" },
+              {
                 "name": "open",
                 "description": "Indicates whether or not the dialog is open. You can toggle this attribute to show and hide the dialog, or you can\nuse the `show()` and `hide()` methods and this attribute will reflect the dialog's open state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "label",
                 "description": "The dialog's label as displayed in the header. You should always include a relevant label even when using\n`no-header`, as it is required for proper accessibility. If you need to display HTML, use the `label` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "no-header",
+                "name": "noHeader",
                 "description": "Disables the header. This will also remove the default close button, so please ensure you provide an easy,\naccessible way for users to dismiss the dialog.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -1721,32 +1816,10 @@
               },
               {
                 "name": "sl-request-close",
+                "type": "{ source: 'close-button' | 'keyboard' | 'overlay' }",
                 "description": "Emitted when the user attempts to close the dialog by clicking the close button, clicking the overlay, or pressing escape. Calling `event.preventDefault()` will keep the dialog open. Avoid using this unless closing the dialog will result in destructive behavior such as data loss."
               }
             ]
-          }
-        },
-        {
-          "name": "sl-divider",
-          "description": "Dividers are used to visually separate or group elements.\n---\n\n\n### **CSS Properties:**\n - **--color** - The color of the divider. _(default: undefined)_\n- **--width** - The width of the divider. _(default: undefined)_\n- **--spacing** - The spacing of the divider. _(default: undefined)_",
-          "doc-url": "",
-          "attributes": [
-            {
-              "name": "vertical",
-              "description": "Draws the divider in a vertical orientation.",
-              "value": { "type": "boolean", "default": "false" }
-            }
-          ],
-          "events": [],
-          "js": {
-            "properties": [
-              {
-                "name": "vertical",
-                "description": "Draws the divider in a vertical orientation.",
-                "value": { "type": "boolean" }
-              }
-            ],
-            "events": []
           }
         },
         {
@@ -1821,35 +1894,43 @@
             },
             {
               "name": "sl-request-close",
+              "type": "{ source: 'close-button' | 'keyboard' | 'overlay' }",
               "description": "Emitted when the user attempts to close the drawer by clicking the close button, clicking the overlay, or pressing escape. Calling `event.preventDefault()` will keep the drawer open. Avoid using this unless closing the drawer will result in destructive behavior such as data loss."
             }
           ],
           "js": {
             "properties": [
               {
+                "name": "modal",
+                "description": "Exposes the internal modal utility that controls focus trapping. To temporarily disable focus trapping and allow third-party modals spawned from an active Shoelace modal, call `modal.activateExternal()` when the third-party modal opens. Upon closing, call `modal.deactivateExternal()` to restore Shoelace's focus trapping."
+              },
+              { "name": "drawer", "type": "HTMLElement" },
+              { "name": "panel", "type": "HTMLElement" },
+              { "name": "overlay", "type": "HTMLElement" },
+              {
                 "name": "open",
                 "description": "Indicates whether or not the drawer is open. You can toggle this attribute to show and hide the drawer, or you can\nuse the `show()` and `hide()` methods and this attribute will reflect the drawer's open state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "label",
                 "description": "The drawer's label as displayed in the header. You should always include a relevant label even when using\n`no-header`, as it is required for proper accessibility. If you need to display HTML, use the `label` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "placement",
                 "description": "The direction from which the drawer will open.",
-                "value": { "type": "'top' | 'end' | 'bottom' | 'start'" }
+                "type": "'top' | 'end' | 'bottom' | 'start'"
               },
               {
                 "name": "contained",
                 "description": "By default, the drawer slides out of its containing block (usually the viewport). To make the drawer slide out of\nits parent element, set this attribute and add `position: relative` to the parent.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "no-header",
+                "name": "noHeader",
                 "description": "Removes the header. This will also remove the default close button, so please ensure you provide an easy,\naccessible way for users to dismiss the drawer.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -1875,14 +1956,38 @@
               },
               {
                 "name": "sl-request-close",
+                "type": "{ source: 'close-button' | 'keyboard' | 'overlay' }",
                 "description": "Emitted when the user attempts to close the drawer by clicking the close button, clicking the overlay, or pressing escape. Calling `event.preventDefault()` will keep the drawer open. Avoid using this unless closing the drawer will result in destructive behavior such as data loss."
               }
             ]
           }
         },
         {
+          "name": "sl-divider",
+          "description": "Dividers are used to visually separate or group elements.\n---\n\n\n### **CSS Properties:**\n - **--color** - The color of the divider. _(default: undefined)_\n- **--width** - The width of the divider. _(default: undefined)_\n- **--spacing** - The spacing of the divider. _(default: undefined)_",
+          "doc-url": "",
+          "attributes": [
+            {
+              "name": "vertical",
+              "description": "Draws the divider in a vertical orientation.",
+              "value": { "type": "boolean", "default": "false" }
+            }
+          ],
+          "events": [],
+          "js": {
+            "properties": [
+              {
+                "name": "vertical",
+                "description": "Draws the divider in a vertical orientation.",
+                "type": "boolean"
+              }
+            ],
+            "events": []
+          }
+        },
+        {
           "name": "sl-dropdown",
-          "description": "Dropdowns expose additional content that \"drops down\" in a panel.\n---\n\n\n### **Events:**\n - **sl-show** - Emitted when the dropdown opens.\n- **sl-after-show** - Emitted after the dropdown opens and all animations are complete.\n- **sl-hide** - Emitted when the dropdown closes.\n- **sl-after-hide** - Emitted after the dropdown closes and all animations are complete.\n\n### **Methods:**\n - **show()** - Shows the dropdown panel.\n- **hide()** - Hides the dropdown panel\n- **reposition()** - Instructs the dropdown menu to reposition. Useful when the position or size of the trigger changes when the menu\nis activated.\n\n### **Slots:**\n - _default_ - The dropdown's main content.\n- **trigger** - The dropdown's trigger, usually a `<sl-button>` element.\n\n### **CSS Parts:**\n - **base** - The component's base wrapper.\n- **trigger** - The container that wraps the trigger.\n- **panel** - The panel that gets shown when the dropdown is open.",
+          "description": "Dropdowns expose additional content that \"drops down\" in a panel.\n---\n\n\n### **Events:**\n - **sl-show** - Emitted when the dropdown opens.\n- **sl-after-show** - Emitted after the dropdown opens and all animations are complete.\n- **sl-hide** - Emitted when the dropdown closes.\n- **sl-after-hide** - Emitted after the dropdown closes and all animations are complete.\n\n### **Methods:**\n - **show()** - Shows the dropdown panel.\n- **hide()** - Hides the dropdown panel\n- **reposition()** - Instructs the dropdown menu to reposition. Useful when the position or size of the trigger changes when the menu\nis activated.\n\n### **Slots:**\n - _default_ - The dropdown's main content.\n- **trigger** - The dropdown's trigger, usually a `<sl-button>` element.\n\n### **CSS Parts:**\n - **base** - The component's base wrapper, an `<sl-popup>` element.\n- **base__popup** - The popup's exported `popup` part. Use this to target the tooltip's popup container.\n- **trigger** - The container that wraps the trigger.\n- **panel** - The panel that gets shown when the dropdown is open.",
           "doc-url": "",
           "attributes": [
             {
@@ -1959,47 +2064,53 @@
           ],
           "js": {
             "properties": [
+              { "name": "popup", "type": "SlPopup" },
+              { "name": "trigger", "type": "HTMLSlotElement" },
+              { "name": "panel", "type": "HTMLSlotElement" },
               {
                 "name": "open",
                 "description": "Indicates whether or not the dropdown is open. You can toggle this attribute to show and hide the dropdown, or you\ncan use the `show()` and `hide()` methods and this attribute will reflect the dropdown's open state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "placement",
                 "description": "The preferred placement of the dropdown panel. Note that the actual placement may vary as needed to keep the panel\ninside of the viewport.",
-                "value": {
-                  "type": "| 'top'\n    | 'top-start'\n    | 'top-end'\n    | 'bottom'\n    | 'bottom-start'\n    | 'bottom-end'\n    | 'right'\n    | 'right-start'\n    | 'right-end'\n    | 'left'\n    | 'left-start'\n    | 'left-end'"
-                }
+                "type": "| 'top'\n    | 'top-start'\n    | 'top-end'\n    | 'bottom'\n    | 'bottom-start'\n    | 'bottom-end'\n    | 'right'\n    | 'right-start'\n    | 'right-end'\n    | 'left'\n    | 'left-start'\n    | 'left-end'"
               },
               {
                 "name": "disabled",
                 "description": "Disables the dropdown so the panel will not open.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "stay-open-on-select",
+                "name": "stayOpenOnSelect",
                 "description": "By default, the dropdown is closed when an item is selected. This attribute will keep it open instead. Useful for\ndropdowns that allow for multiple interactions.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
+              },
+              {
+                "name": "containingElement",
+                "description": "The dropdown will close when the user interacts outside of this element (e.g. clicking). Useful for composing other\ncomponents that use a dropdown internally.",
+                "type": "HTMLElement | undefined"
               },
               {
                 "name": "distance",
                 "description": "The distance in pixels from which to offset the panel away from its trigger.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "skidding",
                 "description": "The distance in pixels from which to offset the panel along its trigger.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "hoist",
                 "description": "Enable this option to prevent the panel from being clipped when the component is placed inside a container with\n`overflow: auto|scroll`. Hoisting uses a fixed positioning strategy that works in many, but not all, scenarios.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "sync",
                 "description": "Syncs the popup width or height to that of the trigger element.",
-                "value": { "type": "'width' | 'height' | 'both' | undefined" }
+                "type": "'width' | 'height' | 'both' | undefined"
               }
             ],
             "events": [
@@ -2052,17 +2163,17 @@
               {
                 "name": "value",
                 "description": "The number to format in bytes.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "unit",
                 "description": "The type of unit to display.",
-                "value": { "type": "'byte' | 'bit'" }
+                "type": "'byte' | 'bit'"
               },
               {
                 "name": "display",
                 "description": "Determines how to display the result, e.g. \"100 bytes\", \"100 b\", or \"100b\".",
-                "value": { "type": "'long' | 'short' | 'narrow'" }
+                "type": "'long' | 'short' | 'narrow'"
               }
             ],
             "events": []
@@ -2142,64 +2253,62 @@
               {
                 "name": "date",
                 "description": "The date/time to format. If not set, the current date and time will be used. When passing a string, it's strongly\nrecommended to use the ISO 8601 format to ensure timezones are handled correctly. To convert a date to this format\nin JavaScript, use [`date.toISOString()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString).",
-                "value": { "type": "Date | string" }
+                "type": "Date | string"
               },
               {
                 "name": "weekday",
                 "description": "The format for displaying the weekday.",
-                "value": { "type": "'narrow' | 'short' | 'long'" }
+                "type": "'narrow' | 'short' | 'long'"
               },
               {
                 "name": "era",
                 "description": "The format for displaying the era.",
-                "value": { "type": "'narrow' | 'short' | 'long'" }
+                "type": "'narrow' | 'short' | 'long'"
               },
               {
                 "name": "year",
                 "description": "The format for displaying the year.",
-                "value": { "type": "'numeric' | '2-digit'" }
+                "type": "'numeric' | '2-digit'"
               },
               {
                 "name": "month",
                 "description": "The format for displaying the month.",
-                "value": {
-                  "type": "'numeric' | '2-digit' | 'narrow' | 'short' | 'long'"
-                }
+                "type": "'numeric' | '2-digit' | 'narrow' | 'short' | 'long'"
               },
               {
                 "name": "day",
                 "description": "The format for displaying the day.",
-                "value": { "type": "'numeric' | '2-digit'" }
+                "type": "'numeric' | '2-digit'"
               },
               {
                 "name": "hour",
                 "description": "The format for displaying the hour.",
-                "value": { "type": "'numeric' | '2-digit'" }
+                "type": "'numeric' | '2-digit'"
               },
               {
                 "name": "minute",
                 "description": "The format for displaying the minute.",
-                "value": { "type": "'numeric' | '2-digit'" }
+                "type": "'numeric' | '2-digit'"
               },
               {
                 "name": "second",
                 "description": "The format for displaying the second.",
-                "value": { "type": "'numeric' | '2-digit'" }
+                "type": "'numeric' | '2-digit'"
               },
               {
-                "name": "time-zone-name",
+                "name": "timeZoneName",
                 "description": "The format for displaying the time.",
-                "value": { "type": "'short' | 'long'" }
+                "type": "'short' | 'long'"
               },
               {
-                "name": "time-zone",
+                "name": "timeZone",
                 "description": "The time zone to express the time in.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "hour-format",
+                "name": "hourFormat",
                 "description": "The format for displaying the hour.",
-                "value": { "type": "'auto' | '12' | '24'" }
+                "type": "'auto' | '12' | '24'"
               }
             ],
             "events": []
@@ -2273,54 +2382,52 @@
               {
                 "name": "value",
                 "description": "The number to format.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "type",
                 "description": "The formatting style to use.",
-                "value": { "type": "'currency' | 'decimal' | 'percent'" }
+                "type": "'currency' | 'decimal' | 'percent'"
               },
               {
-                "name": "no-grouping",
+                "name": "noGrouping",
                 "description": "Turns off grouping separators.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "currency",
                 "description": "The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code to use when formatting.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "currency-display",
+                "name": "currencyDisplay",
                 "description": "How to display the currency.",
-                "value": {
-                  "type": "'symbol' | 'narrowSymbol' | 'code' | 'name'"
-                }
+                "type": "'symbol' | 'narrowSymbol' | 'code' | 'name'"
               },
               {
-                "name": "minimum-integer-digits",
+                "name": "minimumIntegerDigits",
                 "description": "The minimum number of integer digits to use. Possible values are 1-21.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "minimum-fraction-digits",
+                "name": "minimumFractionDigits",
                 "description": "The minimum number of fraction digits to use. Possible values are 0-20.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "maximum-fraction-digits",
+                "name": "maximumFractionDigits",
                 "description": "The maximum number of fraction digits to use. Possible values are 0-0.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "minimum-significant-digits",
+                "name": "minimumSignificantDigits",
                 "description": "The minimum number of significant digits to use. Possible values are 1-21.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "maximum-significant-digits",
+                "name": "maximumSignificantDigits",
                 "description": "The maximum number of significant digits to use,. Possible values are 1-21.",
-                "value": { "type": "number" }
+                "type": "number"
               }
             ],
             "events": []
@@ -2367,22 +2474,22 @@
               {
                 "name": "name",
                 "description": "The name of the icon to draw. Available names depend on the icon library being used.",
-                "value": { "type": "string | undefined" }
+                "type": "string | undefined"
               },
               {
                 "name": "src",
                 "description": "An external URL of an SVG file. Be sure you trust the content you are including, as it will be executed as code and\ncan result in XSS attacks.",
-                "value": { "type": "string | undefined" }
+                "type": "string | undefined"
               },
               {
                 "name": "label",
                 "description": "An alternate description to use for assistive devices. If omitted, the icon will be considered presentational and\nignored by assistive devices.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "library",
                 "description": "The name of a registered custom icon library.",
-                "value": { "type": "string" }
+                "type": "string"
               }
             ],
             "events": [
@@ -2458,46 +2565,48 @@
           "js": {
             "properties": [
               {
+                "name": "button",
+                "type": "HTMLButtonElement | HTMLLinkElement"
+              },
+              {
                 "name": "name",
                 "description": "The name of the icon to draw. Available names depend on the icon library being used.",
-                "value": { "type": "string | undefined" }
+                "type": "string | undefined"
               },
               {
                 "name": "library",
                 "description": "The name of a registered custom icon library.",
-                "value": { "type": "string | undefined" }
+                "type": "string | undefined"
               },
               {
                 "name": "src",
                 "description": "An external URL of an SVG file. Be sure you trust the content you are including, as it will be executed as code and\ncan result in XSS attacks.",
-                "value": { "type": "string | undefined" }
+                "type": "string | undefined"
               },
               {
                 "name": "href",
                 "description": "When set, the underlying button will be rendered as an `<a>` with this `href` instead of a `<button>`.",
-                "value": { "type": "string | undefined" }
+                "type": "string | undefined"
               },
               {
                 "name": "target",
                 "description": "Tells the browser where to open the link. Only used when `href` is set.",
-                "value": {
-                  "type": "'_blank' | '_parent' | '_self' | '_top' | undefined"
-                }
+                "type": "'_blank' | '_parent' | '_self' | '_top' | undefined"
               },
               {
                 "name": "download",
                 "description": "Tells the browser to download the linked file as this filename. Only used when `href` is set.",
-                "value": { "type": "string | undefined" }
+                "type": "string | undefined"
               },
               {
                 "name": "label",
                 "description": "A description that gets read by assistive devices. For optimal accessibility, you should always include a label\nthat describes what the icon button does.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "disabled",
                 "description": "Disables the button.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -2545,10 +2654,12 @@
           ],
           "js": {
             "properties": [
+              { "name": "base", "type": "HTMLElement" },
+              { "name": "handle", "type": "HTMLElement" },
               {
                 "name": "position",
                 "description": "The position of the divider as a percentage.",
-                "value": { "type": "number" }
+                "type": "number"
               }
             ],
             "events": [
@@ -2590,6 +2701,7 @@
             },
             {
               "name": "sl-error",
+              "type": "{ status: number }",
               "description": "Emitted when the included file fails to load due to an error."
             }
           ],
@@ -2598,17 +2710,17 @@
               {
                 "name": "src",
                 "description": "The location of the HTML file to include. Be sure you trust the content you are including as it will be executed as\ncode and can result in XSS attacks.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "mode",
                 "description": "The fetch mode to use.",
-                "value": { "type": "'cors' | 'no-cors' | 'same-origin'" }
+                "type": "'cors' | 'no-cors' | 'same-origin'"
               },
               {
-                "name": "allow-scripts",
+                "name": "allowScripts",
                 "description": "Allows included scripts to be executed. Be sure you trust the content you are including as it will be executed as\ncode and can result in XSS attacks.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -2618,6 +2730,7 @@
               },
               {
                 "name": "sl-error",
+                "type": "{ status: number }",
                 "description": "Emitted when the included file fails to load due to an error."
               }
             ]
@@ -2850,164 +2963,178 @@
           ],
           "js": {
             "properties": [
-              { "name": "title", "value": { "type": "string" } },
+              { "name": "input", "type": "HTMLInputElement" },
+              { "name": "title", "type": "string" },
               {
                 "name": "type",
                 "description": "The type of input. Works the same as a native `<input>` element, but only a subset of types are supported. Defaults\nto `text`.",
-                "value": {
-                  "type": "| 'date'\n    | 'datetime-local'\n    | 'email'\n    | 'number'\n    | 'password'\n    | 'search'\n    | 'tel'\n    | 'text'\n    | 'time'\n    | 'url'"
-                }
+                "type": "| 'date'\n    | 'datetime-local'\n    | 'email'\n    | 'number'\n    | 'password'\n    | 'search'\n    | 'tel'\n    | 'text'\n    | 'time'\n    | 'url'"
               },
               {
                 "name": "name",
                 "description": "The name of the input, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "value",
                 "description": "The current value of the input, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
+              },
+              {
+                "name": "defaultValue",
+                "description": "The default value of the form control. Primarily used for resetting the form control.",
+                "type": "string"
               },
               {
                 "name": "size",
                 "description": "The input's size.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
                 "name": "filled",
                 "description": "Draws a filled input.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "pill",
                 "description": "Draws a pill-style input with rounded edges.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "label",
                 "description": "The input's label. If you need to display HTML, use the `label` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "help-text",
+                "name": "helpText",
                 "description": "The input's help text. If you need to display HTML, use the `help-text` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "clearable",
                 "description": "Adds a clear button when the input is not empty.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "disabled",
                 "description": "Disables the input.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "placeholder",
                 "description": "Placeholder text to show as a hint when the input is empty.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "readonly",
                 "description": "Makes the input readonly.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "password-toggle",
+                "name": "passwordToggle",
                 "description": "Adds a button to toggle the password's visibility. Only applies to password types.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "password-visible",
+                "name": "passwordVisible",
                 "description": "Determines whether or not the password is currently visible. Only applies to password input types.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "no-spin-buttons",
+                "name": "noSpinButtons",
                 "description": "Hides the browser's built-in increment/decrement spin buttons for number inputs.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "form",
                 "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "required",
                 "description": "Makes the input a required field.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "pattern",
                 "description": "A regular expression pattern to validate input against.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "minlength",
                 "description": "The minimum length of input that will be considered valid.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "maxlength",
                 "description": "The maximum length of input that will be considered valid.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "min",
                 "description": "The input's minimum value. Only applies to date and number input types.",
-                "value": { "type": "number | string" }
+                "type": "number | string"
               },
               {
                 "name": "max",
                 "description": "The input's maximum value. Only applies to date and number input types.",
-                "value": { "type": "number | string" }
+                "type": "number | string"
               },
               {
                 "name": "step",
                 "description": "Specifies the granularity that the value must adhere to, or the special value `any` which means no stepping is\nimplied, allowing any numeric value. Only applies to date and number input types.",
-                "value": { "type": "number | 'any'" }
+                "type": "number | 'any'"
               },
               {
                 "name": "autocapitalize",
                 "description": "Controls whether and how text input is automatically capitalized as it is entered by the user.",
-                "value": {
-                  "type": "'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters'"
-                }
+                "type": "'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters'"
               },
               {
                 "name": "autocorrect",
                 "description": "Indicates whether the browser's autocorrect feature is on or off.",
-                "value": { "type": "'off' | 'on'" }
+                "type": "'off' | 'on'"
               },
               {
                 "name": "autocomplete",
                 "description": "Specifies what permission the browser has to provide assistance in filling out form field values. Refer to\n[this page on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) for available values.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "autofocus",
                 "description": "Indicates that the input should receive focus on page load.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "enterkeyhint",
                 "description": "Used to customize the label or icon of the Enter key on virtual keyboards.",
-                "value": {
-                  "type": "'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send'"
-                }
+                "type": "'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send'"
               },
               {
                 "name": "spellcheck",
                 "description": "Enables spell checking on the input.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "inputmode",
                 "description": "Tells the browser what type of data will be entered by the user, allowing it to display the appropriate virtual\nkeyboard on supportive devices.",
-                "value": {
-                  "type": "'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url'"
-                }
+                "type": "'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url'"
+              },
+              {
+                "name": "valueAsDate",
+                "description": "Gets or sets the current value as a `Date` object. Returns `null` if the value can't be converted. This will use the native `<input type=\"{{type}}\">` implementation and may result in an error."
+              },
+              {
+                "name": "valueAsNumber",
+                "description": "Gets or sets the current value as a number. Returns `NaN` if the value can't be converted."
+              },
+              {
+                "name": "validity",
+                "description": "Gets the validity state object"
+              },
+              {
+                "name": "validationMessage",
+                "description": "Gets the validation message"
               }
             ],
             "events": [
@@ -3052,21 +3179,18 @@
           "events": [
             {
               "name": "sl-select",
+              "type": "{ item: SlMenuItem }",
               "description": "Emitted when a menu item is selected."
             }
           ],
           "js": {
             "properties": [
-              { "name": "defaultSlot", "value": { "type": "HTMLSlotElement" } },
-              { "name": "handleClick", "value": {} },
-              { "name": "handleKeyDown", "value": {} },
-              { "name": "handleMouseDown", "value": {} },
-              { "name": "handleSlotChange", "value": {} },
-              { "name": "isMenuItem", "value": {} }
+              { "name": "defaultSlot", "type": "HTMLSlotElement" }
             ],
             "events": [
               {
                 "name": "sl-select",
+                "type": "{ item: SlMenuItem }",
                 "description": "Emitted when a menu item is selected."
               }
             ]
@@ -3124,30 +3248,32 @@
           "events": [],
           "js": {
             "properties": [
+              { "name": "defaultSlot", "type": "HTMLSlotElement" },
+              { "name": "menuItem", "type": "HTMLElement" },
               {
                 "name": "type",
                 "description": "The type of menu item to render. To use `checked`, this value must be set to `checkbox`.",
-                "value": { "type": "'normal' | 'checkbox'" }
+                "type": "'normal' | 'checkbox'"
               },
               {
                 "name": "checked",
                 "description": "Draws the item in a checked state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "value",
                 "description": "A unique value to store in the menu item. This can be used as a way to identify menu items when selected.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "loading",
                 "description": "Draws the menu item in a loading state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "disabled",
                 "description": "Draws the menu item in a disabled state, preventing selection.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": []
@@ -3204,6 +3330,7 @@
           "events": [
             {
               "name": "sl-mutation",
+              "type": "{ mutationList: MutationRecord[] }",
               "description": "Emitted when a mutation occurs."
             }
           ],
@@ -3212,37 +3339,38 @@
               {
                 "name": "attr",
                 "description": "Watches for changes to attributes. To watch only specific attributes, separate them by a space, e.g.\n`attr=\"class id title\"`. To watch all attributes, use `*`.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "attr-old-value",
+                "name": "attrOldValue",
                 "description": "Indicates whether or not the attribute's previous value should be recorded when monitoring changes.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "char-data",
+                "name": "charData",
                 "description": "Watches for changes to the character data contained within the node.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "char-data-old-value",
+                "name": "charDataOldValue",
                 "description": "Indicates whether or not the previous value of the node's text should be recorded.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "child-list",
+                "name": "childList",
                 "description": "Watches for the addition or removal of new child nodes.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "disabled",
                 "description": "Disables the observer.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
               {
                 "name": "sl-mutation",
+                "type": "{ mutationList: MutationRecord[] }",
                 "description": "Emitted when a mutation occurs."
               }
             ]
@@ -3278,15 +3406,19 @@
           "events": [],
           "js": {
             "properties": [
+              { "name": "defaultSlot", "type": "HTMLSlotElement" },
+              { "name": "current", "type": "boolean" },
+              { "name": "selected", "type": "boolean" },
+              { "name": "hasHover", "type": "boolean" },
               {
                 "name": "value",
                 "description": "The option's value. When selected, the containing form control will receive this value. The value must be unique\nfrom other options in the same group. Values may not contain spaces, as spaces are used as delimiters when listing\nmultiple values.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "disabled",
                 "description": "Draws the option in a disabled state, preventing selection.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": []
@@ -3436,116 +3568,119 @@
           "js": {
             "properties": [
               {
+                "name": "popup",
+                "description": "A reference to the internal popup container. Useful for animating and styling the popup with JavaScript.",
+                "type": "HTMLElement"
+              },
+              {
                 "name": "anchor",
                 "description": "The element the popup will be anchored to. If the anchor lives outside of the popup, you can provide the anchor\nelement `id`, a DOM element reference, or a `VirtualElement`. If the anchor lives inside the popup, use the\n`anchor` slot instead.",
-                "value": { "type": "Element | string | VirtualElement" }
+                "type": "Element | string | VirtualElement"
               },
               {
                 "name": "active",
                 "description": "Activates the positioning logic and shows the popup. When this attribute is removed, the positioning logic is torn\ndown and the popup will be hidden.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "placement",
                 "description": "The preferred placement of the popup. Note that the actual placement will vary as configured to keep the\npanel inside of the viewport.",
-                "value": {
-                  "type": "| 'top'\n    | 'top-start'\n    | 'top-end'\n    | 'bottom'\n    | 'bottom-start'\n    | 'bottom-end'\n    | 'right'\n    | 'right-start'\n    | 'right-end'\n    | 'left'\n    | 'left-start'\n    | 'left-end'"
-                }
+                "type": "| 'top'\n    | 'top-start'\n    | 'top-end'\n    | 'bottom'\n    | 'bottom-start'\n    | 'bottom-end'\n    | 'right'\n    | 'right-start'\n    | 'right-end'\n    | 'left'\n    | 'left-start'\n    | 'left-end'"
               },
               {
                 "name": "strategy",
                 "description": "Determines how the popup is positioned. The `absolute` strategy works well in most cases, but if overflow is\nclipped, using a `fixed` position strategy can often workaround it.",
-                "value": { "type": "'absolute' | 'fixed'" }
+                "type": "'absolute' | 'fixed'"
               },
               {
                 "name": "distance",
                 "description": "The distance in pixels from which to offset the panel away from its anchor.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "skidding",
                 "description": "The distance in pixels from which to offset the panel along its anchor.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "arrow",
                 "description": "Attaches an arrow to the popup. The arrow's size and color can be customized using the `--arrow-size` and\n`--arrow-color` custom properties. For additional customizations, you can also target the arrow using\n`::part(arrow)` in your stylesheet.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "arrow-placement",
+                "name": "arrowPlacement",
                 "description": "The placement of the arrow. The default is `anchor`, which will align the arrow as close to the center of the\nanchor as possible, considering available space and `arrow-padding`. A value of `start`, `end`, or `center` will\nalign the arrow to the start, end, or center of the popover instead.",
-                "value": { "type": "'start' | 'end' | 'center' | 'anchor'" }
+                "type": "'start' | 'end' | 'center' | 'anchor'"
               },
               {
-                "name": "arrow-padding",
+                "name": "arrowPadding",
                 "description": "The amount of padding between the arrow and the edges of the popup. If the popup has a border-radius, for example,\nthis will prevent it from overflowing the corners.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "flip",
                 "description": "When set, placement of the popup will flip to the opposite site to keep it in view. You can use\n`flipFallbackPlacements` to further configure how the fallback placement is determined.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "flip-fallback-placements",
+                "name": "flipFallbackPlacements",
                 "description": "If the preferred placement doesn't fit, popup will be tested in these fallback placements until one fits. Must be a\nstring of any number of placements separated by a space, e.g. \"top bottom left\". If no placement fits, the flip\nfallback strategy will be used instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "flip-fallback-strategy",
+                "name": "flipFallbackStrategy",
                 "description": "When neither the preferred placement nor the fallback placements fit, this value will be used to determine whether\nthe popup should be positioned using the best available fit based on available space or as it was initially\npreferred.",
-                "value": { "type": "'best-fit' | 'initial'" }
+                "type": "'best-fit' | 'initial'"
               },
               {
                 "name": "flipBoundary",
                 "description": "The flip boundary describes clipping element(s) that overflow will be checked relative to when flipping. By\ndefault, the boundary includes overflow ancestors that will cause the element to be clipped. If needed, you can\nchange the boundary by passing a reference to one or more elements to this property.",
-                "value": { "type": "Element | Element[]" }
+                "type": "Element | Element[]"
               },
               {
-                "name": "flip-padding",
+                "name": "flipPadding",
                 "description": "The amount of padding, in pixels, to exceed before the flip behavior will occur.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "shift",
                 "description": "Moves the popup along the axis to keep it in view when clipped.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "shiftBoundary",
                 "description": "The shift boundary describes clipping element(s) that overflow will be checked relative to when shifting. By\ndefault, the boundary includes overflow ancestors that will cause the element to be clipped. If needed, you can\nchange the boundary by passing a reference to one or more elements to this property.",
-                "value": { "type": "Element | Element[]" }
+                "type": "Element | Element[]"
               },
               {
-                "name": "shift-padding",
+                "name": "shiftPadding",
                 "description": "The amount of padding, in pixels, to exceed before the shift behavior will occur.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "auto-size",
+                "name": "autoSize",
                 "description": "When set, this will cause the popup to automatically resize itself to prevent it from overflowing.",
-                "value": { "type": "'horizontal' | 'vertical' | 'both'" }
+                "type": "'horizontal' | 'vertical' | 'both'"
               },
               {
                 "name": "sync",
                 "description": "Syncs the popup's width or height to that of the anchor element.",
-                "value": { "type": "'width' | 'height' | 'both'" }
+                "type": "'width' | 'height' | 'both'"
               },
               {
                 "name": "autoSizeBoundary",
                 "description": "The auto-size boundary describes clipping element(s) that overflow will be checked relative to when resizing. By\ndefault, the boundary includes overflow ancestors that will cause the element to be clipped. If needed, you can\nchange the boundary by passing a reference to one or more elements to this property.",
-                "value": { "type": "Element | Element[]" }
+                "type": "Element | Element[]"
               },
               {
-                "name": "auto-size-padding",
+                "name": "autoSizePadding",
                 "description": "The amount of padding, in pixels, to exceed before the auto-size behavior will occur.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "hover-bridge",
+                "name": "hoverBridge",
                 "description": "When a gap exists between the anchor and the popup element, this option will add a \"hover bridge\" that fills the\ngap using an invisible element. This makes listening for events such as `mouseenter` and `mouseleave` more sane\nbecause the pointer never technically leaves the element. The hover bridge will only be drawn when the popover is\nactive.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -3589,17 +3724,55 @@
               {
                 "name": "value",
                 "description": "The current progress as a percentage, 0 to 100.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "indeterminate",
                 "description": "When true, percentage is ignored, the label is hidden, and the progress bar is drawn in an indeterminate state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "label",
                 "description": "A custom label for assistive devices.",
-                "value": { "type": "string" }
+                "type": "string"
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "sl-progress-ring",
+          "description": "Progress rings are used to show the progress of a determinate operation in a circular fashion.\n---\n\n\n### **Slots:**\n - _default_ - A label to show inside the ring.\n\n### **CSS Properties:**\n - **--size** - The diameter of the progress ring (cannot be a percentage). _(default: undefined)_\n- **--track-width** - The width of the track. _(default: undefined)_\n- **--track-color** - The color of the track. _(default: undefined)_\n- **--indicator-width** - The width of the indicator. Defaults to the track width. _(default: undefined)_\n- **--indicator-color** - The color of the indicator. _(default: undefined)_\n- **--indicator-transition-duration** - The duration of the indicator's transition when the value changes. _(default: undefined)_\n\n### **CSS Parts:**\n - **base** - The component's base wrapper.\n- **label** - The progress ring label.",
+          "doc-url": "",
+          "attributes": [
+            {
+              "name": "value",
+              "description": "The current progress as a percentage, 0 to 100.",
+              "value": { "type": "number", "default": "0" }
+            },
+            {
+              "name": "label",
+              "description": "A custom label for assistive devices.",
+              "value": { "type": "string", "default": "''" }
+            }
+          ],
+          "slots": [
+            { "name": "", "description": "A label to show inside the ring." }
+          ],
+          "events": [],
+          "js": {
+            "properties": [
+              { "name": "indicator", "type": "SVGCircleElement" },
+              { "name": "indicatorOffset", "type": "string" },
+              {
+                "name": "value",
+                "description": "The current progress as a percentage, 0 to 100.",
+                "type": "number"
+              },
+              {
+                "name": "label",
+                "description": "A custom label for assistive devices.",
+                "type": "string"
               }
             ],
             "events": []
@@ -3649,76 +3822,41 @@
           "events": [],
           "js": {
             "properties": [
+              { "name": "canvas", "type": "HTMLElement" },
               {
                 "name": "value",
                 "description": "The QR code's value.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "label",
                 "description": "The label for assistive devices to announce. If unspecified, the value will be used instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "size",
                 "description": "The size of the QR code, in pixels.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "fill",
                 "description": "The fill color. This can be any valid CSS color, but not a CSS custom property.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "background",
                 "description": "The background color. This can be any valid CSS color or `transparent`. It cannot be a CSS custom property.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "radius",
                 "description": "The edge radius of each module. Must be between 0 and 0.5.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "error-correction",
+                "name": "errorCorrection",
                 "description": "The level of error correction to use. [Learn more](https://www.qrcode.com/en/about/error_correction.html)",
-                "value": { "type": "'L' | 'M' | 'Q' | 'H'" }
-              }
-            ],
-            "events": []
-          }
-        },
-        {
-          "name": "sl-progress-ring",
-          "description": "Progress rings are used to show the progress of a determinate operation in a circular fashion.\n---\n\n\n### **Slots:**\n - _default_ - A label to show inside the ring.\n\n### **CSS Properties:**\n - **--size** - The diameter of the progress ring (cannot be a percentage). _(default: undefined)_\n- **--track-width** - The width of the track. _(default: undefined)_\n- **--track-color** - The color of the track. _(default: undefined)_\n- **--indicator-width** - The width of the indicator. Defaults to the track width. _(default: undefined)_\n- **--indicator-color** - The color of the indicator. _(default: undefined)_\n- **--indicator-transition-duration** - The duration of the indicator's transition when the value changes. _(default: undefined)_\n\n### **CSS Parts:**\n - **base** - The component's base wrapper.\n- **label** - The progress ring label.",
-          "doc-url": "",
-          "attributes": [
-            {
-              "name": "value",
-              "description": "The current progress as a percentage, 0 to 100.",
-              "value": { "type": "number", "default": "0" }
-            },
-            {
-              "name": "label",
-              "description": "A custom label for assistive devices.",
-              "value": { "type": "string", "default": "''" }
-            }
-          ],
-          "slots": [
-            { "name": "", "description": "A label to show inside the ring." }
-          ],
-          "events": [],
-          "js": {
-            "properties": [
-              {
-                "name": "value",
-                "description": "The current progress as a percentage, 0 to 100.",
-                "value": { "type": "number" }
-              },
-              {
-                "name": "label",
-                "description": "A custom label for assistive devices.",
-                "value": { "type": "string" }
+                "type": "'L' | 'M' | 'Q' | 'H'"
               }
             ],
             "events": []
@@ -3761,20 +3899,21 @@
           ],
           "js": {
             "properties": [
+              { "name": "checked", "type": "boolean" },
               {
                 "name": "value",
                 "description": "The radio's value. When selected, the radio group will receive this value.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "size",
                 "description": "The radio's size. When used inside a radio group, the size will be determined by the radio group's size so this\nattribute can typically be omitted.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
                 "name": "disabled",
                 "description": "Disables the radio.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -3841,25 +3980,27 @@
           ],
           "js": {
             "properties": [
+              { "name": "input", "type": "HTMLInputElement" },
+              { "name": "hiddenInput", "type": "HTMLInputElement" },
               {
                 "name": "value",
                 "description": "The radio's value. When selected, the radio group will receive this value.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "disabled",
                 "description": "Disables the radio button.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "size",
                 "description": "The radio button's size. When used inside a radio group, the size will be determined by the radio group's size so\nthis attribute can typically be omitted.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
                 "name": "pill",
                 "description": "Draws a pill-style radio button with rounded edges.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -3876,7 +4017,7 @@
         },
         {
           "name": "sl-radio-group",
-          "description": "Radio groups are used to group multiple [radios](/components/radio) or [radio buttons](/components/radio-button) so they function as a single form control.\n---\n\n\n### **Events:**\n - **sl-change** - Emitted when the radio group's selected value changes.\n- **sl-input** - Emitted when the radio group receives user input.\n- **sl-invalid** - Emitted when the form control has been checked for validity and its constraints aren't satisfied.\n\n### **Methods:**\n - **checkValidity()** - Checks for validity but does not show a validation message. Returns `true` when valid and `false` when invalid.\n- **getForm(): _HTMLFormElement | null_** - Gets the associated form, if one exists.\n- **reportValidity(): _boolean_** - Checks for validity and shows the browser's validation message if the control is invalid.\n- **setCustomValidity(message)** - Sets a custom validation message. Pass an empty string to restore validity.\n\n### **Slots:**\n - _default_ - The default slot where `<sl-radio>` or `<sl-radio-button>` elements are placed.\n- **label** - The radio group's label. Required for proper accessibility. Alternatively, you can use the `label` attribute.\n- **help-text** - Text that describes how to use the radio group. Alternatively, you can use the `help-text` attribute.\n\n### **CSS Parts:**\n - **form-control** - The form control that wraps the label, input, and help text.\n- **form-control-label** - The label's wrapper.\n- **form-control-input** - The input's wrapper.\n- **form-control-help-text** - The help text's wrapper.\n- **button-group** - The button group that wraps radio buttons.\n- **button-group__base** - The button group's `base` part.",
+          "description": "Radio groups are used to group multiple [radios](/components/radio) or [radio buttons](/components/radio-button) so they function as a single form control.\n---\n\n\n### **Events:**\n - **sl-change** - Emitted when the radio group's selected value changes.\n- **sl-input** - Emitted when the radio group receives user input.\n- **sl-invalid** - Emitted when the form control has been checked for validity and its constraints aren't satisfied.\n\n### **Methods:**\n - **checkValidity()** - Checks for validity but does not show a validation message. Returns `true` when valid and `false` when invalid.\n- **getForm(): _HTMLFormElement | null_** - Gets the associated form, if one exists.\n- **reportValidity(): _boolean_** - Checks for validity and shows the browser's validation message if the control is invalid.\n- **setCustomValidity(message)** - Sets a custom validation message. Pass an empty string to restore validity.\n- **focus(options: _FocusOptions_)** - Sets focus on the radio-group.\n\n### **Slots:**\n - _default_ - The default slot where `<sl-radio>` or `<sl-radio-button>` elements are placed.\n- **label** - The radio group's label. Required for proper accessibility. Alternatively, you can use the `label` attribute.\n- **help-text** - Text that describes how to use the radio group. Alternatively, you can use the `help-text` attribute.\n\n### **CSS Parts:**\n - **form-control** - The form control that wraps the label, input, and help text.\n- **form-control-label** - The label's wrapper.\n- **form-control-input** - The input's wrapper.\n- **form-control-help-text** - The help text's wrapper.\n- **button-group** - The button group that wraps radio buttons.\n- **button-group__base** - The button group's `base` part.",
           "doc-url": "",
           "attributes": [
             {
@@ -3948,40 +4089,51 @@
           ],
           "js": {
             "properties": [
+              { "name": "defaultSlot", "type": "HTMLSlotElement" },
+              { "name": "validationInput", "type": "HTMLInputElement" },
+              { "name": "defaultValue", "type": "string" },
               {
                 "name": "label",
                 "description": "The radio group's label. Required for proper accessibility. If you need to display HTML, use the `label` slot\ninstead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "help-text",
+                "name": "helpText",
                 "description": "The radio groups's help text. If you need to display HTML, use the `help-text` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "name",
                 "description": "The name of the radio group, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "value",
                 "description": "The current value of the radio group, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "size",
                 "description": "The radio group's size. This size will be applied to all child radios and radio buttons.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
                 "name": "form",
                 "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "required",
                 "description": "Ensures a child radio is checked before allowing the containing form to submit.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
+              },
+              {
+                "name": "validity",
+                "description": "Gets the validity state object"
+              },
+              {
+                "name": "validationMessage",
+                "description": "Gets the validation message"
               }
             ],
             "events": [
@@ -4094,56 +4246,76 @@
           ],
           "js": {
             "properties": [
-              { "name": "title", "value": { "type": "string" } },
+              { "name": "input", "type": "HTMLInputElement" },
+              { "name": "output", "type": "HTMLOutputElement | null" },
+              { "name": "title", "type": "string" },
               {
                 "name": "name",
                 "description": "The name of the range, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "value",
                 "description": "The current value of the range, submitted as a name/value pair with form data.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "label",
                 "description": "The range's label. If you need to display HTML, use the `label` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "help-text",
+                "name": "helpText",
                 "description": "The range's help text. If you need to display HTML, use the help-text slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "disabled",
                 "description": "Disables the range.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "min",
                 "description": "The minimum acceptable value of the range.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "max",
                 "description": "The maximum acceptable value of the range.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "step",
                 "description": "The interval at which the range will increase and decrease.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "tooltip",
                 "description": "The preferred placement of the range's tooltip.",
-                "value": { "type": "'top' | 'bottom' | 'none'" }
+                "type": "'top' | 'bottom' | 'none'"
+              },
+              {
+                "name": "tooltipFormatter",
+                "description": "A function used to format the tooltip's value. The range's value is passed as the first and only argument. The\nfunction should return a string to display in the tooltip.",
+                "type": "(value: number) => string"
               },
               {
                 "name": "form",
                 "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
-                "value": { "type": "string" }
+                "type": "string"
+              },
+              {
+                "name": "defaultValue",
+                "description": "The default value of the form control. Primarily used for resetting the form control.",
+                "type": "number"
+              },
+              {
+                "name": "validity",
+                "description": "Gets the validity state object"
+              },
+              {
+                "name": "validationMessage",
+                "description": "Gets the validation message"
               }
             ],
             "events": [
@@ -4218,45 +4390,47 @@
             },
             {
               "name": "sl-hover",
+              "type": "{ phase: 'start' | 'move' | 'end', value: number }",
               "description": "Emitted when the user hovers over a value. The `phase` property indicates when hovering starts, moves to a new value, or ends. The `value` property tells what the rating's value would be if the user were to commit to the hovered value."
             }
           ],
           "js": {
             "properties": [
+              { "name": "rating", "type": "HTMLElement" },
               {
                 "name": "label",
                 "description": "A label that describes the rating to assistive devices.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "value",
                 "description": "The current rating.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "max",
                 "description": "The highest rating to show.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "precision",
                 "description": "The precision at which the rating will increase and decrease. For example, to allow half-star ratings, set this\nattribute to `0.5`.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "readonly",
                 "description": "Makes the rating readonly.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "disabled",
                 "description": "Disables the rating.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "getSymbol",
                 "description": "A function that customizes the symbol to be rendered. The first and only argument is the rating's current value.\nThe function should return a string containing trusted HTML of the symbol to render at the specified value. Works\nwell with `<sl-icon>` elements.",
-                "value": { "type": "(value: number) => string" }
+                "type": "(value: number) => string"
               }
             ],
             "events": [
@@ -4266,6 +4440,7 @@
               },
               {
                 "name": "sl-hover",
+                "type": "{ phase: 'start' | 'move' | 'end', value: number }",
                 "description": "Emitted when the user hovers over a value. The `phase` property indicates when hovering starts, moves to a new value, or ends. The `value` property tells what the rating's value would be if the user were to commit to the hovered value."
               }
             ]
@@ -4306,22 +4481,22 @@
               {
                 "name": "date",
                 "description": "The date from which to calculate time from. If not set, the current date and time will be used. When passing a\nstring, it's strongly recommended to use the ISO 8601 format to ensure timezones are handled correctly. To convert\na date to this format in JavaScript, use [`date.toISOString()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString).",
-                "value": { "type": "Date | string" }
+                "type": "Date | string"
               },
               {
                 "name": "format",
                 "description": "The formatting style to use.",
-                "value": { "type": "'long' | 'short' | 'narrow'" }
+                "type": "'long' | 'short' | 'narrow'"
               },
               {
                 "name": "numeric",
                 "description": "When `auto`, values such as \"yesterday\" and \"tomorrow\" will be shown when possible. When `always`, values such as\n\"1 day ago\" and \"in 1 day\" will be shown.",
-                "value": { "type": "'always' | 'auto'" }
+                "type": "'always' | 'auto'"
               },
               {
                 "name": "sync",
                 "description": "Keep the displayed value up to date as time passes.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": []
@@ -4347,6 +4522,7 @@
           "events": [
             {
               "name": "sl-resize",
+              "type": "{ entries: ResizeObserverEntry[] }",
               "description": "Emitted when the element is resized."
             }
           ],
@@ -4355,12 +4531,13 @@
               {
                 "name": "disabled",
                 "description": "Disables the observer.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
               {
                 "name": "sl-resize",
+                "type": "{ entries: ResizeObserverEntry[] }",
                 "description": "Emitted when the element is resized."
               }
             ]
@@ -4368,7 +4545,7 @@
         },
         {
           "name": "sl-select",
-          "description": "Selects allow you to choose items from a menu of predefined options.\n---\n\n\n### **Events:**\n - **sl-change** - Emitted when the control's value changes.\n- **sl-clear** - Emitted when the control's value is cleared.\n- **sl-input** - Emitted when the control receives input.\n- **sl-focus** - Emitted when the control gains focus.\n- **sl-blur** - Emitted when the control loses focus.\n- **sl-show** - Emitted when the select's menu opens.\n- **sl-after-show** - Emitted after the select's menu opens and all animations are complete.\n- **sl-hide** - Emitted when the select's menu closes.\n- **sl-after-hide** - Emitted after the select's menu closes and all animations are complete.\n- **sl-invalid** - Emitted when the form control has been checked for validity and its constraints aren't satisfied.\n\n### **Methods:**\n - **show()** - Shows the listbox.\n- **hide()** - Hides the listbox.\n- **checkValidity()** - Checks for validity but does not show a validation message. Returns `true` when valid and `false` when invalid.\n- **getForm(): _HTMLFormElement | null_** - Gets the associated form, if one exists.\n- **reportValidity()** - Checks for validity and shows the browser's validation message if the control is invalid.\n- **setCustomValidity(message: _string_)** - Sets a custom validation message. Pass an empty string to restore validity.\n- **focus(options: _FocusOptions_)** - Sets focus on the control.\n- **blur()** - Removes focus from the control.\n\n### **Slots:**\n - _default_ - The listbox options. Must be `<sl-option>` elements. You can use `<sl-divider>` to group items visually.\n- **label** - The input's label. Alternatively, you can use the `label` attribute.\n- **prefix** - Used to prepend a presentational icon or similar element to the combobox.\n- **clear-icon** - An icon to use in lieu of the default clear icon.\n- **expand-icon** - The icon to show when the control is expanded and collapsed. Rotates on open and close.\n- **help-text** - Text that describes how to use the input. Alternatively, you can use the `help-text` attribute.\n\n### **CSS Parts:**\n - **form-control** - The form control that wraps the label, input, and help text.\n- **form-control-label** - The label's wrapper.\n- **form-control-input** - The select's wrapper.\n- **form-control-help-text** - The help text's wrapper.\n- **combobox** - The container the wraps the prefix, combobox, clear icon, and expand button.\n- **prefix** - The container that wraps the prefix slot.\n- **display-input** - The element that displays the selected option's label, an `<input>` element.\n- **listbox** - The listbox container where options are slotted.\n- **tags** - The container that houses option tags when `multiselect` is used.\n- **tag** - The individual tags that represent each multiselect option.\n- **tag__base** - The tag's base part.\n- **tag__content** - The tag's content part.\n- **tag__remove-button** - The tag's remove button.\n- **tag__remove-button__base** - The tag's remove button base part.\n- **clear-button** - The clear button.\n- **expand-icon** - The container that wraps the expand icon.",
+          "description": "Selects allow you to choose items from a menu of predefined options.\n---\n\n\n### **Events:**\n - **sl-change** - Emitted when the control's value changes.\n- **sl-clear** - Emitted when the control's value is cleared.\n- **sl-input** - Emitted when the control receives input.\n- **sl-focus** - Emitted when the control gains focus.\n- **sl-blur** - Emitted when the control loses focus.\n- **sl-show** - Emitted when the select's menu opens.\n- **sl-after-show** - Emitted after the select's menu opens and all animations are complete.\n- **sl-hide** - Emitted when the select's menu closes.\n- **sl-after-hide** - Emitted after the select's menu closes and all animations are complete.\n- **sl-invalid** - Emitted when the form control has been checked for validity and its constraints aren't satisfied.\n\n### **Methods:**\n - **show()** - Shows the listbox.\n- **hide()** - Hides the listbox.\n- **checkValidity()** - Checks for validity but does not show a validation message. Returns `true` when valid and `false` when invalid.\n- **getForm(): _HTMLFormElement | null_** - Gets the associated form, if one exists.\n- **reportValidity()** - Checks for validity and shows the browser's validation message if the control is invalid.\n- **setCustomValidity(message: _string_)** - Sets a custom validation message. Pass an empty string to restore validity.\n- **focus(options: _FocusOptions_)** - Sets focus on the control.\n- **blur()** - Removes focus from the control.\n\n### **Slots:**\n - _default_ - The listbox options. Must be `<sl-option>` elements. You can use `<sl-divider>` to group items visually.\n- **label** - The input's label. Alternatively, you can use the `label` attribute.\n- **prefix** - Used to prepend a presentational icon or similar element to the combobox.\n- **suffix** - Used to append a presentational icon or similar element to the combobox.\n- **clear-icon** - An icon to use in lieu of the default clear icon.\n- **expand-icon** - The icon to show when the control is expanded and collapsed. Rotates on open and close.\n- **help-text** - Text that describes how to use the input. Alternatively, you can use the `help-text` attribute.\n\n### **CSS Parts:**\n - **form-control** - The form control that wraps the label, input, and help text.\n- **form-control-label** - The label's wrapper.\n- **form-control-input** - The select's wrapper.\n- **form-control-help-text** - The help text's wrapper.\n- **combobox** - The container the wraps the prefix, suffix, combobox, clear icon, and expand button.\n- **prefix** - The container that wraps the prefix slot.\n- **suffix** - The container that wraps the suffix slot.\n- **display-input** - The element that displays the selected option's label, an `<input>` element.\n- **listbox** - The listbox container where options are slotted.\n- **tags** - The container that houses option tags when `multiselect` is used.\n- **tag** - The individual tags that represent each multiselect option.\n- **tag__base** - The tag's base part.\n- **tag__content** - The tag's content part.\n- **tag__remove-button** - The tag's remove button.\n- **tag__remove-button__base** - The tag's remove button base part.\n- **clear-button** - The clear button.\n- **expand-icon** - The container that wraps the expand icon.",
           "doc-url": "",
           "attributes": [
             {
@@ -4378,7 +4555,7 @@
             },
             {
               "name": "value",
-              "description": "The current value of the select, submitted as a name/value pair with form data. When `multiple` is enabled, the\nvalue attribute will be a space-delimited list of values based on the options selected, and the value property will\nbe an array. **For this reason, values must not contain spaces.**",
+              "description": "The default value of the form control. Primarily used for resetting the form control.",
               "value": { "type": "string | string[]", "default": "''" }
             },
             {
@@ -4481,6 +4658,10 @@
               "description": "Used to prepend a presentational icon or similar element to the combobox."
             },
             {
+              "name": "suffix",
+              "description": "Used to append a presentational icon or similar element to the combobox."
+            },
+            {
               "name": "clear-icon",
               "description": "An icon to use in lieu of the default clear icon."
             },
@@ -4537,97 +4718,115 @@
           ],
           "js": {
             "properties": [
+              { "name": "popup", "type": "SlPopup" },
+              { "name": "combobox", "type": "HTMLSlotElement" },
+              { "name": "displayInput", "type": "HTMLInputElement" },
+              { "name": "valueInput", "type": "HTMLInputElement" },
+              { "name": "listbox", "type": "HTMLSlotElement" },
+              { "name": "displayLabel", "type": "string" },
+              { "name": "currentOption", "type": "SlOption" },
+              { "name": "selectedOptions", "type": "SlOption[]" },
               {
                 "name": "name",
                 "description": "The name of the select, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "value",
-                "description": "The current value of the select, submitted as a name/value pair with form data. When `multiple` is enabled, the\nvalue attribute will be a space-delimited list of values based on the options selected, and the value property will\nbe an array. **For this reason, values must not contain spaces.**",
-                "value": { "type": "string | string[]" }
+                "description": "The current value of the select, submitted as a name/value pair with form data. When `multiple` is enabled, the\nvalue attribute will be a space-delimited list of values based on the options selected, and the value property will\nbe an array. **For this reason, values must not contain spaces.**"
+              },
+              {
+                "name": "defaultValue",
+                "description": "The default value of the form control. Primarily used for resetting the form control.",
+                "type": "string | string[]"
               },
               {
                 "name": "size",
                 "description": "The select's size.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
                 "name": "placeholder",
                 "description": "Placeholder text to show as a hint when the select is empty.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "multiple",
                 "description": "Allows more than one option to be selected.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "max-options-visible",
+                "name": "maxOptionsVisible",
                 "description": "The maximum number of selected options to show when `multiple` is true. After the maximum, \"+n\" will be shown to\nindicate the number of additional items that are selected. Set to 0 to remove the limit.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "disabled",
                 "description": "Disables the select control.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "clearable",
                 "description": "Adds a clear button when the select is not empty.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "open",
                 "description": "Indicates whether or not the select is open. You can toggle this attribute to show and hide the menu, or you can\nuse the `show()` and `hide()` methods and this attribute will reflect the select's open state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "hoist",
                 "description": "Enable this option to prevent the listbox from being clipped when the component is placed inside a container with\n`overflow: auto|scroll`. Hoisting uses a fixed positioning strategy that works in many, but not all, scenarios.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "filled",
                 "description": "Draws a filled select.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "pill",
                 "description": "Draws a pill-style select with rounded edges.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "label",
                 "description": "The select's label. If you need to display HTML, use the `label` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "placement",
                 "description": "The preferred placement of the select's menu. Note that the actual placement may vary as needed to keep the listbox\ninside of the viewport.",
-                "value": { "type": "'top' | 'bottom'" }
+                "type": "'top' | 'bottom'"
               },
               {
-                "name": "help-text",
+                "name": "helpText",
                 "description": "The select's help text. If you need to display HTML, use the `help-text` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "form",
                 "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "required",
                 "description": "The select's required attribute.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "getTag",
                 "description": "A function that customizes the tags to be rendered when multiple=true. The first argument is the option, the second\nis the current tag's index.  The function should return either a Lit TemplateResult or a string containing trusted HTML of the symbol to render at\nthe specified value.",
-                "value": {
-                  "type": "(option: SlOption, index: number) => TemplateResult | string | HTMLElement"
-                }
+                "type": "(option: SlOption, index: number) => TemplateResult | string | HTMLElement"
+              },
+              {
+                "name": "validity",
+                "description": "Gets the validity state object"
+              },
+              {
+                "name": "validationMessage",
+                "description": "Gets the validation message"
               }
             ],
             "events": [
@@ -4694,7 +4893,7 @@
               {
                 "name": "effect",
                 "description": "Determines which effect the skeleton will use.",
-                "value": { "type": "'pulse' | 'sheen' | 'none'" }
+                "type": "'pulse' | 'sheen' | 'none'"
               }
             ],
             "events": []
@@ -4706,10 +4905,7 @@
           "doc-url": "",
           "attributes": [],
           "events": [],
-          "js": {
-            "properties": [{ "name": "localize", "value": {} }],
-            "events": []
-          }
+          "js": { "properties": [], "events": [] }
         },
         {
           "name": "sl-split-panel",
@@ -4774,40 +4970,41 @@
           ],
           "js": {
             "properties": [
+              { "name": "divider", "type": "HTMLElement" },
               {
                 "name": "position",
                 "description": "The current position of the divider from the primary panel's edge as a percentage 0-100. Defaults to 50% of the\ncontainer's initial size.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
-                "name": "position-in-pixels",
+                "name": "positionInPixels",
                 "description": "The current position of the divider from the primary panel's edge in pixels.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "vertical",
                 "description": "Draws the split panel in a vertical orientation with the start and end panels stacked.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "disabled",
                 "description": "Disables resizing. Note that the position may still change as a result of resizing the host element.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "primary",
                 "description": "If no primary panel is designated, both panels will resize proportionally when the host element is resized. If a\nprimary panel is designated, it will maintain its size and the other panel will grow or shrink as needed when the\nhost element is resized.",
-                "value": { "type": "\"start\" | \"end\" | undefined" }
+                "type": "\"start\" | \"end\" | undefined"
               },
               {
                 "name": "snap",
                 "description": "One of the following:\n- One or more space-separated values at which the divider should snap, in pixels or percentages, e.g. `\"100px 50% 500px\"`.\n- A repeat expression containing a single pixel or percentage snap interval, e.g. `\"repeat(16px)\"`\n- A function which takes in a position, and then returns a snapped position, e.g. ({ pixels }) => Math.round(pixels / 8) * 8;",
-                "value": { "type": "string | SnapFunction" }
+                "type": "string | SnapFunction"
               },
               {
-                "name": "snap-threshold",
+                "name": "snapThreshold",
                 "description": "How close the divider must be to a snap point until snapping occurs.",
-                "value": { "type": "number" }
+                "type": "number"
               }
             ],
             "events": [
@@ -4899,46 +5096,60 @@
           ],
           "js": {
             "properties": [
-              { "name": "title", "value": { "type": "string" } },
+              { "name": "input", "type": "HTMLInputElement" },
+              { "name": "title", "type": "string" },
               {
                 "name": "name",
                 "description": "The name of the switch, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "value",
                 "description": "The current value of the switch, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "size",
                 "description": "The switch's size.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
                 "name": "disabled",
                 "description": "Disables the switch.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "checked",
                 "description": "Draws the switch in a checked state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
+              },
+              {
+                "name": "defaultChecked",
+                "description": "The default value of the form control. Primarily used for resetting the form control.",
+                "type": "boolean"
               },
               {
                 "name": "form",
                 "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "required",
                 "description": "Makes the switch a required field.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
-                "name": "help-text",
+                "name": "helpText",
                 "description": "The switch's help text. If you need to display HTML, use the `help-text` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
+              },
+              {
+                "name": "validity",
+                "description": "Gets the validity state object"
+              },
+              {
+                "name": "validationMessage",
+                "description": "Gets the validation message"
               }
             ],
             "events": [
@@ -5000,25 +5211,26 @@
           ],
           "js": {
             "properties": [
+              { "name": "tab", "type": "HTMLElement" },
               {
                 "name": "panel",
                 "description": "The name of the tab panel this tab is associated with. The panel must be located in the same tab group.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "active",
                 "description": "Draws the tab in an active state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "closable",
                 "description": "Makes the tab closable and shows a close button.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "disabled",
                 "description": "Disables the tab and prevents selection.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -5051,6 +5263,11 @@
               "name": "no-scroll-controls",
               "description": "Disables the scroll arrows that appear when tabs overflow.",
               "value": { "type": "boolean", "default": "false" }
+            },
+            {
+              "name": "fixed-scroll-controls",
+              "description": "Prevent scroll buttons from being hidden when inactive.",
+              "value": { "type": "boolean", "default": "false" }
             }
           ],
           "slots": [
@@ -5066,38 +5283,51 @@
           "events": [
             {
               "name": "sl-tab-show",
+              "type": "{ name: String }",
               "description": "Emitted when a tab is shown."
             },
             {
               "name": "sl-tab-hide",
+              "type": "{ name: String }",
               "description": "Emitted when a tab is hidden."
             }
           ],
           "js": {
             "properties": [
+              { "name": "tabGroup", "type": "HTMLElement" },
+              { "name": "body", "type": "HTMLSlotElement" },
+              { "name": "nav", "type": "HTMLElement" },
+              { "name": "indicator", "type": "HTMLElement" },
               {
                 "name": "placement",
                 "description": "The placement of the tabs.",
-                "value": { "type": "'top' | 'bottom' | 'start' | 'end'" }
+                "type": "'top' | 'bottom' | 'start' | 'end'"
               },
               {
                 "name": "activation",
                 "description": "When set to auto, navigating tabs with the arrow keys will instantly show the corresponding tab panel. When set to\nmanual, the tab will receive focus but will not show until the user presses spacebar or enter.",
-                "value": { "type": "'auto' | 'manual'" }
+                "type": "'auto' | 'manual'"
               },
               {
-                "name": "no-scroll-controls",
+                "name": "noScrollControls",
                 "description": "Disables the scroll arrows that appear when tabs overflow.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
+              },
+              {
+                "name": "fixedScrollControls",
+                "description": "Prevent scroll buttons from being hidden when inactive.",
+                "type": "boolean"
               }
             ],
             "events": [
               {
                 "name": "sl-tab-show",
+                "type": "{ name: String }",
                 "description": "Emitted when a tab is shown."
               },
               {
                 "name": "sl-tab-hide",
+                "type": "{ name: String }",
                 "description": "Emitted when a tab is hidden."
               }
             ]
@@ -5126,12 +5356,12 @@
               {
                 "name": "name",
                 "description": "The tab panel's name.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "active",
                 "description": "When true, the tab panel will be shown.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": []
@@ -5181,24 +5411,22 @@
               {
                 "name": "variant",
                 "description": "The tag's theme variant.",
-                "value": {
-                  "type": "'primary' | 'success' | 'neutral' | 'warning' | 'danger' | 'text'"
-                }
+                "type": "'primary' | 'success' | 'neutral' | 'warning' | 'danger' | 'text'"
               },
               {
                 "name": "size",
                 "description": "The tag's size.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
                 "name": "pill",
                 "description": "Draws a pill-style tag with rounded edges.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "removable",
                 "description": "Makes the tag removable and shows a remove button.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -5372,122 +5600,131 @@
           ],
           "js": {
             "properties": [
-              { "name": "title", "value": { "type": "string" } },
+              { "name": "input", "type": "HTMLTextAreaElement" },
+              { "name": "sizeAdjuster", "type": "HTMLTextAreaElement" },
+              { "name": "title", "type": "string" },
               {
                 "name": "name",
                 "description": "The name of the textarea, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "value",
                 "description": "The current value of the textarea, submitted as a name/value pair with form data.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "size",
                 "description": "The textarea's size.",
-                "value": { "type": "'small' | 'medium' | 'large'" }
+                "type": "'small' | 'medium' | 'large'"
               },
               {
                 "name": "filled",
                 "description": "Draws a filled textarea.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "label",
                 "description": "The textarea's label. If you need to display HTML, use the `label` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
-                "name": "help-text",
+                "name": "helpText",
                 "description": "The textarea's help text. If you need to display HTML, use the `help-text` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "placeholder",
                 "description": "Placeholder text to show as a hint when the input is empty.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "rows",
                 "description": "The number of rows to display by default.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "resize",
                 "description": "Controls how the textarea can be resized.",
-                "value": { "type": "'none' | 'vertical' | 'auto'" }
+                "type": "'none' | 'vertical' | 'auto'"
               },
               {
                 "name": "disabled",
                 "description": "Disables the textarea.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "readonly",
                 "description": "Makes the textarea readonly.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "form",
                 "description": "By default, form controls are associated with the nearest containing `<form>` element. This attribute allows you\nto place the form control outside of a form and associate it with the form that has this `id`. The form must be in\nthe same document or shadow root for this to work.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "required",
                 "description": "Makes the textarea a required field.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "minlength",
                 "description": "The minimum length of input that will be considered valid.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "maxlength",
                 "description": "The maximum length of input that will be considered valid.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "autocapitalize",
                 "description": "Controls whether and how text input is automatically capitalized as it is entered by the user.",
-                "value": {
-                  "type": "'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters'"
-                }
+                "type": "'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters'"
               },
               {
                 "name": "autocorrect",
                 "description": "Indicates whether the browser's autocorrect feature is on or off.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "autocomplete",
                 "description": "Specifies what permission the browser has to provide assistance in filling out form field values. Refer to\n[this page on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete) for available values.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "autofocus",
                 "description": "Indicates that the input should receive focus on page load.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "enterkeyhint",
                 "description": "Used to customize the label or icon of the Enter key on virtual keyboards.",
-                "value": {
-                  "type": "'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send'"
-                }
+                "type": "'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send'"
               },
               {
                 "name": "spellcheck",
                 "description": "Enables spell checking on the textarea.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "inputmode",
                 "description": "Tells the browser what type of data will be entered by the user, allowing it to display the appropriate virtual\nkeyboard on supportive devices.",
-                "value": {
-                  "type": "'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url'"
-                }
+                "type": "'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url'"
+              },
+              {
+                "name": "defaultValue",
+                "description": "The default value of the form control. Primarily used for resetting the form control.",
+                "type": "string"
+              },
+              {
+                "name": "validity",
+                "description": "Gets the validity state object"
+              },
+              {
+                "name": "validationMessage",
+                "description": "Gets the validation message"
               }
             ],
             "events": [
@@ -5593,47 +5830,48 @@
           ],
           "js": {
             "properties": [
+              { "name": "defaultSlot", "type": "HTMLSlotElement" },
+              { "name": "body", "type": "HTMLElement" },
+              { "name": "popup", "type": "SlPopup" },
               {
                 "name": "content",
                 "description": "The tooltip's content. If you need to display HTML, use the `content` slot instead.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "placement",
                 "description": "The preferred placement of the tooltip. Note that the actual placement may vary as needed to keep the tooltip\ninside of the viewport.",
-                "value": {
-                  "type": "| 'top'\n    | 'top-start'\n    | 'top-end'\n    | 'right'\n    | 'right-start'\n    | 'right-end'\n    | 'bottom'\n    | 'bottom-start'\n    | 'bottom-end'\n    | 'left'\n    | 'left-start'\n    | 'left-end'"
-                }
+                "type": "| 'top'\n    | 'top-start'\n    | 'top-end'\n    | 'right'\n    | 'right-start'\n    | 'right-end'\n    | 'bottom'\n    | 'bottom-start'\n    | 'bottom-end'\n    | 'left'\n    | 'left-start'\n    | 'left-end'"
               },
               {
                 "name": "disabled",
                 "description": "Disables the tooltip so it won't show when triggered.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "distance",
                 "description": "The distance in pixels from which to offset the tooltip away from its target.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "open",
                 "description": "Indicates whether or not the tooltip is open. You can use this in lieu of the show/hide methods.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "skidding",
                 "description": "The distance in pixels from which to offset the tooltip along its target.",
-                "value": { "type": "number" }
+                "type": "number"
               },
               {
                 "name": "trigger",
                 "description": "Controls how the tooltip is activated. Possible options include `click`, `hover`, `focus`, and `manual`. Multiple\noptions can be passed by separating them with a space. When manual is used, the tooltip must be activated\nprogrammatically.",
-                "value": { "type": "string" }
+                "type": "string"
               },
               {
                 "name": "hoist",
                 "description": "Enable this option to prevent the tooltip from being clipped when the component is placed inside a container with\n`overflow: auto|hidden|scroll`. Hoisting uses a fixed positioning strategy that works in many, but not all,\nscenarios.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               }
             ],
             "events": [
@@ -5684,20 +5922,25 @@
           "events": [
             {
               "name": "sl-selection-change",
+              "type": "{ selection: SlTreeItem[] }",
               "description": "Emitted when a tree item is selected or deselected."
             }
           ],
           "js": {
             "properties": [
+              { "name": "defaultSlot", "type": "HTMLSlotElement" },
+              { "name": "expandedIconSlot", "type": "HTMLSlotElement" },
+              { "name": "collapsedIconSlot", "type": "HTMLSlotElement" },
               {
                 "name": "selection",
                 "description": "The selection behavior of the tree. Single selection allows only one node to be selected at a time. Multiple\ndisplays checkboxes and allows more than one node to be selected. Leaf allows only leaf nodes to be selected.",
-                "value": { "type": "'single' | 'multiple' | 'leaf'" }
+                "type": "'single' | 'multiple' | 'leaf'"
               }
             ],
             "events": [
               {
                 "name": "sl-selection-change",
+                "type": "{ selection: SlTreeItem[] }",
                 "description": "Emitted when a tree item is selected or deselected."
               }
             ]
@@ -5768,26 +6011,35 @@
           ],
           "js": {
             "properties": [
+              { "name": "indeterminate", "type": "boolean" },
+              { "name": "isLeaf", "type": "boolean" },
+              { "name": "loading", "type": "boolean" },
+              { "name": "selectable", "type": "boolean" },
               {
                 "name": "expanded",
                 "description": "Expands the tree item.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "selected",
                 "description": "Draws the tree item in a selected state.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "disabled",
                 "description": "Disables the tree item.",
-                "value": { "type": "boolean" }
+                "type": "boolean"
               },
               {
                 "name": "lazy",
                 "description": "Enables lazy loading behavior.",
-                "value": { "type": "boolean" }
-              }
+                "type": "boolean"
+              },
+              { "name": "defaultSlot", "type": "HTMLSlotElement" },
+              { "name": "childrenSlot", "type": "HTMLSlotElement" },
+              { "name": "itemElement", "type": "HTMLDivElement" },
+              { "name": "childrenContainer", "type": "HTMLDivElement" },
+              { "name": "expandButtonSlot", "type": "HTMLSlotElement" }
             ],
             "events": [
               {

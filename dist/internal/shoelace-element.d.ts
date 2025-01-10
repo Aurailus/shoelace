@@ -13,6 +13,7 @@ type WithRequired<T, K extends keyof T> = T & {
 type SlEventInit<T> = T extends keyof GlobalEventHandlersEventMap ? GlobalEventHandlersEventMap[T] extends CustomEvent<Record<PropertyKey, unknown>> ? GlobalEventHandlersEventMap[T] extends CustomEvent<Record<PropertyKey, never>> ? CustomEventInit<GlobalEventHandlersEventMap[T]['detail']> : Partial<GlobalEventHandlersEventMap[T]['detail']> extends GlobalEventHandlersEventMap[T]['detail'] ? CustomEventInit<GlobalEventHandlersEventMap[T]['detail']> : WithRequired<CustomEventInit<GlobalEventHandlersEventMap[T]['detail']>, 'detail'> : CustomEventInit : CustomEventInit;
 type GetCustomEventType<T> = T extends keyof GlobalEventHandlersEventMap ? GlobalEventHandlersEventMap[T] extends CustomEvent<unknown> ? GlobalEventHandlersEventMap[T] : CustomEvent<unknown> : CustomEvent<unknown>;
 export default class ShoelaceElement extends LitElement {
+    #private;
     dir: string;
     lang: string;
     /** Emits a custom event with more convenient defaults. */
@@ -22,6 +23,9 @@ export default class ShoelaceElement extends LitElement {
     static define(name: string, elementConstructor?: typeof ShoelaceElement, options?: ElementDefinitionOptions): void;
     static dependencies: Record<string, typeof ShoelaceElement>;
     constructor();
+    initialReflectedProperties: Map<string, unknown>;
+    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void;
+    protected willUpdate(changedProperties: Parameters<LitElement['willUpdate']>[0]): void;
 }
 export interface ShoelaceFormControl extends ShoelaceElement {
     name: string;

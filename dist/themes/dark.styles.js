@@ -368,10 +368,10 @@ export default css`
     --sl-input-background-color-hover: var(--sl-input-background-color);
     --sl-input-background-color-focus: var(--sl-input-background-color);
     --sl-input-background-color-disabled: var(--sl-color-neutral-100);
-    --sl-input-border-color: var(--sl-color-neutral-300);
-    --sl-input-border-color-hover: var(--sl-color-neutral-400);
-    --sl-input-border-color-focus: var(--sl-color-primary-500);
-    --sl-input-border-color-disabled: var(--sl-color-neutral-300);
+    --sl-input-border-color: var(--sl-color-neutral-400);
+    --sl-input-border-color-hover: var(--sl-color-neutral-500);
+    --sl-input-border-color-focus: var(--sl-color-primary-600);
+    --sl-input-border-color-disabled: var(--sl-color-neutral-400);
     --sl-input-border-width: 1px;
     --sl-input-required-content: "*";
     --sl-input-required-content-offset: -2px;
@@ -421,7 +421,7 @@ export default css`
     --sl-input-help-text-font-size-small: var(--sl-font-size-x-small);
     --sl-input-help-text-font-size-medium: var(--sl-font-size-small);
     --sl-input-help-text-font-size-large: var(--sl-font-size-medium);
-    --sl-input-help-text-color: var(--sl-color-neutral-500);
+    --sl-input-help-text-color: var(--sl-color-neutral-600);
 
     --sl-toggle-size-small: 0.875rem;
     --sl-toggle-size-medium: 1.125rem;

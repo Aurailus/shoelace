@@ -35,6 +35,7 @@ export default class SlTree extends ShoelaceElement {
     private lastFocusedItem;
     private mutationObserver;
     private clickTarget;
+    private readonly localize;
     constructor();
     connectedCallback(): Promise<void>;
     disconnectedCallback(): void;

@@ -32,9 +32,12 @@ export default class SlAlert extends ShoelaceElement {
         'sl-icon-button': typeof SlIconButton;
     };
     private autoHideTimeout;
+    private remainingTimeInterval;
+    private countdownAnimation?;
     private readonly hasSlotController;
     private readonly localize;
     base: HTMLElement;
+    countdownElement: HTMLElement;
     /**
      * Indicates whether or not the alert is open. You can toggle this attribute to show and hide the alert, or you can
      * use the `show()` and `hide()` methods and this attribute will reflect the alert's open state.
@@ -50,10 +53,18 @@ export default class SlAlert extends ShoelaceElement {
      * the alert will not close on its own.
      */
     duration: number;
+    /**
+     * Enables a countdown that indicates the remaining time the alert will be displayed.
+     * Typically used to indicate the remaining time before a whole app refresh.
+     */
+    countdown?: 'rtl' | 'ltr';
+    private remainingTime;
     firstUpdated(): void;
     private restartAutoHide;
+    private pauseAutoHide;
+    private resumeAutoHide;
+    private handleCountdownChange;
     private handleCloseClick;
-    private handleMouseMove;
     handleOpenChange(): Promise<void>;
     handleDurationChange(): void;
     /** Shows the alert. */
