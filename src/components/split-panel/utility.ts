@@ -1,16 +1,26 @@
+/** Options that get passed into a `SnapFunction`. */
 interface SnapFunctionOpts {
-	pos: number
-	size: number
-	snapThreshold: number
-	isRtl: boolean
-	vertical: boolean
-	pixelsToPercent: (px: number) => number
-	percentToPixels: (percent: number) => number
+	pos: number;
+	size: number;
+	snapThreshold: number;
+	isRtl: boolean;
+	vertical: boolean;
+	pixelsToPercent: (px: number) => number;
+	percentToPixels: (percent: number) => number;
 }
 
+/** Used by sl-split-panel to convert an input position into a snapped position. */
 export type SnapFunction = (opt: SnapFunctionOpts) => number | null
 
+/** A SnapFunction which performs no snapping. */
 export const SNAP_NONE = () => null
+
+/**
+ * Converts a string containing either a series of fixed snap points (e.g. "100px 200px 800px", or "10% 50% 99%") or a repeat statement (e.g. "repeat(100px)" or "repeat(10%)") into a SnapFunction. `SnapFunction`s take in a `SnapFunctionOpts` and return the position that the split panel should snap to. 
+ * 
+ * @param snap - The snap string.
+ * @returns a `SnapFunction` representing the snap string's logic.
+ */
 
 export function toSnapFunction(snap: string): SnapFunction {
 	if (snap.startsWith("repeat(")) {
